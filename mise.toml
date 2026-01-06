@@ -1,0 +1,347 @@
+# Stars! Decompilation Project Tasks
+# Configure Ghidra path via GHIDRA_HOME environment variable
+
+[env]
+# Default Ghidra path - override with: export GHIDRA_HOME=/path/to/ghidra
+# Uses shell's GHIDRA_HOME if set, otherwise falls back to default in scripts
+GHIDRA_HOME_ = "~/.local/ghidra/ghidra_10.3_DEV"
+
+# Project paths (relative to this file)
+PROJECT_DIR = "{{ cwd }}"
+GHIDRA_PROJECT = "{{ cwd }}/ghidra_project"
+SCRIPTS_DIR = "{{ cwd }}/scripts/ghidra_scripts"
+TARGET_EXE = "{{ cwd }}/target/stars.exe"
+JSON_GLOBALS = "{{ cwd }}/scripts/nb09_ghidra_globals.json"
+JSON_STRUCTS = "{{ cwd }}/scripts/nb09_structmeta.json"
+
+[tasks.ghidra-import]
+description = "Import stars.exe into Ghidra project (16-bit Protected Mode)"
+run = '''
+#!/bin/bash
+set -e
+
+# Use GHIDRA_HOME if set, otherwise fall back to GHIDRA_HOME_
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+# Expand tilde
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+if [ ! -f "$ANALYZER" ]; then
+    echo "Error: Ghidra not found at $GHIDRA_EXPANDED"
+    echo "Set GHIDRA_HOME environment variable to your Ghidra installation"
+    exit 1
+fi
+
+# Fix decompiler permissions if needed
+chmod +x "$GHIDRA_EXPANDED/Ghidra/Features/Decompiler/os/linux_x86_64/decompile" 2>/dev/null || true
+
+echo "Importing $TARGET_EXE into Ghidra project..."
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -import "$TARGET_EXE" \
+    -processor "x86:LE:16:Protected Mode" \
+    -overwrite
+'''
+
+[tasks.ghidra-apply-structs]
+description = "Apply NB09 struct definitions to Ghidra project"
+run = '''
+#!/bin/bash
+set -e
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+if [ ! -f "$ANALYZER" ]; then
+    echo "Error: Ghidra not found at $GHIDRA_EXPANDED"
+    exit 1
+fi
+
+echo "Applying struct definitions from $JSON_STRUCTS..."
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ApplyNb09StructPackingFromJson.py "$JSON_STRUCTS"
+'''
+
+[tasks.ghidra-apply-names]
+description = "Apply NB09 function and global names to Ghidra project"
+run = '''
+#!/bin/bash
+set -e
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+if [ ! -f "$ANALYZER" ]; then
+    echo "Error: Ghidra not found at $GHIDRA_EXPANDED"
+    exit 1
+fi
+
+echo "Applying names from $JSON_GLOBALS..."
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ApplyNb09NamesFromJson.py "$JSON_GLOBALS"
+'''
+
+[tasks.ghidra-apply-globals]
+description = "Apply NB09 global variable types to Ghidra project"
+run = '''
+#!/bin/bash
+set -e
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+if [ ! -f "$ANALYZER" ]; then
+    echo "Error: Ghidra not found at $GHIDRA_EXPANDED"
+    exit 1
+fi
+
+echo "Applying global types from $JSON_GLOBALS..."
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ApplyNb09GlobalsFromJson.py "$JSON_GLOBALS"
+'''
+
+[tasks.ghidra-apply-funcsigs]
+description = "Apply NB09 function signatures to Ghidra project"
+run = '''
+#!/bin/bash
+set -e
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+if [ ! -f "$ANALYZER" ]; then
+    echo "Error: Ghidra not found at $GHIDRA_EXPANDED"
+    exit 1
+fi
+
+echo "Applying function signatures from $JSON_GLOBALS..."
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ApplyNb09FuncSigsFromJson.py "$JSON_GLOBALS"
+'''
+
+[tasks.ghidra-setup]
+description = "Full Ghidra setup: import binary and apply all symbol scripts"
+depends = ["ghidra-import"]
+run = '''
+#!/bin/bash
+set -e
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+echo "=== Step 1/4: Applying struct definitions ==="
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ApplyNb09StructPackingFromJson.py "$JSON_STRUCTS" || echo "Warning: Some structs may have failed"
+
+echo ""
+echo "=== Step 2/4: Applying names ==="
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ApplyNb09NamesFromJson.py "$JSON_GLOBALS"
+
+echo ""
+echo "=== Step 3/4: Applying global types ==="
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ApplyNb09GlobalsFromJson.py "$JSON_GLOBALS"
+
+echo ""
+echo "=== Step 4/4: Applying function signatures ==="
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ApplyNb09FuncSigsFromJson.py "$JSON_GLOBALS"
+
+echo ""
+echo "=== Setup complete! ==="
+echo "Open Ghidra GUI with: ghidraRun"
+echo "Then open project: $GHIDRA_PROJECT/Stars.gpr"
+'''
+
+[tasks.ghidra-gui]
+description = "Launch Ghidra GUI"
+run = '''
+#!/bin/bash
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+
+if [ ! -f "$GHIDRA_EXPANDED/ghidraRun" ]; then
+    echo "Error: Ghidra not found at $GHIDRA_EXPANDED"
+    echo "Set GHIDRA_HOME environment variable to your Ghidra installation"
+    exit 1
+fi
+
+echo "Launching Ghidra..."
+echo "Project location: $GHIDRA_PROJECT/Stars.gpr"
+"$GHIDRA_EXPANDED/ghidraRun" &
+'''
+
+[tasks.extract-symbols]
+description = "Re-extract symbols from the NE executable (requires Python)"
+run = '''
+#!/bin/bash
+cd "$PROJECT_DIR/scripts"
+python3 extract_nb09.py ../target/stars.exe
+'''
+
+[tasks.list-functions]
+description = "List functions matching a pattern (usage: mise run list-functions -- pattern)"
+run = '''
+#!/bin/bash
+set -e
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ListFunctions.py "${1:-}" 2>&1
+'''
+
+[tasks.decompile]
+description = "Decompile a function by name (usage: mise run decompile -- FunctionName)"
+run = '''
+#!/bin/bash
+set -e
+
+if [ -z "$1" ]; then
+    echo "Usage: mise run decompile -- <function_name>"
+    echo ""
+    echo "Examples:"
+    echo "  mise run decompile -- LpflFromId"
+    echo "  mise run decompile -- LpthFromId"
+    echo "  mise run decompile -- LpplFromId"
+    exit 1
+fi
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+if [ ! -f "$ANALYZER" ]; then
+    echo "Error: Ghidra not found at $GHIDRA_EXPANDED"
+    exit 1
+fi
+
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript DecompileFunction.py "$1" 2>&1
+'''
+
+[tasks.export-decompiled]
+description = "Export decompiled code to a file (usage: mise run export-decompiled -- output.c Func1 Func2 ...)"
+run = '''
+#!/bin/bash
+set -e
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage: mise run export-decompiled -- <output_file> <func1> [func2] ..."
+    echo ""
+    echo "Example: mise run export-decompiled -- decompiled/util.c LpflFromId LpplFromId"
+    exit 1
+fi
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+OUTPUT_FILE="$1"
+shift
+
+# Create output directory if needed
+mkdir -p "$(dirname "$OUTPUT_FILE")"
+
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ExportDecompiled.py "$OUTPUT_FILE" "$@" 2>&1 | \
+    grep -E "^INFO.*GhidraScript|Processing|OK|NOT FOUND|Output written" || true
+'''
+
+[tasks.export-call-tree]
+description = "Export a function and all functions it calls (usage: mise run export-call-tree -- output.c FuncName [depth])"
+run = '''
+#!/bin/bash
+set -e
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage: mise run export-call-tree -- <output_file> <root_func> [max_depth]"
+    echo ""
+    echo "Example: mise run export-call-tree -- decompiled/io.c FLoadGame 3"
+    exit 1
+fi
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+OUTPUT_FILE="$1"
+ROOT_FUNC="$2"
+MAX_DEPTH="${3:-3}"
+
+# Create output directory if needed
+mkdir -p "$(dirname "$OUTPUT_FILE")"
+
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ExportCallTree.py "$OUTPUT_FILE" "$ROOT_FUNC" "$MAX_DEPTH" 2>&1
+'''
+
+[tasks.export-p1-functions]
+description = "Export all P1 utility functions to decompiled/p1_util.c"
+run = '''
+#!/bin/bash
+set -e
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+mkdir -p "$PROJECT_DIR/decompiled"
+
+# P1 utility functions (using actual Ghidra function names)
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ExportDecompiled.py "$PROJECT_DIR/decompiled/p1_util.c" \
+        LpplFromId LpflFromId LpthFromId \
+        LpAlloc LpReAlloc LphbAlloc LphbReAlloc \
+        Random Randomize \
+    2>&1 | grep -E "^INFO.*GhidraScript|Processing|OK|NOT FOUND|Output written" || true
+
+echo ""
+echo "Output: $PROJECT_DIR/decompiled/p1_util.c"
+'''
