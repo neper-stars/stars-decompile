@@ -15,4 +15,51 @@ All of the types, function signatures, and initial local variable declarations a
 * ApplyNb09NamesFromJson.py - rename all function and data values (no typing)
 * ApplyNb09GlobalsFromJson.py - apply typing to all data values
 * ApplyNb09FuncSigsFromJson.py - apply function signatures and local variable reassignment
+* DecompileFunction.py - decompile a single function by name
+* ListFunctions.py - list functions matching a pattern
+* ExportDecompiled.py - export decompiled code for multiple functions to a file
+
+## mise tasks
+
+This project uses [mise](https://mise.jdx.dev/) for task automation. Install mise and run tasks with `mise run <task>`.
+
+### Configuration
+
+Set `GHIDRA_HOME` environment variable to override the default Ghidra path:
+```bash
+export GHIDRA_HOME=/path/to/your/ghidra
+```
+Default: `~/.local/ghidra/ghidra_10.3_DEV`
+
+### Available Tasks
+
+| Task | Description |
+|------|-------------|
+| `mise run ghidra-import` | Import stars.exe into Ghidra (16-bit Protected Mode) |
+| `mise run ghidra-apply-structs` | Apply NB09 struct definitions |
+| `mise run ghidra-apply-names` | Apply function and global names |
+| `mise run ghidra-apply-globals` | Apply global variable types |
+| `mise run ghidra-apply-funcsigs` | Apply function signatures |
+| `mise run ghidra-setup` | Full setup: import + all 4 scripts |
+| `mise run ghidra-gui` | Launch Ghidra GUI |
+| `mise run list-functions -- <pattern>` | List functions matching a pattern |
+| `mise run decompile -- <function>` | Decompile a single function |
+| `mise run export-decompiled -- <output> <func1> ...` | Export multiple functions to file |
+| `mise run export-p1-functions` | Export P1 utility functions to decompiled/p1_util.c |
+
+### Quick Start
+
+```bash
+# Full Ghidra setup (import binary + apply all symbol scripts)
+mise run ghidra-setup
+
+# Decompile a specific function
+mise run decompile -- LpflFromId
+
+# Search for functions
+mise run list-functions -- Rand
+
+# Export multiple functions to a file
+mise run export-decompiled -- output.c LpflFromId LpplFromId Random
+```
 
