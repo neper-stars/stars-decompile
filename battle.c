@@ -3,8 +3,164 @@
 
 #include "battle.h"
 
-/* globals */
-uint8_t rgbrcStart[136];  /* MEMORY_BATTLE:0x0000 */
+#define BrcFromXY(x, y) ((uint8_t)((((y) & 0x0F) << 4) | ((x) & 0x0F)))
+
+// MEMORY_BATTLE:0x0000
+// Flat concatenation of starting BRCs by player count (n = 1..16).
+// Indexing in code: base = cplr * (cplr - 1) / 2;  brc = rgbrcStart[ base + side ].
+uint8_t rgbrcStart[] = {
+    /* n= 1 */ BrcFromXY(4, 4),
+
+    /* n= 2 */ BrcFromXY(1, 4),
+    BrcFromXY(8, 5),
+
+    /* n= 3 */ BrcFromXY(4, 1),
+    BrcFromXY(8, 8),
+    BrcFromXY(1, 8),
+
+    /* n= 4 */ BrcFromXY(1, 1),
+    BrcFromXY(8, 8),
+    BrcFromXY(1, 8),
+    BrcFromXY(8, 1),
+
+    /* n= 5 */ BrcFromXY(4, 1),
+    BrcFromXY(6, 8),
+    BrcFromXY(1, 4),
+    BrcFromXY(8, 4),
+    BrcFromXY(2, 8),
+
+    /* n= 6 */ BrcFromXY(1, 4),
+    BrcFromXY(8, 5),
+    BrcFromXY(2, 8),
+    BrcFromXY(7, 1),
+    BrcFromXY(6, 8),
+    BrcFromXY(3, 1),
+
+    /* n= 7 */ BrcFromXY(1, 1),
+    BrcFromXY(1, 5),
+    BrcFromXY(2, 8),
+    BrcFromXY(6, 8),
+    BrcFromXY(8, 6),
+    BrcFromXY(8, 2),
+    BrcFromXY(5, 1),
+
+    /* n= 8 */ BrcFromXY(1, 3),
+    BrcFromXY(1, 6),
+    BrcFromXY(3, 8),
+    BrcFromXY(6, 8),
+    BrcFromXY(8, 6),
+    BrcFromXY(8, 3),
+    BrcFromXY(6, 1),
+    BrcFromXY(3, 1),
+
+    /* n= 9 */ BrcFromXY(1, 3),
+    BrcFromXY(8, 6),
+    BrcFromXY(3, 8),
+    BrcFromXY(6, 1),
+    BrcFromXY(1, 6),
+    BrcFromXY(8, 3),
+    BrcFromXY(6, 8),
+    BrcFromXY(3, 1),
+    BrcFromXY(4, 4),
+
+    /* n=10 */ BrcFromXY(2, 1),
+    BrcFromXY(5, 1),
+    BrcFromXY(8, 1),
+    BrcFromXY(1, 4),
+    BrcFromXY(8, 4),
+    BrcFromXY(4, 5),
+    BrcFromXY(1, 7),
+    BrcFromXY(8, 7),
+    BrcFromXY(3, 8),
+    BrcFromXY(6, 8),
+
+    /* n=11 */ BrcFromXY(1, 3),
+    BrcFromXY(8, 6),
+    BrcFromXY(3, 8),
+    BrcFromXY(6, 1),
+    BrcFromXY(1, 6),
+    BrcFromXY(8, 3),
+    BrcFromXY(6, 8),
+    BrcFromXY(3, 1),
+    BrcFromXY(3, 4),
+    BrcFromXY(6, 3),
+    BrcFromXY(6, 6),
+
+    /* n=12 */ BrcFromXY(1, 4),
+    BrcFromXY(8, 5),
+    BrcFromXY(2, 8),
+    BrcFromXY(7, 1),
+    BrcFromXY(6, 8),
+    BrcFromXY(3, 1),
+    BrcFromXY(1, 6),
+    BrcFromXY(8, 3),
+    BrcFromXY(1, 2),
+    BrcFromXY(4, 8),
+    BrcFromXY(5, 1),
+    BrcFromXY(8, 7),
+
+    /* n=13 */ BrcFromXY(1, 1),
+    BrcFromXY(1, 3),
+    BrcFromXY(1, 5),
+    BrcFromXY(1, 7),
+    BrcFromXY(3, 1),
+    BrcFromXY(5, 1),
+    BrcFromXY(7, 1),
+    BrcFromXY(8, 3),
+    BrcFromXY(8, 5),
+    BrcFromXY(3, 8),
+    BrcFromXY(5, 8),
+    BrcFromXY(7, 8),
+    BrcFromXY(4, 4),
+
+    /* n=14 */ BrcFromXY(1, 1),
+    BrcFromXY(1, 3),
+    BrcFromXY(1, 5),
+    BrcFromXY(1, 7),
+    BrcFromXY(2, 8),
+    BrcFromXY(4, 8),
+    BrcFromXY(6, 8),
+    BrcFromXY(8, 8),
+    BrcFromXY(8, 6),
+    BrcFromXY(8, 4),
+    BrcFromXY(8, 2),
+    BrcFromXY(7, 1),
+    BrcFromXY(5, 1),
+    BrcFromXY(3, 1),
+
+    /* n=15 */ BrcFromXY(1, 1),
+    BrcFromXY(1, 3),
+    BrcFromXY(1, 5),
+    BrcFromXY(1, 7),
+    BrcFromXY(2, 8),
+    BrcFromXY(4, 8),
+    BrcFromXY(6, 8),
+    BrcFromXY(8, 8),
+    BrcFromXY(8, 6),
+    BrcFromXY(8, 4),
+    BrcFromXY(8, 2),
+    BrcFromXY(7, 1),
+    BrcFromXY(5, 1),
+    BrcFromXY(3, 1),
+    BrcFromXY(4, 4),
+
+    /* n=16 */ BrcFromXY(1, 1),
+    BrcFromXY(1, 3),
+    BrcFromXY(1, 5),
+    BrcFromXY(1, 7),
+    BrcFromXY(2, 8),
+    BrcFromXY(4, 8),
+    BrcFromXY(6, 8),
+    BrcFromXY(8, 8),
+    BrcFromXY(8, 6),
+    BrcFromXY(8, 4),
+    BrcFromXY(8, 2),
+    BrcFromXY(7, 1),
+    BrcFromXY(5, 1),
+    BrcFromXY(3, 1),
+    BrcFromXY(3, 3),
+    BrcFromXY(6, 6),
+};
 
 /* functions */
 int16_t FFleetHasTeeth(FLEET *lpfl)
@@ -15,12 +171,12 @@ int16_t FFleetHasTeeth(FLEET *lpfl)
     return 0;
 }
 
-void DropSalvage(THING * *plpth, int32_t *rgwtMinerals, int16_t iplr, POINT *ppt)
+void DropSalvage(THING **plpth, int32_t *rgwtMinerals, int16_t iplr, POINT *ppt)
 {
     int32_t wtTotal;
     int32_t wt;
     int16_t i;
-    THING * lpth;
+    THING *lpth;
 
     /* TODO: implement */
 }
@@ -28,16 +184,16 @@ void DropSalvage(THING * *plpth, int32_t *rgwtMinerals, int16_t iplr, POINT *ppt
 void CheckTarget(TOK *ptok, FLEET *lpfl, int16_t ishdef)
 {
     int16_t iplr;
-    BTLPLAN * lpbtlplan;
+    BTLPLAN *lpbtlplan;
     int16_t ibp;
-    SHDEF * lpshdef;
+    SHDEF *lpshdef;
 
     /* TODO: implement */
 }
 
 int16_t BattlePlansDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam)
 {
-    int16_t (* lpProc)(void);
+    int16_t (*lpProc)(void);
     int16_t idc;
     int16_t i;
     int16_t fRet;
@@ -61,11 +217,11 @@ int16_t NewPlanNameDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t
     return 0;
 }
 
-void CreateSalvage(FLEET *pfl, THING * *plpth)
+void CreateSalvage(FLEET *pfl, THING **plpth)
 {
     int32_t wtTotal;
-    SHDEF * lpshdefT;
-    PLANET * lppl;
+    SHDEF *lpshdefT;
+    PLANET *lppl;
     int16_t i;
     int32_t rgwtMinerals[3];
     int16_t j;
@@ -79,7 +235,7 @@ void DoBattles(int16_t fPostMovement)
 {
     int16_t cplr;
     int16_t ifl;
-    FLEET * lpfl;
+    FLEET *lpfl;
     uint16_t grfSpectator;
     uint16_t grfPlayer;
     uint16_t rggrfAttack[16];
@@ -115,7 +271,7 @@ int32_t ScoreGuessBattleDamage(TOK *ptokSrc, uint8_t brc, int16_t fPrimary, uint
     int16_t iBest;
     int16_t dMoves;
     int16_t rgy[2];
-    TOK * ptok;
+    TOK *ptok;
     int16_t yEnemy;
     int16_t dzEnemy;
     int32_t dpGivenBest;
@@ -157,7 +313,7 @@ int16_t FAttackPlayer(FLEET *lpfl, int16_t iplr)
 
 void CheckInitiative(TOK *ptok)
 {
-    SHDEF * lpshdef;
+    SHDEF *lpshdef;
     int16_t pctBC;
 
     /* TODO: implement */
@@ -168,7 +324,7 @@ int16_t FDeleteBattlePlan(int16_t iplan, int16_t fWarn)
     int16_t fFoundBigger;
     int16_t iflMac;
     int16_t i;
-    FLEET * lpfl;
+    FLEET *lpfl;
 
     /* debug symbols */
     /* label LCommit @ MEMORY_BATTLE:0x1714 */
@@ -188,7 +344,7 @@ void RegenShield(TOK *ptok)
 int16_t FDumpCargo(FLEET *lpfl)
 {
     POINT pt;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t i;
 
     /* TODO: implement */
@@ -207,11 +363,11 @@ int16_t FAttack(int16_t itokAttacker, int16_t init, BTLREC *lpbtlrec, uint16_t g
 {
     int32_t dpShieldLeft;
     int16_t dz;
-    SHDEF * lpshdefE;
+    SHDEF *lpshdefE;
     int32_t dpArmorLeft;
     int32_t dpSingle;
     int32_t scoreBest;
-    TOK * ptok;
+    TOK *ptok;
     int16_t ctokDamaged;
     int16_t itokTarget;
     int32_t dpMain;
@@ -227,17 +383,17 @@ int16_t FAttack(int16_t itokAttacker, int16_t init, BTLREC *lpbtlrec, uint16_t g
     uint16_t grfWeapon;
     int16_t cItem;
     int32_t pctHit;
-    TOK * ptokTarget;
-    SHDEF * lpshdef;
+    TOK *ptokTarget;
+    SHDEF *lpshdef;
     int32_t lValue;
     int32_t dpT;
-    HUL * lphul;
+    HUL *lphul;
     int32_t cTorpHit;
     int16_t fPrimary;
     int32_t dp;
     int16_t itok;
     int32_t dpCol;
-    TOK * ptokE;
+    TOK *ptokE;
     PART part;
     int32_t nds;
     int32_t dpShieldCur;
@@ -274,7 +430,7 @@ int16_t RelationsDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t l
 
 int16_t FHullHasTeeth(HUL *lphul)
 {
-    HS * lphs;
+    HS *lphs;
     int16_t ihs;
 
     /* TODO: implement */
@@ -283,7 +439,7 @@ int16_t FHullHasTeeth(HUL *lphul)
 
 int16_t FFleetHasBombs(FLEET *lpfl)
 {
-    HUL * lphul;
+    HUL *lphul;
     int16_t imd;
     int16_t ishdef;
 
@@ -339,7 +495,7 @@ int16_t SpdOfShip(FLEET *lpfl, int16_t ishdef, TOK *ptok, int16_t fDumpCargo, SH
     int16_t cEngineT;
     uint16_t wtCargoShdefMax;
     int16_t iEngine;
-    ENGINE * lpengine;
+    ENGINE *lpengine;
 
     /* TODO: implement */
     return 0;
@@ -359,9 +515,9 @@ void DoBombing(void)
     int32_t cKillDefenses;
     int32_t cKillFact;
     int32_t pctTerra;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t ifl;
-    FLEET * lpfl;
+    FLEET *lpfl;
     int32_t cPPE;
     int32_t dmgBombPeople;
     float pctSmart;
@@ -383,14 +539,14 @@ void DoBombing(void)
 void InitializeBoard(FLEET *lpfl, int16_t ibrc, uint16_t grfPlayer, uint8_t *pinit, int16_t *pinitMin, int16_t *pinitMac)
 {
     int16_t iplr;
-    FLEET * lpflCur;
-    TOK * ptok;
+    FLEET *lpflCur;
+    TOK *ptok;
     int16_t initMac;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t fDampeningField;
     int16_t initMin;
-    uint16_t * lpwtCargoCur;
-    TOK * ptokT;
+    uint16_t *lpwtCargoCur;
+    TOK *ptokT;
     uint8_t mpiplrdibrc[16];
     int16_t fDumpCargo;
     int16_t ishdef;
@@ -411,12 +567,12 @@ int16_t DzMoveRangeToConsider(TOK *ptok, uint16_t grfAttack, uint8_t *pbrc)
     uint8_t dzBest;
     int16_t itokLook;
     int16_t iplrTarget;
-    TOK * ptokTarget;
+    TOK *ptokTarget;
     int16_t dzMax;
     uint8_t brcCur;
     int16_t ihs;
-    SHDEF * lpshdef;
-    HUL * lphul;
+    SHDEF *lpshdef;
+    HUL *lphul;
     PART part;
 
     /* debug symbols */
@@ -436,11 +592,11 @@ int16_t FFuelTanker(SHDEF *lpshdef)
 int16_t FDoCoolBattle(FLEET *lpfl, int16_t cplr, uint16_t *rggrfAttack, uint16_t grfPlayer, uint16_t grfSpectator)
 {
     int16_t cShipsInvolved;
-    uint8_t * lpbMax;
-    TOK * ptok;
+    uint8_t *lpbMax;
+    TOK *ptok;
     uint16_t wt;
     int16_t cShdefsInvolved;
-    uint8_t * lpbSav;
+    uint8_t *lpbSav;
     int16_t initMac;
     int16_t init;
     uint16_t wtT;
@@ -448,19 +604,19 @@ int16_t FDoCoolBattle(FLEET *lpfl, int16_t cplr, uint16_t *rggrfAttack, uint16_t
     int16_t i;
     int16_t j;
     int16_t initMin;
-    BTLREC * lpbtlrec;
+    BTLREC *lpbtlrec;
     int16_t iRound;
-    FLEET * lpflT;
+    FLEET *lpflT;
     uint16_t brcOrig;
-    BTLDATA * lpbtldata;
+    BTLDATA *lpbtldata;
     uint8_t rgfInit[64];
     uint16_t rgPlrLosses[256];
     uint16_t wtNext;
     int16_t itok;
-    PLANET * lppl;
+    PLANET *lppl;
     int32_t lwt;
     int16_t env[9];
-    int16_t (* penvMemSav)[9];
+    int16_t (*penvMemSav)[9];
 
     /* debug symbols */
     /* block (block) @ MEMORY_BATTLE:0x8be9 */
@@ -485,17 +641,17 @@ void CheckWeapons(TOK *ptok, int16_t *pfDampeningField, uint8_t *pinit)
     int32_t pctCap;
     int16_t initMin;
     int32_t pctHit;
-    SHDEF * lpshdef;
+    SHDEF *lpshdef;
     int16_t dxyLim;
     int16_t initBase;
-    HUL * lphul;
+    HUL *lphul;
     int16_t dxyPart;
     PART part;
 
     /* TODO: implement */
 }
 
-SHDEF * LpshdefFromTok(TOK *ptok)
+SHDEF *LpshdefFromTok(TOK *ptok)
 {
 
     /* TODO: implement */
@@ -505,11 +661,11 @@ SHDEF * LpshdefFromTok(TOK *ptok)
 int16_t CplrBattle(FLEET *lpfl, uint16_t *rggrfAttack, uint16_t *pgrfPlayer, uint16_t *pgrfSpectator)
 {
     int16_t iplrStarbase;
-    FLEET * lpflCur;
+    FLEET *lpflCur;
     int32_t rgcsh[16];
     uint16_t grPlr;
     int16_t iplrCur;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t cplr;
     int16_t i;
     int16_t mdRel;
@@ -535,15 +691,15 @@ int16_t CplrBattle(FLEET *lpfl, uint16_t *rggrfAttack, uint16_t *pgrfPlayer, uin
 void SpankTheCheaters(void)
 {
     int32_t lSell;
-    PLANET * lppl;
-    FLEET * lpfl;
+    PLANET *lppl;
+    FLEET *lpfl;
     int16_t ifl;
     int16_t i;
     int32_t pctSell;
     int16_t fCheater;
     int16_t fSellOff;
     char rgfCheater[16];
-    PLANET * lpplMac;
+    PLANET *lpplMac;
 
     /* TODO: implement */
 }
@@ -564,15 +720,15 @@ int16_t FDamageTok(TOK *ptok, int16_t itok, int32_t *pdpBeam, int32_t dpTorp, ui
 {
     int16_t pctSh;
     DV dv;
-    uint16_t * pwLosses;
+    uint16_t *pwLosses;
     int16_t cshOrigDamaged;
     int32_t dpShdef;
     int32_t ddpOrig;
     int32_t dpOrig;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t i;
     int16_t cshOrig;
-    FLEET * lpfl;
+    FLEET *lpfl;
     int32_t cKillMax;
     int16_t csh;
     int32_t dpT;
@@ -604,22 +760,22 @@ void SendBattleMessages(FLEET *lpflBtl, int16_t cplr, int16_t idBtl, uint16_t *r
     int16_t iplr;
     uint8_t rgcfl[16];
     int32_t lpopStarbase;
-    uint16_t * pw;
+    uint16_t *pw;
     int16_t isb;
-    PLANET * lppl;
-    uint16_t * pwThem;
+    PLANET *lppl;
+    uint16_t *pwThem;
     int16_t fAlive;
     int16_t cUs;
     int16_t y;
-    FLEET * lpfl;
+    FLEET *lpfl;
     int16_t cThemDead;
     int16_t i;
     int16_t idm;
     int16_t j;
-    FLEET * lpflT;
+    FLEET *lpflT;
     int16_t cUsDead;
     int16_t iThem;
-    uint16_t * pwUs;
+    uint16_t *pwUs;
     int16_t cThem;
     int16_t x;
 
@@ -661,7 +817,7 @@ int32_t DpFromPtokBrcToBrc(TOK *ptok, uint8_t brcSrc, uint8_t brcTarget, TOK *pt
     int32_t dpTotal;
     int16_t fOutOfRange;
     int32_t dRange;
-    HUL * lphul;
+    HUL *lphul;
     int32_t cTorpHit;
     int32_t dp;
     PART part;
@@ -718,7 +874,7 @@ int16_t DxyMoveTokTo(TOK *ptok, int16_t spdMove, uint16_t grfAttack)
 
 int16_t FHullHasBombs(HUL *lphul)
 {
-    HS * lphs;
+    HS *lphs;
     int16_t ihs;
 
     /* TODO: implement */
