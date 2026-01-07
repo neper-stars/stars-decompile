@@ -554,11 +554,18 @@ def run():
         print("[FATAL] No current program")
         return
 
-    header = askFile(WINDOWS_H_PROMPT, "Open")
-    if header is None:
-        print("[INFO] cancelled")
-        return
-    header_path = header.getAbsolutePath()
+    # Check for script arguments first (headless mode)
+    args = getScriptArgs()
+    if args and len(args) > 0:
+        header_path = args[0]
+        print("UpdateWin16WindowsApiSignatures.py> using argument: %s" % header_path)
+    else:
+        # Interactive mode - ask user
+        header = askFile(WINDOWS_H_PROMPT, "Open")
+        if header is None:
+            print("[INFO] cancelled")
+            return
+        header_path = header.getAbsolutePath()
 
     print("UpdateWin16WindowsApiSignatures.py> reading %s" % header_path)
     try:

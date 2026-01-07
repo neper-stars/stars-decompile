@@ -15,8 +15,24 @@ JSON_GLOBALS = "{{ cwd }}/scripts/nb09_ghidra_globals.json"
 JSON_STRUCTS = "{{ cwd }}/scripts/nb09_structmeta.json"
 WINDOWS_H = "{{ cwd }}/include/WINDOWS.H"
 
+[tasks.unzip-stars]
+description = "Extract stars.exe from the archive"
+run = '''
+#!/bin/bash
+set -e
+
+cd "$PROJECT_DIR/target"
+if [ ! -f "stars.exe" ]; then
+    echo "Extracting stars26jrc3.zip..."
+    unzip -o stars26jrc3.zip
+else
+    echo "stars.exe already exists"
+fi
+'''
+
 [tasks.ghidra-import]
 description = "Import stars.exe into Ghidra project (16-bit Protected Mode)"
+depends = ["unzip-stars"]
 run = '''
 #!/bin/bash
 set -e
@@ -47,6 +63,7 @@ bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
 
 [tasks.ghidra-apply-structs]
 description = "Apply NB09 struct definitions to Ghidra project"
+depends = ["ghidra-import"]
 run = '''
 #!/bin/bash
 set -e
@@ -70,6 +87,7 @@ bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
 
 [tasks.ghidra-apply-names]
 description = "Apply NB09 function and global names to Ghidra project"
+depends = ["ghidra-apply-structs"]
 run = '''
 #!/bin/bash
 set -e
@@ -93,6 +111,7 @@ bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
 
 [tasks.ghidra-apply-globals]
 description = "Apply NB09 global variable types to Ghidra project"
+depends = ["ghidra-apply-names"]
 run = '''
 #!/bin/bash
 set -e
@@ -116,6 +135,7 @@ bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
 
 [tasks.ghidra-apply-funcsigs]
 description = "Apply NB09 function signatures to Ghidra project"
+depends = ["ghidra-apply-globals"]
 run = '''
 #!/bin/bash
 set -e
@@ -137,53 +157,38 @@ bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
     -postScript ApplyNb09FuncSigsFromJson.py "$JSON_GLOBALS"
 '''
 
-[tasks.ghidra-setup]
-description = "Full Ghidra setup: import binary and apply all symbol scripts"
-depends = ["ghidra-import"]
+[tasks.ghidra-apply-win16api]
+description = "Apply Win16 Windows API signatures to Ghidra project"
+depends = ["ghidra-apply-funcsigs"]
 run = '''
 #!/bin/bash
 set -e
-
-mkdir -p "$GHIDRA_PROJECT"
 
 GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
 GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
 ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
 
-echo "=== Step 1/4: Applying struct definitions ==="
+if [ ! -f "$ANALYZER" ]; then
+    echo "Error: Ghidra not found at $GHIDRA_EXPANDED"
+    exit 1
+fi
+
+echo "Applying Win16 API signatures..."
 bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
     -process stars.exe \
     -noanalysis \
     -scriptPath "$SCRIPTS_DIR" \
-    -postScript ApplyNb09StructPackingFromJson.py "$JSON_STRUCTS" || echo "Warning: Some structs may have failed"
+    -postScript UpdateWin16WindowsApiSignatures.py "$WINDOWS_H"
+'''
 
-echo ""
-echo "=== Step 2/4: Applying names ==="
-bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
-    -process stars.exe \
-    -noanalysis \
-    -scriptPath "$SCRIPTS_DIR" \
-    -postScript ApplyNb09NamesFromJson.py "$JSON_GLOBALS"
-
-echo ""
-echo "=== Step 3/4: Applying global types ==="
-bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
-    -process stars.exe \
-    -noanalysis \
-    -scriptPath "$SCRIPTS_DIR" \
-    -postScript ApplyNb09GlobalsFromJson.py "$JSON_GLOBALS"
-
-echo ""
-echo "=== Step 4/4: Applying function signatures ==="
-bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
-    -process stars.exe \
-    -noanalysis \
-    -scriptPath "$SCRIPTS_DIR" \
-    -postScript ApplyNb09FuncSigsFromJson.py "$JSON_GLOBALS"
-
+[tasks.ghidra-setup]
+description = "Full Ghidra setup: import binary and apply all symbol scripts"
+depends = ["ghidra-apply-win16api"]
+run = '''
+#!/bin/bash
 echo ""
 echo "=== Setup complete! ==="
-echo "Open Ghidra GUI with: ghidraRun"
+echo "Open Ghidra GUI with: mise run ghidra-gui"
 echo "Then open project: $GHIDRA_PROJECT/Stars.gpr"
 '''
 
