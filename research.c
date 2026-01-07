@@ -4,14 +4,14 @@
 #include "research.h"
 
 /* globals */
-int32_t rglTechCost[27];  /* MEMORY_RESEARCH:0x1d4e */
-uint16_t rggrbitBrParts[17];  /* MEMORY_RESEARCH:0x1eb6 */
+uint16_t rggrbitBrParts[17] = {0x19ff, 0x0008, 0x0010, 0x0040, 0x0800, 0x0001, 0x1000, 0x0100, 0x0080, 0x0200, 0x8000, 0x0002, 0x0004, 0x4000, 0x0400, 0x2000, 0x0020};                         /* 10d8:1eb6 */
+int32_t rglTechCost[27] = {0, 50, 80, 130, 210, 340, 550, 890, 1440, 2330, 3770, 6100, 9870, 13850, 18040, 22440, 27050, 31870, 36900, 42140, 47590, 53250, 59120, 65200, 71490, 77990, 84700}; /* 10d8:1d4e */
 
 /* functions */
 int32_t CostOfDevelopingItem(char *rgTech)
 {
     int32_t lSpent;
-    char * pTech;
+    char *pTech;
     char rgTechSav[6];
     int32_t lCost;
     int16_t fUnreachable;
@@ -45,9 +45,9 @@ int16_t ResearchDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lP
     POINT pt;
     int16_t fChg;
     int16_t dxCurrent;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t c;
-    PLANET * lpplMac;
+    PLANET *lpplMac;
     uint16_t hfontSav;
     char *psz;
     RECT rcWindow;
@@ -68,7 +68,7 @@ int16_t FTrackResearchDlg(uint16_t hwnd, int16_t x, int16_t y, int16_t fkb)
     int16_t dChg;
     int16_t i;
     int16_t cNew;
-    RECT * prc;
+    RECT *prc;
     BTNT btnt;
     RECT rc;
 
@@ -79,10 +79,10 @@ int16_t FTrackResearchDlg(uint16_t hwnd, int16_t x, int16_t y, int16_t fkb)
 int32_t ProjectedResearchSpending(int32_t pct)
 {
     int32_t lRes;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t cRes;
     int32_t lSpend;
-    PLANET * lpplMac;
+    PLANET *lpplMac;
     char pctSav;
     int16_t cBogus;
 

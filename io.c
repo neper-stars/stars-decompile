@@ -4,4 +4,4 @@
 #include "io.h"
 
 /* globals */
-char mpishdefishTutor[6];  /* MEMORY_IO:0x0000 */
+char mpishdefishTutor[6] = {3, 4, 9, 6, 7, 14}; /* 1070:0000 */

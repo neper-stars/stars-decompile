@@ -4,8 +4,8 @@
 #include "scan.h"
 
 /* globals */
-int16_t vrgPopRad[19];  /* MEMORY_SCAN:0x0000 */
-uint32_t rgcrScanMine[3];  /* MEMORY_SCAN:0x0026 */
+uint32_t rgcrScanMine[3] = {0x00ff0000, 0x0000ffff, 0x000000ff};                                                                        /* 1058:0026 */
+int16_t vrgPopRad[19] = {25, 50, 100, 200, 400, 800, 1000, 1500, 2250, 3000, 4000, 5000, 6000, 7500, 9000, 11000, 14000, 18000, 25000}; /* 1058:0000 */
 
 /* functions */
 int16_t FindDlg(uint16_t hwnd, uint16_t msg, uint16_t wParam, int32_t lParam)
@@ -89,13 +89,13 @@ int32_t ScannerWndProc(uint16_t hwnd, uint16_t msg, uint16_t wParam, int32_t lPa
     int16_t fChgScan;
     SCAN scan;
     int16_t c;
-    THING * lpth;
-    FLEET * lpfl;
+    THING *lpth;
+    FLEET *lpfl;
     int16_t fSep;
     int32_t rgid[100];
     int16_t iChecked;
     int16_t iSel;
-    THING * lpthMac;
+    THING *lpthMac;
     int16_t id;
 
     /* debug symbols */
@@ -129,7 +129,7 @@ int16_t IWarpBestForWaypoint(FLEET *lpfl, ORDER *lpord)
     int16_t iWarpSav;
     int16_t j;
     int16_t i;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t iWarpOld;
     SCAN scan;
 
@@ -172,7 +172,7 @@ int32_t CShipsScanVis(FLEET *lpfl)
 
 void DrawShipScanPath(uint16_t hdc, int16_t fShow)
 {
-    ORDER * lpord2;
+    ORDER *lpord2;
     int16_t rgDup[87];
     int16_t j;
     uint16_t hpenSav;
@@ -180,9 +180,9 @@ void DrawShipScanPath(uint16_t hdc, int16_t fShow)
     POINT pt;
     int16_t iRopSav;
     int16_t dy;
-    ORDER * lpord1;
+    ORDER *lpord1;
     POINT ptCur;
-    FLEET * lpfl;
+    FLEET *lpfl;
     int16_t i;
     int16_t fHdc;
     int32_t lWarp2;
@@ -190,7 +190,7 @@ void DrawShipScanPath(uint16_t hdc, int16_t fShow)
     int16_t dx;
     RECT rc;
     int16_t id;
-    THING * lpth;
+    THING *lpth;
     int16_t fDoneRoute;
     double dAngle;
     POINT rgptArrow[2];
@@ -251,7 +251,7 @@ int16_t FAddWayPoint(POINT ptIn, SCAN *pscan)
     uint16_t hdc;
     int16_t id;
     int16_t dy;
-    ORDER * lpord;
+    ORDER *lpord;
     int16_t lDist;
     POINT rgpt[3];
     int16_t dx;
@@ -270,7 +270,7 @@ int16_t FSelectSz(char *szName)
 {
     char *pch;
     int16_t ifl;
-    FLEET * lpfl;
+    FLEET *lpfl;
     int16_t ipl;
     int16_t cch;
     char szT[20];
@@ -314,7 +314,7 @@ void DrawLockLight(uint16_t hdc, RECT *prc, int16_t fFullRedraw)
 
 int16_t FGetNextObjHere(SCAN *pscan, int16_t fOnlyOurs)
 {
-    FLEET * lpfl;
+    FLEET *lpfl;
     int16_t i;
     int16_t fFound;
 
@@ -397,7 +397,7 @@ int16_t FHandleWayPointDrag(POINT pt)
     int16_t fDup;
     int16_t grTypeIn;
     uint16_t hcurSav;
-    ORDER * lpord;
+    ORDER *lpord;
     int16_t i;
     POINT ptLogical;
     POINT ptNext;
@@ -427,7 +427,7 @@ void LogicalToScan(POINT *ppt)
 
 int16_t FNearAWayPoint(POINT pt, int16_t fLogical)
 {
-    ORDER * lpord;
+    ORDER *lpord;
     int16_t i;
     SCAN scan;
 
@@ -453,7 +453,7 @@ void DrawScanFleetCount(FLEET *lpfl, int16_t x, int16_t y, uint16_t hdc, uint16_
     int32_t l2;
     int16_t f999;
     uint32_t cr;
-    FLEET * lpflWalk;
+    FLEET *lpflWalk;
     int16_t iPlr;
     uint16_t hbmpSav;
     int32_t l;
@@ -466,7 +466,7 @@ int16_t DrawScanner(uint16_t hdc, RECT *prc)
     int16_t xOff;
     int16_t dExpand;
     uint16_t hpenSav;
-    FLEET * lpflT;
+    FLEET *lpflT;
     int16_t j;
     int16_t yTop;
     int16_t xMax;
@@ -475,19 +475,19 @@ int16_t DrawScanner(uint16_t hdc, RECT *prc)
     uint32_t crFore;
     int16_t iBkPrev;
     POINT ptD;
-    PLANET * lpplMac;
+    PLANET *lpplMac;
     int16_t yBmp;
     int16_t dy;
     uint16_t hbmpXSav;
     uint16_t hbmpScreen;
     int16_t id2;
     uint16_t hdcScreen;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t yMax;
     char rgWhatsHere[999];
     uint16_t hdcMem;
-    THING * lpth;
-    FLEET * lpfl;
+    THING *lpth;
+    FLEET *lpfl;
     int16_t i;
     int16_t xMin;
     uint16_t hbmpSav;
@@ -502,7 +502,7 @@ int16_t DrawScanner(uint16_t hdc, RECT *prc)
     int16_t fMA;
     int16_t fStarbase;
     POINT ptSelMain;
-    THING * lpthMac;
+    THING *lpthMac;
     int16_t fStargate;
     uint16_t mdScanBase;
     int16_t yMin;
@@ -522,7 +522,7 @@ int16_t DrawScanner(uint16_t hdc, RECT *prc)
     uint32_t cr;
     int16_t pctDesire;
     int16_t xOut;
-    THING * lpthDest;
+    THING *lpthDest;
     uint16_t hbr;
     int16_t fConc;
     int16_t yOut;

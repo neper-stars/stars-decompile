@@ -4,10 +4,10 @@
 #include "turn.h"
 
 /* globals */
-int16_t rgrgdmgMine[3][2];  /* MEMORY_TURN:0x4f3c */
-int16_t rgrgdmgMinMine[3][2];  /* MEMORY_TURN:0x4f48 */
-int16_t rgpctMineHit[3];  /* MEMORY_TURN:0x4f54 */
-int16_t rgiWarpSafe[3];  /* MEMORY_TURN:0x4f5a */
+int16_t rgiWarpSafe[3] = { 4, 6, 5 }; /* 10b0:4f5a */
+int16_t rgpctMineHit[3] = { 3, 10, 35 }; /* 10b0:4f54 */
+int16_t rgrgdmgMine[3][2] = { { 100, 125 }, { 500, 600 }, { 0, 0 } }; /* 10b0:4f3c */
+int16_t rgrgdmgMinMine[3][2] = { { 500, 600 }, { 2000, 2500 }, { 0, 0 } }; /* 10b0:4f48 */
 
 /* functions */
 void DoOrders(int16_t fPostMovement)

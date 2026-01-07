@@ -4,7 +4,7 @@
 #include "report.h"
 
 /* globals */
-uint16_t mpicolgrbitBU[12];  /* MEMORY_REPORT:0x0000 */
+uint16_t mpicolgrbitBU[12] = {0x00ff, 0x00ff, 0x00ff, 0x00ff, 0x00ff, 0x00ff, 0x00ff, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080}; /* 1108:0000 */
 
 /* functions */
 int16_t ScoreXDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam)
@@ -16,7 +16,7 @@ int16_t ScoreXDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lPar
     PAINTSTRUCT ps;
     char szT[40];
     int16_t cchHistory;
-    char * rgszScan[1];
+    char *rgszScan[1];
     int16_t c;
     int32_t rgid[12];
     char *psz;
@@ -98,11 +98,11 @@ void SetHScrollBar(void)
 void SortReportCache(int16_t irpt, int16_t icol)
 {
     uint16_t rgidRep[1024];
-    PLANET * lpplMac;
+    PLANET *lpplMac;
     int16_t cRows;
     uint16_t iItem;
-    PLANET * lppl;
-    FLEET * lpfl;
+    PLANET *lppl;
+    FLEET *lpfl;
     int16_t i;
 
     /* TODO: implement */
@@ -137,7 +137,7 @@ void ReportColumnPopup(POINT pt, int16_t icol, int16_t fRightBtn)
     int16_t rgcol[32];
     char szColTitle[50];
     int16_t cItems;
-    char * psz[1];
+    char *psz[1];
     int16_t cch;
     int16_t iRet;
     int16_t iHide;
@@ -171,17 +171,17 @@ int16_t ICompReport(void *arg1, void *arg2)
     int16_t i2;
     int16_t fTier2;
     int16_t irpt;
-    PLANET * lppl2;
-    FLEET * lpfl2;
-    BTLDATA * lpbd1;
+    PLANET *lppl2;
+    FLEET *lpfl2;
+    BTLDATA *lpbd1;
     int16_t ibtl2;
-    PLANET * lppl1;
-    FLEET * lpfl1;
+    PLANET *lppl1;
+    FLEET *lpfl1;
     int16_t ibtl1;
     int16_t iFirst;
     float pct2;
     int16_t iLast;
-    BTLDATA * lpbd2;
+    BTLDATA *lpbd2;
     float pct1;
     int32_t rgl[4];
 
@@ -225,8 +225,8 @@ void InvalidateReport(int16_t irpt, int16_t fReload)
 {
     int16_t fResetRpt;
     int16_t fClearRpt;
-    RPT * prptSav;
-    uint16_t * lprgidSav;
+    RPT *prptSav;
+    uint16_t *lprgidSav;
     RECT rc;
 
     /* TODO: implement */
@@ -240,7 +240,7 @@ void DumpUniverse(void)
     int16_t fOpen;
     int16_t fSuccess;
     int16_t fSilentSav;
-    int16_t (* penvMemSav)[9];
+    int16_t (*penvMemSav)[9];
     int16_t cch;
 
     /* debug symbols */
@@ -256,14 +256,14 @@ void DumpFleets(void)
     char szFile[256];
     char szForm[256];
     int16_t ifl;
-    FLEET * lpfl;
+    FLEET *lpfl;
     int16_t j;
     int16_t i;
     int16_t env[9];
     int16_t fOpen;
     int16_t fSuccess;
     int16_t fSilentSav;
-    int16_t (* penvMemSav)[9];
+    int16_t (*penvMemSav)[9];
     char *psz;
     int16_t cch;
     int32_t l;
@@ -293,9 +293,9 @@ int16_t DxReportColHdr(int16_t irpt, int16_t iCol, char *psz, uint16_t hdc)
 
 void DumpPlanets(void)
 {
-    PLANET * lpplMac;
+    PLANET *lpplMac;
     int16_t ids;
-    PLANET * lppl;
+    PLANET *lppl;
     char szFile[256];
     char szForm[256];
     int16_t j;
@@ -304,7 +304,7 @@ void DumpPlanets(void)
     int16_t fOpen;
     int16_t fSuccess;
     int16_t fSilentSav;
-    int16_t (* penvMemSav)[9];
+    int16_t (*penvMemSav)[9];
     char *psz;
     int16_t cch;
     int32_t l;
@@ -329,7 +329,7 @@ int32_t LFetchScoreXVal(SCOREX *lpsx, int16_t iVal)
     return 0;
 }
 
-char * PszGetETA(uint16_t hdc, FLEET *lpfl, int16_t *pcYears)
+char *PszGetETA(uint16_t hdc, FLEET *lpfl, int16_t *pcYears)
 {
     POINT pt;
     int16_t c;
@@ -348,10 +348,10 @@ char * PszGetETA(uint16_t hdc, FLEET *lpfl, int16_t *pcYears)
 void ExecuteReportClick(POINT pt, int16_t irpt, int16_t icol, int16_t irow)
 {
     uint16_t hdc;
-    BTLDATA * lpbd;
-    PLANET * lppl;
+    BTLDATA *lpbd;
+    PLANET *lppl;
     int16_t i;
-    FLEET * lpfl;
+    FLEET *lpfl;
     int16_t ibit;
     int32_t rglQuan[4];
     int16_t xCur;
@@ -398,14 +398,14 @@ void DrawVCReport(uint16_t hdc)
 
 void DrawReportItem(uint16_t hdc, RECT *prc, int16_t irpt, int16_t irow, int16_t icol)
 {
-    BTLDATA * lpbd;
+    BTLDATA *lpbd;
     char szT[100];
     char chT;
     char *lpsz;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t j;
     int16_t i;
-    FLEET * lpfl;
+    FLEET *lpfl;
     int16_t dx;
     char *psz;
     int16_t xCur;
@@ -435,7 +435,7 @@ void DrawReportItem(uint16_t hdc, RECT *prc, int16_t irpt, int16_t irow, int16_t
     /* TODO: implement */
 }
 
-char * PszGetTaskName(FLEET *lpfl, int16_t *picr)
+char *PszGetTaskName(FLEET *lpfl, int16_t *picr)
 {
     int16_t icr;
     int16_t ids;
@@ -453,7 +453,7 @@ char * PszGetTaskName(FLEET *lpfl, int16_t *picr)
     return NULL;
 }
 
-char * PszGetDestName(FLEET *lpfl, uint16_t hdc)
+char *PszGetDestName(FLEET *lpfl, uint16_t hdc)
 {
     int16_t i;
     ORDER ord;
@@ -498,7 +498,7 @@ void DrawHistoryReport(uint16_t hdc)
     RECT rc;
     uint16_t hpenSav;
     uint16_t hpen;
-    SCOREX * lpsx;
+    SCOREX *lpsx;
 
     /* debug symbols */
     /* block (block) @ MEMORY_REPORT:0x2db3 */

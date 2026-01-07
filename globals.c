@@ -4,512 +4,512 @@
 /* Unassigned symbols (no file inferred) */
 
 /* globals */
-extern uint16_t hbrButtonFace;              /* _DATA:0x0000 */
-extern uint16_t hbrButtonText;              /* _DATA:0x0002 */
-extern uint16_t hbrButtonHilite;            /* _DATA:0x0004 */
-extern uint16_t hbrButtonShadow;            /* _DATA:0x0006 */
-extern uint16_t hbrWindow;                  /* _DATA:0x0008 */
-extern uint16_t hbrWindowText;              /* _DATA:0x000a */
-extern uint16_t hbrWindowFrame;             /* _DATA:0x000c */
-extern uint16_t hbrDesktop;                 /* _DATA:0x000e */
-extern uint16_t hbrLightGray;               /* _DATA:0x0010 */
-extern uint16_t hbrGray;                    /* _DATA:0x0012 */
-extern uint16_t hbrRed;                     /* _DATA:0x0014 */
-extern uint16_t hbrGreen;                   /* _DATA:0x0016 */
-extern uint16_t hbrBlue;                    /* _DATA:0x0018 */
-extern int16_t (*lpfnTutorDlgProc)(void);   /* _DATA:0x001a */
-extern uint32_t rgcrPlrHistory[16];         /* _DATA:0x001e */
-extern int16_t (*penvMem)[9];               /* _DATA:0x005e */
-extern GAME game;                           /* _DATA:0x0060 */
-extern int16_t dGal;                        /* _DATA:0x00e0 */
-extern int16_t dGalInv;                     /* _DATA:0x00e2 */
-extern int16_t dGalMinDist;                 /* _DATA:0x00e4 */
-extern PLANET *lpPlanets;                   /* _DATA:0x00e6 */
-extern FLEET **rglpfl;                      /* _DATA:0x00ea */
-extern SHDEF *rglpshdef[1];                 /* _DATA:0x00ee */
-extern char *szHelpFile;                    /* _DATA:0x013a */
-extern SHDEF *rglpshdefSB[1];               /* _DATA:0x013c */
-extern int16_t idPlayer;                    /* _DATA:0x017c */
-extern uint16_t hwndBrowser;                /* _DATA:0x017e */
-extern uint16_t hwndScanner;                /* _DATA:0x0180 */
-extern uint16_t hwndActive;                 /* _DATA:0x0182 */
-extern uint16_t hwndMine;                   /* _DATA:0x0184 */
-extern uint16_t hwndPlanet;                 /* _DATA:0x0186 */
-extern uint16_t hwndMessage;                /* _DATA:0x0188 */
-extern uint16_t hwndTb;                     /* _DATA:0x018a */
-extern int16_t fLogOut;                     /* _DATA:0x018c */
-extern char *lpchBatch;                     /* _DATA:0x018e */
-extern uint16_t uTimerId;                   /* _DATA:0x0192 */
-extern uint16_t uTimerType;                 /* _DATA:0x0194 */
-extern char *PCTD;                          /* _DATA:0x019a */
-extern char *PCTLD;                         /* _DATA:0x01a0 */
-extern char *PCTDPCTPCT;                    /* _DATA:0x01a8 */
-extern char *PCTDKT;                        /* _DATA:0x01b0 */
-extern char *MPCTD;                         /* _DATA:0x01b6 */
-extern char *PCTDXPCTDPCTPCT;               /* _DATA:0x01c0 */
-extern uint32_t ctickLast;                  /* _DATA:0x01c2 */
-extern char szFrame[11];                    /* _DATA:0x01c6 */
-extern char szScan[10];                     /* _DATA:0x01d2 */
-extern char szMine[10];                     /* _DATA:0x01dc */
-extern char szPlanet[12];                   /* _DATA:0x01e6 */
-extern char szMessage[13];                  /* _DATA:0x01f2 */
-extern char szPopup[11];                    /* _DATA:0x0200 */
-extern char szBrowser[13];                  /* _DATA:0x020c */
-extern char szTitle[11];                    /* _DATA:0x021a */
-extern char szReport[12];                   /* _DATA:0x0226 */
-extern char szTb[8];                        /* _DATA:0x0232 */
-extern char szTooltip[8];                   /* _DATA:0x023a */
-extern char szDirName[256];                 /* _DATA:0x0242 */
-extern uint16_t hwndTitle;                  /* _DATA:0x0342 */
-extern int16_t fFreeingTitle;               /* _DATA:0x0344 */
-extern uint16_t hiconStars;                 /* _DATA:0x0346 */
-extern uint16_t hiconHost;                  /* _DATA:0x0348 */
-extern uint16_t hiconWait;                  /* _DATA:0x034a */
-extern int32_t lSaltCur;                    /* _DATA:0x034c */
-extern int32_t lSaltLast;                   /* _DATA:0x0350 */
-extern int16_t vretExitValue;               /* _DATA:0x037c */
-extern int16_t iPassCnt;                    /* _DATA:0x03c2 */
-extern int16_t fProcessingTimer;            /* _DATA:0x0404 */
-extern POINT ptStickyHostModeDlg;           /* _DATA:0x0406 */
-extern uint16_t vhpalSplash;                /* _DATA:0x041e */
-extern uint16_t vhdibTitle;                 /* _DATA:0x0420 */
-extern uint16_t rghwndBtnSplash[4];         /* _DATA:0x0422 */
-extern uint32_t rgcrMinerals[6];            /* _DATA:0x0438 */
-extern char *rgszPlanetAttr[1];             /* _DATA:0x046e */
-extern char *rgszPlanetAttrAbbr[1];         /* _DATA:0x0482 */
-extern char *rgszMinerals[1];               /* _DATA:0x04bc */
-extern char *rgszMineField[1];              /* _DATA:0x04e2 */
-extern int16_t cMinGrafMax;                 /* _DATA:0x04e8 */
-extern uint8_t mpiTypeiItem[3];             /* _DATA:0x04fa */
-extern char *mpdtsz[1];                     /* _DATA:0x0542 */
-extern int16_t fOrdersVis;                  /* _DATA:0x0576 */
-extern uint16_t grbitScan;                  /* _DATA:0x0578 */
-extern int16_t vpctRadarView;               /* _DATA:0x057a */
-extern int16_t vrgScanPO[2][5];             /* _DATA:0x057c */
-extern int16_t iScanZoom;                   /* _DATA:0x0590 */
-extern int16_t fInScrollSet;                /* _DATA:0x05bc */
-extern POINT ptStickyFindDlg;               /* _DATA:0x05be */
-extern char *vrgszMRU;                      /* _DATA:0x05c2 */
-extern int16_t bitTbl[8];                   /* _DATA:0x05c6 */
-extern char rgszArial[4][32];               /* _DATA:0x0696 */
-extern int16_t fFileErrSilent;              /* _DATA:0x073c */
-extern int16_t idsFileError;                /* _DATA:0x073e */
-extern uint16_t wVersFile;                  /* _DATA:0x0740 */
-extern uint32_t bogi[25];                   /* _DATA:0x0756 */
-extern GDATA gd;                            /* _DATA:0x07ba */
-extern char *szListbox;                     /* _DATA:0x07cc */
-extern char *szCombobox;                    /* _DATA:0x07d8 */
-extern char *szEdit;                        /* _DATA:0x07e0 */
-extern char *szButton;                      /* _DATA:0x07ea */
-extern TILE rgtilePlanet[0];                /* _DATA:0x07ec */
-extern int16_t rgdxOrderDD[3];              /* _DATA:0x084c */
-extern int16_t dxBattleDD;                  /* _DATA:0x0852 */
-extern int16_t dxShipLB;                    /* _DATA:0x0854 */
-extern int16_t dyShipLB;                    /* _DATA:0x0856 */
-extern int16_t dxFleetCompLB;               /* _DATA:0x0858 */
-extern int16_t dyFleetCompLB;               /* _DATA:0x085a */
-extern int16_t dxPlanetProdLB;              /* _DATA:0x085c */
-extern int16_t dyPlanetProdLB;              /* _DATA:0x085e */
-extern int16_t dxOrderED;                   /* _DATA:0x0860 */
-extern int16_t iselProd;                    /* _DATA:0x0862 */
-extern uint16_t hwndOrderED;                /* _DATA:0x0864 */
-extern int32_t vSerialNumber;               /* _DATA:0x089c */
-extern int32_t rglPopMac[5];                /* _DATA:0x08bc */
-extern POINT ptStickyRenameDlg;             /* _DATA:0x08d0 */
-extern char *rgszZipOrder[1];               /* _DATA:0x08f6 */
-extern TILE rgtileShip[0];                  /* _DATA:0x08fe */
-extern int16_t mdXferDlg;                   /* _DATA:0x0974 */
-extern POINT ptStickyTransferDlg;           /* _DATA:0x0976 */
-extern int16_t fValidLx;                    /* _DATA:0x0988 */
-extern int16_t fValidLxf;                   /* _DATA:0x098a */
-extern uint8_t *vlpMemStream;               /* _DATA:0x098c */
-extern uint8_t *lpLog;                      /* _DATA:0x0990 */
-extern int16_t imemLogCur;                  /* _DATA:0x0994 */
-extern int16_t imemLogPrev;                 /* _DATA:0x0996 */
-extern int16_t fLogOff;                     /* _DATA:0x0998 */
-extern TURNSERIAL *vrgts;                   /* _DATA:0x09a4 */
-extern uint16_t *vrgPlanResExtra;           /* _DATA:0x09a8 */
-extern COLDROP *lpcd;                       /* _DATA:0x09ac */
-extern XFERFULL *lpxf;                      /* _DATA:0x09b0 */
-extern int16_t vcBackupDirs;                /* _DATA:0x09ce */
-extern int16_t hf;                          /* _DATA:0x0a12 */
-extern char *lpbDefUni;                     /* _DATA:0x0a1a */
-extern char *vrgszComputerPlayers[1];       /* _DATA:0x0a6e */
-extern char *vrgszComputerLevel[1];         /* _DATA:0x0a9e */
-extern POINT ptStickyNewDlg;                /* _DATA:0x0ac8 */
-extern int16_t cbbitfMsg;                   /* _DATA:0x0ae6 */
-extern int16_t *lpMsg;                      /* _DATA:0x0ae8 */
-extern int16_t imemMsgCur;                  /* _DATA:0x0aec */
-extern int16_t cMsg;                        /* _DATA:0x0aee */
-extern int16_t iMsgCur;                     /* _DATA:0x0af0 */
-extern int16_t iMsgSendCur;                 /* _DATA:0x0af2 */
-extern int16_t fViewFilteredMsg;            /* _DATA:0x0af4 */
-extern MSGPLR *vlpmsgplrIn;                 /* _DATA:0x0af6 */
-extern MSGPLR *vlpmsgplrOut;                /* _DATA:0x0afa */
-extern int16_t vcmsgplrIn;                  /* _DATA:0x0afe */
-extern int16_t vcmsgplrOut;                 /* _DATA:0x0b00 */
-extern int16_t viInRe;                      /* _DATA:0x0b02 */
-extern char *vrgszUnits[1];                 /* _DATA:0x0b38 */
-extern char iLastMsgGet;                    /* _DATA:0x0b65 */
-extern char *PCTLD00;                       /* _DATA:0x0b6c */
-extern uint16_t hwndPopup;                  /* _DATA:0x0b6e */
-extern POPUPDATA GlobalPD;                  /* _DATA:0x0b70 */
-extern int16_t fInEditUpdate;               /* _DATA:0x0c40 */
-extern int16_t rgmapBuildBmps[21];          /* _DATA:0x0c42 */
-extern int16_t iselSlot;                    /* _DATA:0x0c6c */
-extern POINT ptStickySlotDlg;               /* _DATA:0x0c6e */
-extern uint16_t hdibPlaque;                 /* _DATA:0x0c72 */
-extern uint16_t hwndSlotDlg;                /* _DATA:0x0c80 */
-extern char rgszSpeed[30];                  /* _DATA:0x0c90 */
-extern PLPROD *lpplProdGlob;                /* _DATA:0x0cbe */
-extern uint16_t hwndProdDlg;                /* _DATA:0x0cc2 */
-extern int16_t fDlgUp;                      /* _DATA:0x0cc4 */
-extern POINT ptStickyProduceDlg;            /* _DATA:0x0cc6 */
-extern POINT ptStickyZipProdDlg;            /* _DATA:0x0cf0 */
-extern int16_t vyZPDStatic;                 /* _DATA:0x0cf4 */
-extern int16_t pctResGlob;                  /* _DATA:0x0cf6 */
-extern POINT ptStickyResDlg;                /* _DATA:0x0cf8 */
-extern int16_t yTopTechNote;                /* _DATA:0x0cfc */
-extern POINT ptStickyBrowserDlg;            /* _DATA:0x0d0e */
-extern int16_t fBrowserValid;               /* _DATA:0x0d12 */
-extern HB *rglphb[1];                       /* _DATA:0x0d24 */
-extern uint16_t mphtcbAlloc[12];            /* _DATA:0x0d54 */
-extern uint8_t *lpbBattleLog;               /* _DATA:0x0d6c */
-extern uint8_t *lpbBattleCur;               /* _DATA:0x0d70 */
-extern uint8_t *lpbBattleT;                 /* _DATA:0x0d74 */
-extern uint16_t *vlpwtCargo;                /* _DATA:0x0d78 */
-extern int16_t idBattle;                    /* _DATA:0x0d7c */
-extern int16_t fStarbaseDied;               /* _DATA:0x0d7e */
-extern int16_t fStarbaseDamaged;            /* _DATA:0x0d80 */
-extern POINT ptStickyRelationsDlg;          /* _DATA:0x0d82 */
-extern POINT ptStickyBattlePlansDlg;        /* _DATA:0x0d86 */
-extern int16_t iPlanSelDlg;                 /* _DATA:0x0d8a */
-extern PLAYER vrgplrDef[0];                 /* _DATA:0x0d92 */
-extern uint16_t rgidRaceBtn[0];             /* _DATA:0x12d2 */
-extern POINT ptStickyRaceDlg;               /* _DATA:0x12dc */
-extern char *vrgszRCWWidth[1];              /* _DATA:0x12f4 */
-extern char szRacePass[0];                  /* _DATA:0x12f8 */
-extern char szRaceFile[0];                  /* _DATA:0x1308 */
-extern int32_t lRandSeed1;                  /* _DATA:0x1360 */
-extern int32_t lRandSeed2;                  /* _DATA:0x1364 */
-extern int16_t cRandStack;                  /* _DATA:0x1368 */
-extern char iLastGet;                       /* _DATA:0x136a */
-extern POINT rgptArrow[5];                  /* _DATA:0x137c */
-extern POINT rgptTriangle[3];               /* _DATA:0x1390 */
-extern int16_t chbrCache;                   /* _DATA:0x139c */
-extern int16_t rgcompstrlower[26];          /* _DATA:0x139e */
-extern char *rgchcompstrlower;              /* _DATA:0x13ee */
-extern char rgchcomp[13];                   /* _DATA:0x13f0 */
-extern uint16_t vcPasswordFailures;         /* _DATA:0x13fe */
-extern uint16_t hwndProgressGauge;          /* _DATA:0x1400 */
-extern int32_t *vrgdpVCR;                   /* _DATA:0x1402 */
-extern int16_t fAnimate;                    /* _DATA:0x1406 */
-extern int16_t viSpeedVCR;                  /* _DATA:0x1408 */
-extern POINT ptStickyVCRDlg;                /* _DATA:0x140a */
-extern uint16_t hwndVCRDlg;                 /* _DATA:0x140e */
-extern int16_t fAi;                         /* _DATA:0x1432 */
-extern uint8_t *vlpbAiPlanet;               /* _DATA:0x1434 */
-extern uint8_t *vlpbAiData;                 /* _DATA:0x1438 */
-extern PLANET **vrglpplAi;                  /* _DATA:0x143c */
-extern uint8_t vrgcAiParts[45];             /* _DATA:0x1440 */
-extern char iLastStrGet;                    /* _DATA:0x1474 */
-extern POINT ptStickyTutorDlg;              /* _DATA:0x1476 */
-extern int16_t iLastTutGet;                 /* _DATA:0x1482 */
-extern RPT vrptPlanet;                      /* _DATA:0x1484 */
-extern RPT vrptFleet;                       /* _DATA:0x14ba */
-extern RPT vrptEFleet;                      /* _DATA:0x14f0 */
-extern RPT vrptBattle;                      /* _DATA:0x1526 */
-extern SCOREX *rgsxPlr[1];                  /* _DATA:0x155c */
-extern RPT *vprptCur;                       /* _DATA:0x159c */
-extern int16_t irowEFleetCur;               /* _DATA:0x159e */
-extern uint16_t *vlprgidRep;                /* _DATA:0x15a0 */
-extern uint16_t *vlprgidMisc;               /* _DATA:0x15a4 */
-extern uint16_t *vlprgidPlanet;             /* _DATA:0x15a8 */
-extern uint16_t *vlprgidFleet;              /* _DATA:0x15ac */
-extern SCOREX *vlprgScoreX;                 /* _DATA:0x15b0 */
-extern uint16_t hwndReportDlg;              /* _DATA:0x15b4 */
-extern char *szDblDash;                     /* _DATA:0x15ba */
-extern POINT ptStickyScoreXDlg;             /* _DATA:0x15d0 */
-extern uint16_t hwndScoreXDlg;              /* _DATA:0x15d4 */
-extern int16_t fInScoreDialog;              /* _DATA:0x15d6 */
-extern int16_t vicolSortPrev;               /* _DATA:0x161c */
-extern int16_t viSubsortPrev;               /* _DATA:0x161e */
-extern char szCRLF[3];                      /* _DATA:0x1620 */
-extern POINT ptStickyPrintMapDlg;           /* _DATA:0x1680 */
-extern int16_t vrgcPrintMapPage[2];         /* _DATA:0x1684 */
-extern THING *lpThings;                     /* _DATA:0x1688 */
-extern int16_t cThing;                      /* _DATA:0x168c */
-extern int16_t cThingAlloc;                 /* _DATA:0x168e */
-extern POINT ptStickyZipOrderDlg;           /* _DATA:0x16a4 */
-extern uint16_t hwndZipOrderDlg;            /* _DATA:0x16a8 */
-extern POINT ptStickyMergeFleetsDlg;        /* _DATA:0x16b0 */
-extern uint16_t hwndTBRadar;                /* _DATA:0x16b8 */
-extern POINT vptTbLast;                     /* _DATA:0x16ba */
-extern uint16_t hwndTooltip;                /* _DATA:0x16c8 */
-extern int16_t vidTimerTooltip;             /* _DATA:0x16ca */
-extern uint32_t vtickTooltipLast;           /* _DATA:0x16cc */
-extern uint8_t ctype[0];                    /* _DATA:0x174e */
-extern int32_t lFileSeed1;                  /* _BSS:0x0000 */
-extern int32_t lFileSeed2;                  /* _BSS:0x0004 */
-extern INI ini;                             /* c_common:0x0000 */
-extern PART vpartBrowser;                   /* c_common:0x001a */
-extern RECT rcMsgText;                      /* c_common:0x0022 */
-extern uint32_t crButtonFace;               /* c_common:0x002a */
-extern uint16_t hrgnScratch;                /* c_common:0x002e */
-extern int16_t vcStepVCR;                   /* c_common:0x0030 */
-extern int16_t (*lpfnRealEditProc)(void);   /* c_common:0x0032 */
-extern uint16_t hbrYellow;                  /* c_common:0x0036 */
-extern char szLastGet[19];                  /* c_common:0x0038 */
-extern int16_t fMarkedPlanets;              /* c_common:0x004c */
-extern int16_t iWindowLayout;               /* c_common:0x004e */
-extern char szPassLast[16];                 /* c_common:0x0050 */
-extern uint16_t hwndBattleDD;               /* c_common:0x0060 */
-extern char *vrgszFileNew;                  /* c_common:0x0062 */
-extern int16_t dxyVCRSquare;                /* c_common:0x0064 */
-extern ZIPPRODQ vrgZipProd[5];              /* c_common:0x0066 */
-extern RECT rcCargo;                        /* c_common:0x012e */
-extern int16_t dySBar;                      /* c_common:0x0136 */
-extern uint16_t hpenDkYellow;               /* c_common:0x0138 */
-extern FRAMESTUFF vfs;                      /* c_common:0x013a */
-extern int16_t dxResRadio;                  /* c_common:0x0150 */
-extern BTLDATA *vlpbdVCRNext;               /* c_common:0x0152 */
-extern uint16_t hAccel;                     /* c_common:0x0156 */
-extern int16_t (*lpfnRealComboProc)(void);  /* c_common:0x0158 */
-extern int16_t dxWinFrame;                  /* c_common:0x015c */
-extern int16_t dyWinFrame;                  /* c_common:0x015e */
-extern uint16_t hcurResizeWE;               /* c_common:0x0160 */
-extern int16_t dxResRight;                  /* c_common:0x0162 */
-extern int16_t dxShipDD;                    /* c_common:0x0164 */
-extern int16_t dyArial7;                    /* c_common:0x0166 */
-extern int16_t dyArial6;                    /* c_common:0x0168 */
-extern int16_t dyArial8;                    /* c_common:0x016a */
-extern uint16_t hwndRepCB;                  /* c_common:0x016c */
-extern uint32_t crButtonShadow;             /* c_common:0x016e */
-extern int16_t (*lpfnFakeListProc)(void);   /* c_common:0x0172 */
-extern int16_t dyShipDD;                    /* c_common:0x0176 */
-extern int16_t (*lpfnGaugeDlgProc)(void);   /* c_common:0x0178 */
-extern uint16_t grfMissed;                  /* c_common:0x017c */
-extern int16_t rgcsxPlr[16];                /* c_common:0x017e */
-extern uint16_t hdibThings;                 /* c_common:0x019e */
-extern uint16_t hbrSelect;                  /* c_common:0x01a0 */
-extern int32_t lResBudget;                  /* c_common:0x01a2 */
-extern SHDEF shdefBuild;                    /* c_common:0x01a6 */
-extern LOGXFER lx;                          /* c_common:0x023a */
-extern uint16_t hbmpBackBld;                /* c_common:0x0252 */
-extern uint16_t hwndMDIClient;              /* c_common:0x0254 */
-extern uint16_t rghiconVCR[7];              /* c_common:0x0256 */
-extern LOGXFERF lxf;                        /* c_common:0x0264 */
-extern uint8_t rghbrCacheUse[32];           /* c_common:0x0288 */
-extern int16_t (*lpfnFakeEditProc)(void);   /* c_common:0x02a8 */
-extern int32_t lResTotal;                   /* c_common:0x02ac */
-extern BTN *rgbtnXfer;                      /* c_common:0x02b0 */
-extern int16_t csh;                         /* c_common:0x02b2 */
-extern int16_t (*lpfnFakeComboProc)(void);  /* c_common:0x02b4 */
-extern char vszDefPass[17];                 /* c_common:0x02b8 */
-extern uint16_t hbrRadar;                   /* c_common:0x02ca */
-extern uint8_t rgTechBattle[6];             /* c_common:0x02cc */
-extern uint8_t rgTechTrader[13];            /* c_common:0x02d2 */
-extern int16_t yScanTop;                    /* c_common:0x02e0 */
-extern int16_t xScanTop;                    /* c_common:0x02e2 */
-extern uint32_t crWindow;                   /* c_common:0x02e4 */
-extern int16_t vcflMerge;                   /* c_common:0x02e8 */
-extern uint16_t uDateInstalled;             /* c_common:0x02ea */
-extern uint16_t rghbrMineral[5];            /* c_common:0x02ec */
-extern int16_t (*lpfnRealListProc)(void);   /* c_common:0x02f6 */
-extern uint16_t hcurTrashCan;               /* c_common:0x02fa */
-extern uint16_t hwndFrame;                  /* c_common:0x02fc */
-extern uint16_t rghdibInventory[7];         /* c_common:0x02fe */
-extern char szMineralTitle[90];             /* c_common:0x030c */
-extern uint32_t crButtonText;               /* c_common:0x0366 */
-extern int16_t *rgXferValidHulls;           /* c_common:0x036a */
-extern BTLREC *vlpbrVCR;                    /* c_common:0x036c */
-extern int16_t dxyVCRBoard;                 /* c_common:0x0370 */
-extern int16_t iPanelActive;                /* c_common:0x0372 */
-extern uint16_t hdibRacesX;                 /* c_common:0x0374 */
-extern uint16_t hdibRacesT;                 /* c_common:0x0376 */
-extern int16_t viStore;                     /* c_common:0x0378 */
-extern uint16_t hbmpMsg;                    /* c_common:0x037a */
-extern int16_t viStepVCRCur;                /* c_common:0x037c */
-extern int16_t cFutureTech;                 /* c_common:0x037e */
-extern int16_t dxMaxMineralQuan;            /* c_common:0x0380 */
-extern uint32_t rgcrCache[32];              /* c_common:0x0382 */
-extern uint16_t hbrPurple;                  /* c_common:0x0402 */
-extern PLAYER *vrgplrNew;                   /* c_common:0x0404 */
-extern HDR hdrCur;                          /* c_common:0x0406 */
-extern uint16_t rghwndBtn[13];              /* c_common:0x0408 */
-extern int16_t fDirtyPlan;                  /* c_common:0x0422 */
-extern uint16_t rghfontArial8[5];           /* c_common:0x0424 */
-extern uint16_t rghfontArial7[1];           /* c_common:0x042e */
-extern uint16_t rghfontArial6[1];           /* c_common:0x0430 */
-extern uint16_t hpenDkPurple;               /* c_common:0x0432 */
-extern uint16_t hpenYellow;                 /* c_common:0x0434 */
-extern uint16_t hcurResizeNS;               /* c_common:0x0436 */
-extern RECT vrgrcSlot[16];                  /* c_common:0x0438 */
-extern int16_t (*lpfnFakeCEProc)(void);     /* c_common:0x04b8 */
-extern int16_t dScanPage;                   /* c_common:0x04bc */
-extern RECT vrcTooltip;                     /* c_common:0x04be */
-extern uint16_t hwndMain;                   /* c_common:0x04c6 */
-extern int16_t viRound;                     /* c_common:0x04c8 */
-extern uint16_t hbrTooltip;                 /* c_common:0x04ca */
-extern RECT rcSpinTop;                      /* c_common:0x04cc */
-extern RECT rcSpinBot;                      /* c_common:0x04d4 */
-extern int16_t vcRound;                     /* c_common:0x04dc */
-extern int16_t rgidPlan[999];               /* c_common:0x04de */
-extern int16_t (*lpfnRealCEProc)(void);     /* c_common:0x0cac */
-extern POINT rgptPlan[999];                 /* c_common:0x0cb0 */
-extern POINT vptMsg;                        /* c_common:0x1c4c */
-extern int16_t yBuildInfoSum;               /* c_common:0x1c50 */
-extern int16_t mdMsgObj;                    /* c_common:0x1c52 */
-extern uint16_t hcurNoWay;                  /* c_common:0x1c54 */
-extern int16_t idMsgObj;                    /* c_common:0x1c56 */
-extern POINT ptPlaque;                      /* c_common:0x1c58 */
-extern uint32_t crButtonHilite;             /* c_common:0x1c5c */
-extern TIMER vtimer;                        /* c_common:0x1c60 */
-extern uint16_t hbmpUnknownPlanet;          /* c_common:0x1c6a */
-extern int16_t (*lpfnReportDlgProc)(void);  /* c_common:0x1c6c */
-extern SHDEF rgshdef[16];                   /* c_common:0x1c70 */
-extern uint8_t rgcbtlplan[16];              /* c_common:0x25a0 */
-extern uint16_t rghfontArial10[2];          /* c_common:0x25b0 */
-extern int16_t xNewGameDiamond;             /* c_common:0x25b4 */
-extern uint8_t vrgAiCyberArmadaPotency[4];  /* c_common:0x25b6 */
-extern int16_t dScanInc;                    /* c_common:0x25ba */
-extern char szMsgTitle[90];                 /* c_common:0x25bc */
-extern uint32_t crWindowText;               /* c_common:0x2616 */
-extern uint16_t hwndRaceParent;             /* c_common:0x261a */
-extern RECT *vrgrcRCW;                      /* c_common:0x261c */
-extern uint16_t hcurArrowHelp;              /* c_common:0x261e */
-extern RECT rgrcRef[19];                    /* c_common:0x2620 */
-extern int16_t vclpplAi;                    /* c_common:0x26b8 */
-extern RECT rcMsgTitle;                     /* c_common:0x26ba */
-extern uint16_t hdibPlanets;                /* c_common:0x26c2 */
-extern int16_t yTopFutureTech;              /* c_common:0x26c4 */
-extern SEL sel;                             /* c_common:0x26c6 */
-extern HS rghsFutureTech[8];                /* c_common:0x27a8 */
-extern uint16_t hAccelTitle;                /* c_common:0x27c8 */
-extern uint16_t hbmpScanner;                /* c_common:0x27ca */
-extern uint16_t grbitScanMines;             /* c_common:0x27cc */
-extern RECT rcProdDiamond;                  /* c_common:0x27ce */
-extern uint16_t hcurScanner;                /* c_common:0x27d6 */
-extern XFER *pxfer;                         /* c_common:0x27d8 */
-extern int16_t iPopMenuSel;                 /* c_common:0x27da */
-extern char szPopupBuffer[256];             /* c_common:0x27dc */
-extern int16_t dxTip;                       /* c_common:0x28dc */
-extern uint16_t rghdibShips[5];             /* c_common:0x28de */
-extern uint16_t hbr50Screen;                /* c_common:0x28e8 */
-extern uint16_t hcurOpenGrab;               /* c_common:0x28ea */
-extern int16_t cPlanet;                     /* c_common:0x28ec */
-extern uint16_t hbmpScanShip;               /* c_common:0x28ee */
-extern TOK *vrgtok;                         /* c_common:0x28f0 */
-extern uint16_t rghwndMsgBtn[4];            /* c_common:0x28f4 */
-extern int16_t vidsTooltip;                 /* c_common:0x28fc */
-extern int16_t vfAscendingPrev;             /* c_common:0x28fe */
-extern POINT ptSpeedVCR;                    /* c_common:0x2900 */
-extern int16_t crcRCW;                      /* c_common:0x2904 */
-extern int16_t crgbtnXfer;                  /* c_common:0x2906 */
-extern char rgbCur[1024];                   /* c_common:0x2908 */
-extern int16_t iResTechNow;                 /* c_common:0x2d08 */
-extern PLAYER vplr;                         /* c_common:0x2d0a */
-extern int16_t dyTitleBar;                  /* c_common:0x2dca */
-extern char szLastMsgGet[256];              /* c_common:0x2dcc */
-extern uint8_t vrgAiArmadaPotency[4];       /* c_common:0x2ecc */
-extern uint16_t rghdibShipsT[5];            /* c_common:0x2ed0 */
-extern uint8_t bitfMsgSent[49];             /* c_common:0x2eda */
-extern uint16_t hbrDkYellow;                /* c_common:0x2f0c */
-extern uint8_t vrgbMachineConfig[11];       /* c_common:0x2f0e */
-extern uint16_t grbitScanEShip;             /* c_common:0x2f1a */
-extern int16_t iAboutPartial;               /* c_common:0x2f1c */
-extern uint8_t *vAiMacRecycleSB;            /* c_common:0x2f1e */
-extern char *lpchBatchMac;                  /* c_common:0x2f20 */
-extern POINT ptslotGlob;                    /* c_common:0x2f24 */
-extern int16_t vpctProgressGauge;           /* c_common:0x2f28 */
-extern uint16_t hwndFleetCompLB;            /* c_common:0x2f2a */
-extern int16_t *vrgiflMerge;                /* c_common:0x2f2c */
-extern uint8_t vrgplrTypeNew[16];           /* c_common:0x2f2e */
-extern uint16_t hcurResize4Way;             /* c_common:0x2f3e */
-extern int16_t (*lpfnBrowserDlgProc)(void); /* c_common:0x2f40 */
-extern BTLPLAN btlplan;                     /* c_common:0x2f44 */
-extern int16_t vdxScoreX;                   /* c_common:0x2f68 */
-extern int16_t dxResStrRight;               /* c_common:0x2f6a */
-extern uint16_t hwndMsgDrop;                /* c_common:0x2f6c */
-extern int16_t (*lpfnHostTimerProc)(void);  /* c_common:0x2f6e */
-extern SHDEF *lpshdefBuild;                 /* c_common:0x2f72 */
-extern uint8_t *lpb2k;                      /* c_common:0x2f76 */
-extern uint16_t hbrCargo;                   /* c_common:0x2f7a */
-extern TUTOR tutor;                         /* c_common:0x2f7c */
-extern int32_t rglRandStack[4][2];          /* c_common:0x2fa8 */
-extern int16_t cXferValidHulls;             /* c_common:0x2fc8 */
-extern uint16_t hrgnHuge;                   /* c_common:0x2fca */
-extern uint16_t hwndPlanetProdLB;           /* c_common:0x2fcc */
-extern uint16_t hcurHand;                   /* c_common:0x2fce */
-extern HDR hdrPrev;                         /* c_common:0x2fd0 */
-extern uint16_t hbrDock;                    /* c_common:0x2fd2 */
-extern ZIPORDER vrgZip[4];                  /* c_common:0x2fd4 */
-extern uint16_t rghbrCache[32];             /* c_common:0x3034 */
-extern uint16_t hcurCloseGrab;              /* c_common:0x3074 */
-extern uint8_t vbrcVCRFocus;                /* c_common:0x3076 */
-extern uint16_t grbitScanShip;              /* c_common:0x3078 */
-extern int16_t dyArial10;                   /* c_common:0x307a */
-extern int16_t ishdefBuild;                 /* c_common:0x307c */
-extern uint16_t hwndShipDD;                 /* c_common:0x307e */
-extern uint16_t hInst;                      /* c_common:0x3080 */
-extern int16_t vcScreenColors;              /* c_common:0x3082 */
-extern uint16_t vhpal;                      /* c_common:0x3084 */
-extern uint16_t hwndShipLB;                 /* c_common:0x3086 */
-extern uint16_t hbrShip;                    /* c_common:0x3088 */
-extern uint16_t hwndMsgScroll;              /* c_common:0x308a */
-extern BTLDATA *vlpbdVCR;                   /* c_common:0x308c */
-extern int16_t fRCWReadOnly;                /* c_common:0x3090 */
-extern uint16_t *vrgPlrLosses;              /* c_common:0x3092 */
-extern uint8_t bitfMsgFiltered[49];         /* c_common:0x3094 */
-extern int16_t cFleet;                      /* c_common:0x30c6 */
-extern uint16_t hpenDkGreen;                /* c_common:0x30c8 */
-extern char szMsgBuf[256];                  /* c_common:0x30ca */
-extern char *lpbDefMac;                     /* c_common:0x31d2 */
-extern int16_t mdBuild;                     /* c_common:0x31d6 */
-extern uint8_t vrgbEnvCur[0];               /* c_common:0x31d8 */
-extern uint16_t hwndBrowserChild;           /* c_common:0x31e4 */
-extern uint16_t hdibRaces;                  /* c_common:0x31e6 */
-extern int16_t viVCRFocus;                  /* c_common:0x31e8 */
-extern char szLastStrGet[256];              /* c_common:0x31ea */
-extern char szBackup[0];                    /* c_common:0x32ea */
-extern uint16_t hwndMineCB;                 /* c_common:0x33ea */
-extern int16_t cXferFull;                   /* c_common:0x33ec */
-extern uint16_t hpenRadarNear;              /* c_common:0x33ee */
-extern uint16_t rghbrPlanetAttr[3][2];      /* c_common:0x33f0 */
-extern uint16_t hpenEnemy;                  /* c_common:0x33fc */
-extern uint16_t hbrRadarNear;               /* c_common:0x33fe */
-extern uint16_t hpenDkBlue;                 /* c_common:0x3400 */
-extern uint16_t rghbrMinSum[4][2];          /* c_common:0x3402 */
-extern char szBase[256];                    /* c_common:0x3412 */
-extern uint16_t hcurScanAdd;                /* c_common:0x3512 */
-extern char szWork[360];                    /* c_common:0x3514 */
-extern uint16_t hbrStarbase;                /* c_common:0x367c */
-extern char szFormatNumber[12];             /* c_common:0x367e */
-extern int16_t dySysFont;                   /* c_common:0x368a */
-extern int16_t fHullCopy;                   /* c_common:0x368c */
-extern uint16_t rghbrPat[3];                /* c_common:0x368e */
-extern uint16_t hwndMsgEdit;                /* c_common:0x3694 */
-extern RECT rgrcBuildSpin[2];               /* c_common:0x3696 */
-extern uint16_t hpenRadar;                  /* c_common:0x36a6 */
-extern BTLPLAN *rglpbtlplan[1];             /* c_common:0x36a8 */
-extern int16_t vctok;                       /* c_common:0x36e8 */
-extern uint16_t hbmpNumbers;                /* c_common:0x36ea */
-extern THING *lpthBattle;                   /* c_common:0x36ec */
-extern uint16_t hpenStarbase;               /* c_common:0x36f0 */
-extern uint32_t vtickTooltip1stVis;         /* c_common:0x36f2 */
-extern uint16_t rghwndOrderDD[3];           /* c_common:0x36f6 */
-extern uint16_t hdibToolbar;                /* c_common:0x36fc */
-extern int16_t fStarbaseMode;               /* c_common:0x36fe */
-extern int16_t vcplrNew;                    /* c_common:0x3700 */
-extern uint16_t hbmpMono;                   /* c_common:0x3702 */
-extern int16_t iAbout1st;                   /* c_common:0x3704 */
-extern uint16_t hbrEnemy;                   /* c_common:0x3706 */
-extern int16_t cColDrop;                    /* c_common:0x3708 */
-extern uint16_t hbrBBlue;                   /* c_common:0x370a */
-extern int16_t dxResLeft;                   /* c_common:0x370c */
-extern uint16_t hpenMassPath;               /* c_common:0x370e */
-extern PROD *pProdGlob;                     /* c_common:0x3710 */
-extern PLAYER rgplr[16];                    /* c_common:0x3712 */
-extern uint16_t hpenShip;                   /* c_common:0x4312 */
-extern int16_t rgOut[16];                   /* c_common:0x4314 */
-extern int16_t cProdGlob;                   /* c_common:0x4334 */
+BTLDATA *vlpbdVCR;
+BTLDATA *vlpbdVCRNext;
+BTLPLAN *rglpbtlplan[1];
+BTLPLAN btlplan;
+BTLREC *vlpbrVCR;
+BTN *rgbtnXfer;
+char *lpbDefMac;
+char *lpbDefUni;
+char *lpchBatch;
+char *lpchBatchMac;
+char *MPCTD;
+char *mpdtsz[1];
+char *PCTD;
+char *PCTDKT;
+char *PCTDPCTPCT;
+char *PCTDXPCTDPCTPCT;
+char *PCTLD;
+char *PCTLD00;
+char *rgchcompstrlower;
+char *rgszMineField[1];
+char *rgszMinerals[1];
+char *rgszPlanetAttr[1];
+char *rgszPlanetAttrAbbr[1];
+char *rgszZipOrder[1];
+char *szButton;
+char *szCombobox;
+char *szDblDash;
+char *szEdit;
+char *szHelpFile;
+char *szListbox;
+char *vrgszComputerLevel[1];
+char *vrgszComputerPlayers[1];
+char *vrgszFileNew;
+char *vrgszMRU;
+char *vrgszRCWWidth[1];
+char *vrgszUnits[1];
+char iLastGet;
+char iLastMsgGet;
+char iLastStrGet;
+char rgbCur[1024];
+char rgchcomp[13];
+char rgszArial[4][32];
+char rgszSpeed[30];
+char szBackup[0];
+char szBase[256];
+char szBrowser[13];
+char szCRLF[3];
+char szDirName[256];
+char szFormatNumber[12];
+char szFrame[11];
+char szLastGet[19];
+char szLastMsgGet[256];
+char szLastStrGet[256];
+char szMessage[13];
+char szMine[10];
+char szMineralTitle[90];
+char szMsgBuf[256];
+char szMsgTitle[90];
+char szPassLast[16];
+char szPlanet[12];
+char szPopup[11];
+char szPopupBuffer[256];
+char szRaceFile[0];
+char szRacePass[0];
+char szReport[12];
+char szScan[10];
+char szTb[8];
+char szTitle[11];
+char szTooltip[8];
+char szWork[360];
+char vszDefPass[17];
+COLDROP *lpcd;
+FLEET **rglpfl;
+FRAMESTUFF vfs;
+GAME game;
+GDATA gd;
+HB *rglphb[1];
+HDR hdrCur;
+HDR hdrPrev;
+HS rghsFutureTech[8];
+INI ini;
+int16_t (*lpfnBrowserDlgProc)(void);
+int16_t (*lpfnFakeCEProc)(void);
+int16_t (*lpfnFakeComboProc)(void);
+int16_t (*lpfnFakeEditProc)(void);
+int16_t (*lpfnFakeListProc)(void);
+int16_t (*lpfnGaugeDlgProc)(void);
+int16_t (*lpfnHostTimerProc)(void);
+int16_t (*lpfnRealCEProc)(void);
+int16_t (*lpfnRealComboProc)(void);
+int16_t (*lpfnRealEditProc)(void);
+int16_t (*lpfnRealListProc)(void);
+int16_t (*lpfnReportDlgProc)(void);
+int16_t (*lpfnTutorDlgProc)(void);
+int16_t (*penvMem)[9];
+int16_t *lpMsg;
+int16_t *rgXferValidHulls;
+int16_t *vrgiflMerge;
+int16_t bitTbl[8];
+int16_t cbbitfMsg;
+int16_t cColDrop;
+int16_t cFleet;
+int16_t cFutureTech;
+int16_t chbrCache;
+int16_t cMinGrafMax;
+int16_t cMsg;
+int16_t cPlanet;
+int16_t cProdGlob;
+int16_t cRandStack;
+int16_t crcRCW;
+int16_t crgbtnXfer;
+int16_t csh;
+int16_t cThing;
+int16_t cThingAlloc;
+int16_t cXferFull;
+int16_t cXferValidHulls;
+int16_t dGal;
+int16_t dGalInv;
+int16_t dGalMinDist;
+int16_t dScanInc;
+int16_t dScanPage;
+int16_t dxBattleDD;
+int16_t dxFleetCompLB;
+int16_t dxMaxMineralQuan;
+int16_t dxOrderED;
+int16_t dxPlanetProdLB;
+int16_t dxResLeft;
+int16_t dxResRadio;
+int16_t dxResRight;
+int16_t dxResStrRight;
+int16_t dxShipDD;
+int16_t dxShipLB;
+int16_t dxTip;
+int16_t dxWinFrame;
+int16_t dxyVCRBoard;
+int16_t dxyVCRSquare;
+int16_t dyArial10;
+int16_t dyArial6;
+int16_t dyArial7;
+int16_t dyArial8;
+int16_t dyFleetCompLB;
+int16_t dyPlanetProdLB;
+int16_t dySBar;
+int16_t dyShipDD;
+int16_t dyShipLB;
+int16_t dySysFont;
+int16_t dyTitleBar;
+int16_t dyWinFrame;
+int16_t fAi;
+int16_t fAnimate;
+int16_t fBrowserValid;
+int16_t fDirtyPlan;
+int16_t fDlgUp;
+int16_t fFileErrSilent;
+int16_t fFreeingTitle;
+int16_t fHullCopy;
+int16_t fInEditUpdate;
+int16_t fInScoreDialog;
+int16_t fInScrollSet;
+int16_t fLogOff;
+int16_t fLogOut;
+int16_t fMarkedPlanets;
+int16_t fOrdersVis;
+int16_t fProcessingTimer;
+int16_t fRCWReadOnly;
+int16_t fStarbaseDamaged;
+int16_t fStarbaseDied;
+int16_t fStarbaseMode;
+int16_t fValidLx;
+int16_t fValidLxf;
+int16_t fViewFilteredMsg;
+int16_t hf;
+int16_t iAbout1st;
+int16_t iAboutPartial;
+int16_t idBattle;
+int16_t idMsgObj;
+int16_t idPlayer;
+int16_t idsFileError;
+int16_t iLastTutGet;
+int16_t imemLogCur;
+int16_t imemLogPrev;
+int16_t imemMsgCur;
+int16_t iMsgCur;
+int16_t iMsgSendCur;
+int16_t iPanelActive;
+int16_t iPassCnt;
+int16_t iPlanSelDlg;
+int16_t iPopMenuSel;
+int16_t iResTechNow;
+int16_t irowEFleetCur;
+int16_t iScanZoom;
+int16_t iselProd;
+int16_t iselSlot;
+int16_t ishdefBuild;
+int16_t iWindowLayout;
+int16_t mdBuild;
+int16_t mdMsgObj;
+int16_t mdXferDlg;
+int16_t pctResGlob;
+int16_t rgcompstrlower[26];
+int16_t rgcsxPlr[16];
+int16_t rgdxOrderDD[3];
+int16_t rgidPlan[999];
+int16_t rgmapBuildBmps[21];
+int16_t rgOut[16];
+int16_t vcBackupDirs;
+int16_t vcflMerge;
+int16_t vclpplAi;
+int16_t vcmsgplrIn;
+int16_t vcmsgplrOut;
+int16_t vcplrNew;
+int16_t vcRound;
+int16_t vcScreenColors;
+int16_t vcStepVCR;
+int16_t vctok;
+int16_t vdxScoreX;
+int16_t vfAscendingPrev;
+int16_t vicolSortPrev;
+int16_t vidsTooltip;
+int16_t vidTimerTooltip;
+int16_t viInRe;
+int16_t viRound;
+int16_t viSpeedVCR;
+int16_t viStepVCRCur;
+int16_t viStore;
+int16_t viSubsortPrev;
+int16_t viVCRFocus;
+int16_t vpctProgressGauge;
+int16_t vpctRadarView;
+int16_t vretExitValue;
+int16_t vrgcPrintMapPage[2];
+int16_t vrgScanPO[2][5];
+int16_t vyZPDStatic;
+int16_t xNewGameDiamond;
+int16_t xScanTop;
+int16_t yBuildInfoSum;
+int16_t yScanTop;
+int16_t yTopFutureTech;
+int16_t yTopTechNote;
+int32_t *vrgdpVCR;
+int32_t lFileSeed1; /* _BSS:0x0000 */
+int32_t lFileSeed2; /* _BSS:0x0004 */
+int32_t lRandSeed1;
+int32_t lRandSeed2;
+int32_t lResBudget;
+int32_t lResTotal;
+int32_t lSaltCur;
+int32_t lSaltLast;
+int32_t rglPopMac[5];
+int32_t rglRandStack[4][2];
+int32_t vSerialNumber;
+LOGXFER lx;
+LOGXFERF lxf;
+MSGPLR *vlpmsgplrIn;
+MSGPLR *vlpmsgplrOut;
+PART vpartBrowser;
+PLANET **vrglpplAi;
+PLANET *lpPlanets;
+PLAYER *vrgplrNew;
+PLAYER rgplr[16];
+PLAYER vplr;
+PLAYER vrgplrDef[0];
+PLPROD *lpplProdGlob;
+POINT ptPlaque;
+POINT ptslotGlob;
+POINT ptSpeedVCR;
+POINT ptStickyBattlePlansDlg;
+POINT ptStickyBrowserDlg;
+POINT ptStickyFindDlg;
+POINT ptStickyHostModeDlg;
+POINT ptStickyMergeFleetsDlg;
+POINT ptStickyNewDlg;
+POINT ptStickyPrintMapDlg;
+POINT ptStickyProduceDlg;
+POINT ptStickyRaceDlg;
+POINT ptStickyRelationsDlg;
+POINT ptStickyRenameDlg;
+POINT ptStickyResDlg;
+POINT ptStickyScoreXDlg;
+POINT ptStickySlotDlg;
+POINT ptStickyTransferDlg;
+POINT ptStickyTutorDlg;
+POINT ptStickyVCRDlg;
+POINT ptStickyZipOrderDlg;
+POINT ptStickyZipProdDlg;
+POINT rgptArrow[5];
+POINT rgptPlan[999];
+POINT rgptTriangle[3];
+POINT vptMsg;
+POINT vptTbLast;
+POPUPDATA GlobalPD;
+PROD *pProdGlob;
+RECT *vrgrcRCW;
+RECT rcCargo;
+RECT rcMsgText;
+RECT rcMsgTitle;
+RECT rcProdDiamond;
+RECT rcSpinBot;
+RECT rcSpinTop;
+RECT rgrcBuildSpin[2];
+RECT rgrcRef[19];
+RECT vrcTooltip;
+RECT vrgrcSlot[16];
+RPT *vprptCur;
+RPT vrptBattle;
+RPT vrptEFleet;
+RPT vrptFleet;
+RPT vrptPlanet;
+SCOREX *rgsxPlr[1];
+SCOREX *vlprgScoreX;
+SEL sel;
+SHDEF *lpshdefBuild;
+SHDEF *rglpshdef[1];
+SHDEF *rglpshdefSB[1];
+SHDEF rgshdef[16];
+SHDEF shdefBuild;
+THING *lpthBattle;
+THING *lpThings;
+TILE rgtilePlanet[0];
+TILE rgtileShip[0];
+TIMER vtimer;
+TOK *vrgtok;
+TURNSERIAL *vrgts;
+TUTOR tutor;
+uint16_t *vlprgidFleet;
+uint16_t *vlprgidMisc;
+uint16_t *vlprgidPlanet;
+uint16_t *vlprgidRep;
+uint16_t *vlpwtCargo;
+uint16_t *vrgPlanResExtra;
+uint16_t *vrgPlrLosses;
+uint16_t grbitScan;
+uint16_t grbitScanEShip;
+uint16_t grbitScanMines;
+uint16_t grbitScanShip;
+uint16_t grfMissed;
+uint16_t hAccel;
+uint16_t hAccelTitle;
+uint16_t hbmpBackBld;
+uint16_t hbmpMono;
+uint16_t hbmpMsg;
+uint16_t hbmpNumbers;
+uint16_t hbmpScanner;
+uint16_t hbmpScanShip;
+uint16_t hbmpUnknownPlanet;
+uint16_t hbr50Screen;
+uint16_t hbrBBlue;
+uint16_t hbrBlue;
+uint16_t hbrButtonFace;
+uint16_t hbrButtonHilite;
+uint16_t hbrButtonShadow;
+uint16_t hbrButtonText;
+uint16_t hbrCargo;
+uint16_t hbrDesktop;
+uint16_t hbrDkYellow;
+uint16_t hbrDock;
+uint16_t hbrEnemy;
+uint16_t hbrGray;
+uint16_t hbrGreen;
+uint16_t hbrLightGray;
+uint16_t hbrPurple;
+uint16_t hbrRadar;
+uint16_t hbrRadarNear;
+uint16_t hbrRed;
+uint16_t hbrSelect;
+uint16_t hbrShip;
+uint16_t hbrStarbase;
+uint16_t hbrTooltip;
+uint16_t hbrWindow;
+uint16_t hbrWindowFrame;
+uint16_t hbrWindowText;
+uint16_t hbrYellow;
+uint16_t hcurArrowHelp;
+uint16_t hcurCloseGrab;
+uint16_t hcurHand;
+uint16_t hcurNoWay;
+uint16_t hcurOpenGrab;
+uint16_t hcurResize4Way;
+uint16_t hcurResizeNS;
+uint16_t hcurResizeWE;
+uint16_t hcurScanAdd;
+uint16_t hcurScanner;
+uint16_t hcurTrashCan;
+uint16_t hdibPlanets;
+uint16_t hdibPlaque;
+uint16_t hdibRaces;
+uint16_t hdibRacesT;
+uint16_t hdibRacesX;
+uint16_t hdibThings;
+uint16_t hdibToolbar;
+uint16_t hiconHost;
+uint16_t hiconStars;
+uint16_t hiconWait;
+uint16_t hInst;
+uint16_t hpenDkBlue;
+uint16_t hpenDkGreen;
+uint16_t hpenDkPurple;
+uint16_t hpenDkYellow;
+uint16_t hpenEnemy;
+uint16_t hpenMassPath;
+uint16_t hpenRadar;
+uint16_t hpenRadarNear;
+uint16_t hpenShip;
+uint16_t hpenStarbase;
+uint16_t hpenYellow;
+uint16_t hrgnHuge;
+uint16_t hrgnScratch;
+uint16_t hwndActive;
+uint16_t hwndBattleDD;
+uint16_t hwndBrowser;
+uint16_t hwndBrowserChild;
+uint16_t hwndFleetCompLB;
+uint16_t hwndFrame;
+uint16_t hwndMain;
+uint16_t hwndMDIClient;
+uint16_t hwndMessage;
+uint16_t hwndMine;
+uint16_t hwndMineCB;
+uint16_t hwndMsgDrop;
+uint16_t hwndMsgEdit;
+uint16_t hwndMsgScroll;
+uint16_t hwndOrderED;
+uint16_t hwndPlanet;
+uint16_t hwndPlanetProdLB;
+uint16_t hwndPopup;
+uint16_t hwndProdDlg;
+uint16_t hwndProgressGauge;
+uint16_t hwndRaceParent;
+uint16_t hwndRepCB;
+uint16_t hwndReportDlg;
+uint16_t hwndScanner;
+uint16_t hwndScoreXDlg;
+uint16_t hwndShipDD;
+uint16_t hwndShipLB;
+uint16_t hwndSlotDlg;
+uint16_t hwndTb;
+uint16_t hwndTBRadar;
+uint16_t hwndTitle;
+uint16_t hwndTooltip;
+uint16_t hwndVCRDlg;
+uint16_t hwndZipOrderDlg;
+uint16_t mphtcbAlloc[12];
+uint16_t rghbrCache[32];
+uint16_t rghbrMineral[5];
+uint16_t rghbrMinSum[4][2];
+uint16_t rghbrPat[3];
+uint16_t rghbrPlanetAttr[3][2];
+uint16_t rghdibInventory[7];
+uint16_t rghdibShips[5];
+uint16_t rghdibShipsT[5];
+uint16_t rghfontArial10[2];
+uint16_t rghfontArial6[1];
+uint16_t rghfontArial7[1];
+uint16_t rghfontArial8[5];
+uint16_t rghiconVCR[7];
+uint16_t rghwndBtn[13];
+uint16_t rghwndBtnSplash[4];
+uint16_t rghwndMsgBtn[4];
+uint16_t rghwndOrderDD[3];
+uint16_t rgidRaceBtn[0];
+uint16_t uDateInstalled;
+uint16_t uTimerId;
+uint16_t uTimerType;
+uint16_t vcPasswordFailures;
+uint16_t vhdibTitle;
+uint16_t vhpal;
+uint16_t vhpalSplash;
+uint16_t wVersFile;
+uint32_t bogi[25];
+uint32_t crButtonFace;
+uint32_t crButtonHilite;
+uint32_t crButtonShadow;
+uint32_t crButtonText;
+uint32_t crWindow;
+uint32_t crWindowText;
+uint32_t ctickLast;
+uint32_t rgcrCache[32];
+uint32_t rgcrMinerals[6];
+uint32_t rgcrPlrHistory[16];
+uint32_t vtickTooltip1stVis;
+uint32_t vtickTooltipLast;
+uint8_t *lpb2k;
+uint8_t *lpbBattleCur;
+uint8_t *lpbBattleLog;
+uint8_t *lpbBattleT;
+uint8_t *lpLog;
+uint8_t *vAiMacRecycleSB;
+uint8_t *vlpbAiData;
+uint8_t *vlpbAiPlanet;
+uint8_t *vlpMemStream;
+uint8_t bitfMsgFiltered[49];
+uint8_t bitfMsgSent[49];
+uint8_t ctype[0];
+uint8_t mpiTypeiItem[3];
+uint8_t rgcbtlplan[16];
+uint8_t rghbrCacheUse[32];
+uint8_t rgTechBattle[6];
+uint8_t rgTechTrader[13];
+uint8_t vbrcVCRFocus;
+uint8_t vrgAiArmadaPotency[4];
+uint8_t vrgAiCyberArmadaPotency[4];
+uint8_t vrgbEnvCur[0];
+uint8_t vrgbMachineConfig[11];
+uint8_t vrgcAiParts[45];
+uint8_t vrgplrTypeNew[16];
+XFER *pxfer;
+XFERFULL *lpxf;
+ZIPORDER vrgZip[4] = {{.txp = {.rgia = {{}, {}, {}, {}, {}}}, .szName = {-15, 46, 87, 86, 87, 126, 87, 90, 123, -31, 126, 87, 127}, .fValid = 0x56}, {.txp = {.rgia = {{}, {}, {}, {}, {}}}, .szName = {127, 90, 87, 91, 126, 87, 91, 86, 87, 87, 86, 86, 87}, .fValid = 0xdf}, {.txp = {.rgia = {{}, {}, {}, {}, {}}}, .szName = {42, 46, -36, 46, -37, -36, 46, -37, -37, -36, -15, -15, -15}, .fValid = 0xf1}, {.txp = {.rgia = {{}, {}, {}, {}, {}}}, .szName = "R.R.RRRRVRRRR", .fValid = 0x52}};
+ZIPPRODQ vrgZipProd[5] = {{.szName = "", .fValid = 0x00, .cpq = 0x00, .rgpq = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}}}, {.szName = "", .fValid = 0x00, .cpq = 0x00, .rgpq = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}}}, {.szName = " ", .fValid = 0x00, .cpq = 0x00, .rgpq = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}}}, {.szName = "", .fValid = 0x00, .cpq = 0x00, .rgpq = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}}}, {.szName = "", .fValid = 0x00, .cpq = 0x00, .rgpq = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}}}};

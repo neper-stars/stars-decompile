@@ -4,8 +4,8 @@
 #include "mdi.h"
 
 /* globals */
-uint8_t vrgbShuffleSerial[21];  /* MEMORY_MDI:0x2870 */
-char rgTOWidth[2][2];  /* MEMORY_MDI:0x7702 */
+char rgTOWidth[2][2] = {{-3, 0}, {2, 1}};                                                                                                                       /* 1020:7702 */
+uint8_t vrgbShuffleSerial[21] = {0x0b, 0x04, 0x05, 0x10, 0x11, 0x0c, 0x13, 0x0f, 0x0a, 0x01, 0x0e, 0x0d, 0x03, 0x12, 0x02, 0x14, 0x09, 0x07, 0x00, 0x08, 0x06}; /* 1020:2870 */
 
 /* functions */
 void VerifyTurns(void)
@@ -57,7 +57,7 @@ void FormatSerialAndEnv(int32_t lSerial, uint8_t *pbEnv, char *pszOut)
 
 void RestoreSelection(void)
 {
-    PLANET * lppl;
+    PLANET *lppl;
 
     /* TODO: implement */
 }
@@ -87,7 +87,7 @@ int16_t FWasRaceFile(char *szFile, int16_t fChkPass)
     int16_t idsError;
     int32_t lSaltSav;
     PLAYER plr;
-    int16_t (* penvMemSav)[9];
+    int16_t (*penvMemSav)[9];
     int16_t env[9];
     int16_t fRet;
     int16_t fSav;
@@ -101,7 +101,7 @@ int16_t FWasRaceFile(char *szFile, int16_t fChkPass)
 
 int16_t HostModeDialog(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam)
 {
-    int16_t (* lpProc)(void);
+    int16_t (*lpProc)(void);
     int16_t fRet;
     RECT rc;
     int16_t mf;
@@ -140,10 +140,10 @@ void EnsureAis(void)
 
 int16_t FFindSomethingAndSelectIt(void)
 {
-    PLANET * lpplMac;
-    PLANET * lppl;
+    PLANET *lpplMac;
+    PLANET *lppl;
     int16_t i;
-    FLEET * lpfl;
+    FLEET *lpfl;
 
     /* TODO: implement */
     return 0;
@@ -177,7 +177,7 @@ int32_t TitleWndProc(uint16_t hwnd, uint16_t msg, uint16_t wParam, int32_t lPara
     RECT rcWnd;
     uint16_t hbrSav;
     RECT rcT;
-    LOGFONT * plf;
+    LOGFONT *plf;
     uint16_t hfont;
     uint16_t hfontSav;
 
@@ -201,7 +201,7 @@ void CommandHandler(uint16_t hwnd, uint16_t wParam)
 {
     POINT pt;
     uint16_t hmenu;
-    int16_t (* lpProc)(void);
+    int16_t (*lpProc)(void);
     int16_t dy;
     char szExt[4];
     int16_t dx;
@@ -215,11 +215,11 @@ void CommandHandler(uint16_t hwnd, uint16_t wParam)
     char *psz;
     uint16_t hcurSav;
     int16_t ids;
-    PLANET * lpplMac;
+    PLANET *lpplMac;
     int16_t cObj;
     int16_t ifl;
-    PLANET * lppl;
-    FLEET * lpfl;
+    PLANET *lppl;
+    FLEET *lpfl;
     int16_t i;
     TIMERINFO ti;
     uint32_t dwTickCur;
@@ -297,7 +297,7 @@ int32_t FrameWndProc(uint16_t a1, uint16_t a2, uint16_t a3, int32_t a4)
     char *pch;
     RECT rc;
     char szExt[4];
-    int16_t (* lpProc)(void);
+    int16_t (*lpProc)(void);
     int16_t fRet;
     POINT ptAct;
     RECT rc2;
@@ -380,7 +380,7 @@ void WriteIniSettings(void)
 {
     int16_t ctile;
     char szPd[3];
-    TILE * rgtile;
+    TILE *rgtile;
     int16_t i;
     int16_t iPass;
     char szEntry[16];
@@ -500,7 +500,7 @@ int16_t CTurnsOutSafe(void)
 void BringUpHostDlg(void)
 {
     POINT pt;
-    int16_t (* lpProc)(void);
+    int16_t (*lpProc)(void);
     int16_t fRet;
 
     /* debug symbols */

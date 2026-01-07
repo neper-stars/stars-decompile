@@ -4,12 +4,12 @@
 #include "build.h"
 
 /* globals */
-uint16_t rghstCat[14];  /* MEMORY_BUILD:0x0000 */
-int16_t rgidsCat[14];  /* MEMORY_BUILD:0x001c */
-uint16_t rggrbitParts[13];  /* MEMORY_BUILD:0x0038 */
-int16_t rgidsParts[13];  /* MEMORY_BUILD:0x0052 */
-uint16_t rggrbitPartsSB[8];  /* MEMORY_BUILD:0x006c */
-int16_t rgidsPartsSB[8];  /* MEMORY_BUILD:0x007c */
+uint16_t rggrbitParts[13] = {0x19ff, 0x0008, 0x0010, 0x0040, 0x0800, 0x0001, 0x1000, 0x0100, 0x0080, 0x0002, 0x0004, 0x0020, 0x0030};     /* 10c8:0038 */
+uint16_t rggrbitPartsSB[8] = {0x0a3c, 0x0008, 0x0010, 0x0800, 0x0200, 0x0004, 0x0020, 0x0030};                                            /* 10c8:006c */
+uint16_t rghstCat[14] = {0x0030, 0x1800, 0x0008, 0x0010, 0x0040, 0x0001, 0x0100, 0x0080, 0x0002, 0x0004, 0x0800, 0x1000, 0x0020, 0x0200}; /* 10c8:0000 */
+int16_t rgidsCat[14] = {1104, 1105, 1088, 1089, 1090, 1092, 1094, 1095, 1098, 1099, 1091, 1093, 1103, 1096};                              /* 10c8:001c */
+int16_t rgidsParts[13] = {1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094, 1095, 1098, 1099, 1103, 1104};                                  /* 10c8:0052 */
+int16_t rgidsPartsSB[8] = {1087, 1088, 1089, 1091, 1096, 1099, 1103, 1104};                                                               /* 10c8:007c */
 
 /* functions */
 int16_t FCheckQueuedShip(uint16_t hwnd, SHDEF *lpshdef, int16_t fEdit)
@@ -29,7 +29,7 @@ int16_t SlotDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam
     RECT rcWindow;
     uint16_t hdc;
     RECT rcGBox;
-    SHDEF * lpshdef;
+    SHDEF *lpshdef;
     int16_t left;
     PAINTSTRUCT ps;
     uint16_t hwndItem;
@@ -38,8 +38,8 @@ int16_t SlotDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam
     RECT rc;
     int16_t i;
     int16_t fProgress;
-    DRAWITEMSTRUCT * lpdis;
-    MEASUREITEMSTRUCT * lpmis;
+    DRAWITEMSTRUCT *lpdis;
+    MEASUREITEMSTRUCT *lpmis;
     POINT pt;
     int16_t fProtoSB;
     int16_t cshQueued;
@@ -85,7 +85,7 @@ void KillQueuedMassPackets(PLANET *lppl)
 {
     int16_t iprod;
     int16_t iDst;
-    PROD * lpprod;
+    PROD *lpprod;
 
     /* TODO: implement */
 }
@@ -109,7 +109,7 @@ void DrawBuildSelHull(uint16_t hwnd, uint16_t hdc, int16_t iDraw, RECT *prc)
     int16_t k;
     uint32_t crBackSav;
     int16_t csh;
-    HUL * lphul;
+    HUL *lphul;
     int32_t dpShield;
     int16_t cch;
     int32_t dp;
@@ -136,7 +136,7 @@ void DrawBuildSelHull(uint16_t hwnd, uint16_t hdc, int16_t iDraw, RECT *prc)
 
 int16_t ShipBuilder(POINT ptDlgSize)
 {
-    int16_t (* lpProcSlot)(void);
+    int16_t (*lpProcSlot)(void);
     int16_t fSuccess;
 
     /* TODO: implement */
@@ -190,7 +190,7 @@ void DrawSlotDlg(uint16_t hwnd, uint16_t hdc, RECT *prc, int16_t iDraw)
     uint16_t hbmpSav;
     int16_t xLeft;
     PART part;
-    HULDEF * lphuldef;
+    HULDEF *lphuldef;
     RECT rc;
     int16_t iInventSel;
     uint16_t hpenSav;
@@ -217,14 +217,14 @@ void FillBuildDD(uint16_t hwndDD, int16_t md)
     int16_t fAdded;
     int16_t i;
     int16_t j;
-    SHDEF * lpshdef;
+    SHDEF *lpshdef;
     RECT rc;
     PART part;
 
     /* TODO: implement */
 }
 
-SHDEF * NthValidShdef(int16_t n)
+SHDEF *NthValidShdef(int16_t n)
 {
     int16_t i;
 
@@ -232,7 +232,7 @@ SHDEF * NthValidShdef(int16_t n)
     return NULL;
 }
 
-SHDEF * NthValidEnemyShdef(int16_t n)
+SHDEF *NthValidEnemyShdef(int16_t n)
 {
     int16_t i;
     int16_t j;
@@ -277,7 +277,7 @@ void KillQueuedShips(PLANET *lppl)
 {
     int16_t iprod;
     int16_t iDst;
-    PROD * lpprod;
+    PROD *lpprod;
 
     /* TODO: implement */
 }
@@ -313,7 +313,7 @@ void UpdateSlotGlobals(void)
     int16_t i;
     uint16_t wrc;
     int16_t xLeft;
-    HULDEF * lphuldef;
+    HULDEF *lphuldef;
 
     /* TODO: implement */
 }
@@ -351,7 +351,7 @@ int16_t FTrackSlot(uint16_t hwnd, int16_t x, int16_t y, int16_t fkb, int16_t fLi
     int16_t dxStart;
     int16_t bt;
     BTNT btnt;
-    RECT * prc;
+    RECT *prc;
     int16_t iBase;
     int16_t iCur;
     int16_t xLeft;

@@ -4,14 +4,14 @@
 #include "race.h"
 
 /* globals */
-char rgRW3Spacing[7];           /* MEMORY_RACE:0x2a8c */
-char rgRW3Width[7];             /* MEMORY_RACE:0x2a94 */
-char rgRW3IStat[7];             /* MEMORY_RACE:0x2a9c */
-char rgRaceStatMin[16];         /* MEMORY_RACE:0x30f4 */
-char rgRaceStatMax[16];         /* MEMORY_RACE:0x3104 */
-int16_t rgRacePrimaryTrait[10]; /* MEMORY_RACE:0x4410 */
-int16_t rgRaceAdvDisPts[14];    /* MEMORY_RACE:0x4424 */
-int16_t rgRaceDisEnvPts[6];     /* MEMORY_RACE:0x4440 */
+int16_t rgRaceAdvDisPts[14] = {-235, -25, -159, -201, 40, -240, -155, 160, 240, 255, 325, 180, 70, 30}; /* 10e0:4424 */
+int16_t rgRaceDisEnvPts[6] = {150, 330, 540, 780, 1050, 1380};                                          /* 10e0:4440 */
+int16_t rgRacePrimaryTrait[10] = {40, 95, 45, 10, -100, -150, 120, 180, 90, -66};                       /* 10e0:4410 */
+char rgRaceStatMax[16] = {25, 15, 25, 25, 25, 15, 25, 6, 2, 2, 2, 2, 2, 2, 9, 0};                       /* 10e0:3104 */
+char rgRaceStatMin[16] = {7, 5, 5, 5, 5, 2, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0};                              /* 10e0:30f4 */
+char rgRW3IStat[7] = {0, 1, 2, 3, 4, 5, 6};                                                             /* 10e0:2a9c */
+char rgRW3Spacing[7] = {4, 3, 3, 3, 3, 3, 3};                                                           /* 10e0:2a8c */
+char rgRW3Width[7] = {-2, 2, 2, 2, -2, 2, 2};                                                           /* 10e0:2a94 */
 
 /* functions */
 int16_t RaceWizardDlg6(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam)
