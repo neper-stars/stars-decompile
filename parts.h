@@ -25,16 +25,16 @@ extern SHDEF rgshdefSBT[4];  /* MEMORY_PARTS:0x4b3e */
 extern SPECIALSB rgspecialSB[16];  /* MEMORY_PARTS:0x4d8a */
 
 /* functions */
-void LookupBestPlanetaryScanner(PART *);  /* MEMORY_PARTS:0x60be */
-int16_t FLookupPart(PART *);  /* MEMORY_PARTS:0x524e */
-HULDEF * LphuldefFromId(int16_t);  /* RETFAR */  /* MEMORY_PARTS:0x512c */
-int16_t TechStatus(char *);  /* MEMORY_PARTS:0x6148 */
-HULDEF * LphuldefSBFromId(int16_t);  /* RETFAR */  /* MEMORY_PARTS:0x510a */
+void LookupBestPlanetaryScanner(PART *ppart);  /* MEMORY_PARTS:0x60be */
+int16_t FLookupPart(PART *ppart);  /* MEMORY_PARTS:0x524e */
+HULDEF * LphuldefFromId(int16_t id);  /* RETFAR */  /* MEMORY_PARTS:0x512c */
+int16_t TechStatus(char *rgTech);  /* MEMORY_PARTS:0x6148 */
+HULDEF * LphuldefSBFromId(int16_t id);  /* RETFAR */  /* MEMORY_PARTS:0x510a */
 SHDEF * LpshdefT(void);  /* RETFAR */  /* MEMORY_PARTS:0x51ac */
-PLANETARY * LpplanetaryFromId(int16_t);  /* RETFAR */  /* MEMORY_PARTS:0x51dc */
+PLANETARY * LpplanetaryFromId(int16_t id);  /* RETFAR */  /* MEMORY_PARTS:0x51dc */
 SHDEF * LpshdefSBT(void);  /* RETFAR */  /* MEMORY_PARTS:0x51c4 */
-int16_t FLookupPartX(PART *, uint16_t, uint16_t);  /* MEMORY_PARTS:0x51fe */
-SCANNER * LpscannerFromId(int16_t);  /* RETFAR */  /* MEMORY_PARTS:0x518a */
-ENGINE * LpengineFromId(int16_t);  /* RETFAR */  /* MEMORY_PARTS:0x5168 */
+int16_t FLookupPartX(PART *ppart, uint16_t grhst, uint16_t iItem);  /* MEMORY_PARTS:0x51fe */
+SCANNER * LpscannerFromId(int16_t id);  /* RETFAR */  /* MEMORY_PARTS:0x518a */
+ENGINE * LpengineFromId(int16_t id);  /* RETFAR */  /* MEMORY_PARTS:0x5168 */
 
 #endif /* PARTS_H_ */

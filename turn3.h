@@ -5,6 +5,6 @@
 #include "types.h"
 
 /* functions */
-void SatisfyOrders(int16_t);  /* MEMORY_TURN:0x6798 */
+void SatisfyOrders(int16_t iPass);  /* MEMORY_TURN:0x6798 */
 
 #endif /* TURN3_H_ */

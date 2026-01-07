@@ -12,38 +12,38 @@ extern ITEMACTION rgiaLoadAllCol[5];  /* MEMORY_TUTOR:0x0fb2 */
 extern ZIPPRODQ1 rgzpqTut[2];  /* MEMORY_TUTOR:0x663a */
 
 /* functions */
-void EndTutor(int16_t);  /* MEMORY_TUTOR:0x0c02 */
-void DrawTutorText(uint16_t);  /* MEMORY_TUTOR:0x03c0 */
-int16_t FCheckCargo(FLEET *, int16_t, int16_t, int16_t, int16_t);  /* MEMORY_TUTOR:0x7664 */
-int16_t FCheckPlanetRoute(int16_t, int16_t);  /* MEMORY_TUTOR:0x6f86 */
-int16_t FCheckScanner(int16_t, int16_t);  /* MEMORY_TUTOR:0x685c */
-int16_t FCheckResearch(int16_t, int16_t, int16_t);  /* MEMORY_TUTOR:0x6da4 */
+void EndTutor(int16_t fClose);  /* MEMORY_TUTOR:0x0c02 */
+void DrawTutorText(uint16_t hwnd);  /* MEMORY_TUTOR:0x03c0 */
+int16_t FCheckCargo(FLEET *lpfl, int16_t wtMin1, int16_t wtMin2, int16_t wtMin3, int16_t wtColonists);  /* MEMORY_TUTOR:0x7664 */
+int16_t FCheckPlanetRoute(int16_t idpl, int16_t idplRoute);  /* MEMORY_TUTOR:0x6f86 */
+int16_t FCheckScanner(int16_t md, int16_t iZoom);  /* MEMORY_TUTOR:0x685c */
+int16_t FCheckResearch(int16_t iTech, int16_t iTechNext, int16_t pct);  /* MEMORY_TUTOR:0x6da4 */
 int16_t FTutorTaskDone(void);  /* MEMORY_TUTOR:0x0fbc */
-int16_t TutorDlg(uint16_t, uint16_t, uint16_t, int32_t);  /* PASCAL */  /* MEMORY_TUTOR:0x0000 */
-int16_t FCheckFleetName(int16_t, int16_t);  /* MEMORY_TUTOR:0x690a */
-int16_t FCheckZip(int16_t, ITEMACTION *, int16_t);  /* MEMORY_TUTOR:0x6460 */
+int16_t TutorDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam);  /* PASCAL */  /* MEMORY_TUTOR:0x0000 */
+int16_t FCheckFleetName(int16_t id, int16_t ids);  /* MEMORY_TUTOR:0x690a */
+int16_t FCheckZip(int16_t iZip, ITEMACTION *lpiaGoal, int16_t ids);  /* MEMORY_TUTOR:0x6460 */
 void SaveGameState(void);  /* MEMORY_TUTOR:0x0c90 */
-int16_t FCheckXferWP(uint16_t, int16_t, int16_t, uint16_t, ITEMACTION *);  /* MEMORY_TUTOR:0x7280 */
-int16_t FCheckFleetWP(uint16_t, int16_t, uint16_t, int16_t, uint16_t, uint16_t);  /* MEMORY_TUTOR:0x6df4 */
-void ShowTutor(int16_t);  /* MEMORY_TUTOR:0x0374 */
+int16_t FCheckXferWP(uint16_t ifl, int16_t iord, int16_t id, uint16_t iWarp, ITEMACTION *lpiaGoal);  /* MEMORY_TUTOR:0x7280 */
+int16_t FCheckFleetWP(uint16_t ifl, int16_t iord, uint16_t grobj, int16_t id, uint16_t grTask, uint16_t iWarp);  /* MEMORY_TUTOR:0x6df4 */
+void ShowTutor(int16_t fShow);  /* MEMORY_TUTOR:0x0374 */
 void RestoreGameState(void);  /* MEMORY_TUTOR:0x0e1c */
-int16_t PanicDlg(uint16_t, uint16_t, uint16_t, int32_t);  /* PASCAL */  /* MEMORY_TUTOR:0x026a */
-int16_t FCheckPatrolWP(uint16_t, int16_t, int16_t, uint16_t, uint16_t, uint16_t);  /* MEMORY_TUTOR:0x71ac */
-int16_t FCheckLayingWP(uint16_t, int16_t, int16_t, int16_t);  /* MEMORY_TUTOR:0x6ff4 */
-int16_t FCheckMessages(int16_t, int16_t, int16_t);  /* MEMORY_TUTOR:0x6c48 */
-int16_t FCheckQueue(int16_t, int16_t, uint16_t, uint16_t, uint16_t, uint16_t);  /* MEMORY_TUTOR:0x7442 */
-int16_t FTutorialEnabledShipBuilder(int16_t);  /* MEMORY_TUTOR:0x79f6 */
-int16_t FCheckTemplate(int16_t);  /* MEMORY_TUTOR:0x666e */
-int16_t FCheckColonizeWP(uint16_t, int16_t, uint16_t);  /* MEMORY_TUTOR:0x70c0 */
-int16_t FCheckBuilderPart(int16_t, HS *, uint16_t);  /* MEMORY_TUTOR:0x77d8 */
+int16_t PanicDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam);  /* PASCAL */  /* MEMORY_TUTOR:0x026a */
+int16_t FCheckPatrolWP(uint16_t ifl, int16_t iord, int16_t id, uint16_t iWarp, uint16_t iPlan, uint16_t iDist);  /* MEMORY_TUTOR:0x71ac */
+int16_t FCheckLayingWP(uint16_t ifl, int16_t iord, int16_t id, int16_t iYears);  /* MEMORY_TUTOR:0x6ff4 */
+int16_t FCheckMessages(int16_t imsg, int16_t idm, int16_t fFilter);  /* MEMORY_TUTOR:0x6c48 */
+int16_t FCheckQueue(int16_t ipl, int16_t iprod, uint16_t grobj, uint16_t iItem, uint16_t cItem, uint16_t fNoResearch);  /* MEMORY_TUTOR:0x7442 */
+int16_t FTutorialEnabledShipBuilder(int16_t itutsbAction);  /* MEMORY_TUTOR:0x79f6 */
+int16_t FCheckTemplate(int16_t iTemplate);  /* MEMORY_TUTOR:0x666e */
+int16_t FCheckColonizeWP(uint16_t ifl, int16_t id, uint16_t iWarp);  /* MEMORY_TUTOR:0x70c0 */
+int16_t FCheckBuilderPart(int16_t iSlot, HS *phs, uint16_t cInit);  /* MEMORY_TUTOR:0x77d8 */
 int16_t FAskKillTutor(void);  /* MEMORY_TUTOR:0x0f36 */
-void StartTutor(int16_t);  /* MEMORY_TUTOR:0x06b4 */
-int16_t FCheckSelection(uint16_t, int16_t);  /* MEMORY_TUTOR:0x6af4 */
-int16_t FCheckSummary(uint16_t, int16_t);  /* MEMORY_TUTOR:0x69e2 */
+void StartTutor(int16_t fRestart);  /* MEMORY_TUTOR:0x06b4 */
+int16_t FCheckSelection(uint16_t grobj, int16_t id);  /* MEMORY_TUTOR:0x6af4 */
+int16_t FCheckSummary(uint16_t grobj, int16_t id);  /* MEMORY_TUTOR:0x69e2 */
 int16_t FOKMergeDialog(void);  /* MEMORY_TUTOR:0x81da */
-int16_t FCheckBtlPlan(int16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t);  /* MEMORY_TUTOR:0x760a */
-int16_t FCheckShipBuilder(int16_t, int16_t);  /* MEMORY_TUTOR:0x7964 */
-void TutorError(int16_t);  /* MEMORY_TUTOR:0x67ae */
+int16_t FCheckBtlPlan(int16_t ibp, uint16_t imdTarget, uint16_t fSpread, uint16_t fBomb, uint16_t fDump, uint16_t mdUnarmed, uint16_t mdScout, uint16_t mdWar, uint16_t mdBomber);  /* MEMORY_TUTOR:0x760a */
+int16_t FCheckShipBuilder(int16_t iCategory, int16_t iShip);  /* MEMORY_TUTOR:0x7964 */
+void TutorError(int16_t idsError);  /* MEMORY_TUTOR:0x67ae */
 void AdvanceTutor(void);  /* MEMORY_TUTOR:0x0a30 */
 
 #endif /* TUTOR_H_ */

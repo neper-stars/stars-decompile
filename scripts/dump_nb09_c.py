@@ -327,14 +327,23 @@ def dump_globals(db, unknown_label="(unknown)", include_segment_comment=True, no
 # Dump: Procs
 # -----------------------------
 
-def dump_procs(db, unknown_label="(unknown)", include_segment_comment=True, no_sort=False) -> str:
+def dump_procs(
+    db,
+    unknown_label="(unknown)",
+    include_segment_comment=True,
+    no_sort=False,
+    include_param_names: bool = False,
+) -> str:
     groups: Dict[str, List[str]] = {}
+
+    pl_by_name = _proc_locals_by_name(db) if include_param_names else {}
 
     for p in db.proc_symbols:
         fname = _basename(getattr(p, "src_file", None))
         key = fname or unknown_label
 
-        decl = db.c_decl_of(int(p.typind), p.name, style="c") + ";"
+        calltype = None
+        decl_base = db.c_decl_of(int(p.typind), p.name, style="c")
 
         # Tags for tooling (Ghidra helpers)
         tags: list[str] = []
@@ -351,6 +360,12 @@ def dump_procs(db, unknown_label="(unknown)", include_segment_comment=True, no_s
                     tags.append("RETFAR")
         except Exception:
             pass
+
+        if include_param_names:
+            pl = pl_by_name.get(p.name)
+            decl_base = _proto_for_definition(decl_base, pl, calltype=calltype)
+
+        decl = decl_base + ";"
 
         if tags:
             decl += "  /* " + " ".join(tags) + " */"
@@ -883,10 +898,11 @@ def _proto_for_definition(base_sig: str, pl, calltype: int | None = None) -> str
 
     def add_name(ptype: str, nm: str) -> str:
         ptype = ptype.strip()
-        # already has a name (very rough heuristic): ends with identifier
-        if re.search(r"\b[A-Za-z_][A-Za-z0-9_]*\b\s*(\[[^\]]*\])?\s*$", ptype) and not ptype.endswith("*") and "(*)" not in ptype:
-            # still may be unnamed like 'PROD *' (endswith '*'), so only accept if last token isn't '*' or ')'
-            pass
+        # already has a name (rough heuristic): there is at least one whitespace-separated token
+        # beyond the type, and it doesn't look like a trailing '*' placeholder.
+        toks = ptype.split()
+        if len(toks) >= 2 and not ptype.endswith("*") and "(*)" not in ptype:
+            return ptype
         # unnamed function pointer like 'int16_t (*)(FLEET*,FLEET*)'
         if "(*)" in ptype:
             return ptype.replace("(*)", f"(*{nm})")
@@ -915,11 +931,24 @@ def _proto_for_definition(base_sig: str, pl, calltype: int | None = None) -> str
 # Skeleton generator
 # -----------------------------
 
-def generate_skeleton(db, out_dir: Path, unknown_label="(unknown)") -> None:
+def generate_skeleton(
+    db,
+    out_dir: Path,
+    unknown_label="(unknown)",
+    *,
+    headers_only: bool = False,
+    include_param_names: bool = True,
+) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     globals_text = dump_globals(db, unknown_label=unknown_label, include_segment_comment=True, no_sort=True)
-    procs_text = dump_procs(db, unknown_label=unknown_label, include_segment_comment=True, no_sort=True)
+    procs_text = dump_procs(
+        db,
+        unknown_label=unknown_label,
+        include_segment_comment=True,
+        no_sort=True,
+        include_param_names=include_param_names,
+    )
 
     def parse_blocks(text: str):
         cur = None
@@ -1013,103 +1042,107 @@ def generate_skeleton(db, out_dir: Path, unknown_label="(unknown)") -> None:
         h.append("")
         (out_dir / h_name).write_text("\n".join(h), encoding="utf-8")
 
-        # C
-        c = []
-        c.append("")
-        c.append('#include "types.h"')
-        c.append("")
-        c.append(f'#include "{h_name}"')
-        c.append("")
+        if headers_only:
+            continue
 
-        if globals_lines:
-            c.append("/* globals */")
-            for ln in globals_lines:
-                c.append(ln)
+        if not headers_only:
+            # C
+            c = []
+            c.append("")
+            c.append('#include "types.h"')
+            c.append("")
+            c.append(f'#include "{h_name}"')
             c.append("")
 
-        if proc_lines:
-            c.append("/* functions */")
-            for proto in proc_lines:
-                base = _strip_trailing_semicolon(_strip_seg_comment(proto))
-                name = base.split("(")[0].strip().split()[-1]
+            if globals_lines:
+                c.append("/* globals */")
+                for ln in globals_lines:
+                    c.append(ln)
+                c.append("")
 
-                ps = next((p for p in db.proc_symbols if p.name == name), None)
-                pl = pl_by_name.get(name)
+            if proc_lines:
+                c.append("/* functions */")
+                for proto in proc_lines:
+                    base = _strip_trailing_semicolon(_strip_seg_comment(proto))
+                    name = base.split("(")[0].strip().split()[-1]
 
-                calltype = None
-                if ps is not None:
+                    ps = next((p for p in db.proc_symbols if p.name == name), None)
+                    pl = pl_by_name.get(name)
+
+                    calltype = None
+                    if ps is not None:
+                        try:
+                            pt = db.resolve_typind(int(ps.typind))
+                            calltype = getattr(pt, 'calltype', None)
+                        except Exception:
+                            calltype = None
+
+                    sig = _proto_for_definition(base, pl, calltype)
+
+                    c.append(sig)
+                    c.append("{")
+
+                    # locals (exclude params)
+                    if pl is not None:
+                        locals_only = [v for v in (pl.locals or []) if getattr(v, "kind", "") != "param"]
+
+                        # sort locals by bp_off descending (e.g. -2, -4, -6...) => nearest first
+                        def lkey(v):
+                            bo = getattr(v, "bp_off", None)
+                            return (0, -int(bo)) if bo is not None else (1, 0)
+
+                        locals_only.sort(key=lkey)
+
+                        seen_names = set()
+                        for v in locals_only:
+                            nm = getattr(v, "name", None) or ""
+                            if nm and nm in seen_names:
+                                continue
+                            if nm:
+                                seen_names.add(nm)
+                            c.append("    " + _format_local_decl(db, v))
+
+                        blocks = getattr(pl, "blocks", []) or []
+                        labels = getattr(pl, "labels", []) or []
+                        if blocks or labels:
+                            c.append("")
+                            c.append("    /* debug symbols */")
+                            for b in blocks:
+                                bname = getattr(b, "name", None) or "(block)"
+                                bseg = getattr(b, "seg", None)
+                                boff = getattr(b, "off", None)
+                                if bseg is not None and boff is not None:
+                                    c.append(f"    /* block {bname} @ {_seg_label(db, int(bseg))}:{int(boff):#06x} */")
+                                else:
+                                    c.append(f"    /* block {bname} */")
+                            for lab in labels:
+                                lname = getattr(lab, "name", None) or "(label)"
+                                lseg = getattr(lab, "seg", None)
+                                loff = getattr(lab, "off", None)
+                                if lseg is not None and loff is not None:
+                                    c.append(f"    /* label {lname} @ {_seg_label(db, int(lseg))}:{int(loff):#06x} */")
+                                else:
+                                    c.append(f"    /* label {lname} */")
+
+                    c.append("")
+                    c.append("    /* TODO: implement */")
+
+                    # default return for non-void functions
                     try:
-                        pt = db.resolve_typind(int(ps.typind))
-                        calltype = getattr(pt, 'calltype', None)
+                        ret_part = base.split("(", 1)[0].strip()
+                        ret_tokens = ret_part.split()
+                        ret_type = " ".join(ret_tokens[:-1]).strip() if len(ret_tokens) >= 2 else ""
                     except Exception:
-                        calltype = None
+                        ret_type = ""
 
-                sig = _proto_for_definition(base, pl, calltype)
+                    if ret_type and ret_type != "void":
+                        if "*" in ret_type:
+                            c.append("    return NULL;")
+                        else:
+                            c.append("    return 0;")
 
-                c.append(sig)
-                c.append("{")
-
-                # locals (exclude params)
-                if pl is not None:
-                    locals_only = [v for v in (pl.locals or []) if getattr(v, "kind", "") != "param"]
-
-                    # sort locals by bp_off descending (e.g. -2, -4, -6...) => nearest first
-                    def lkey(v):
-                        bo = getattr(v, "bp_off", None)
-                        return (0, -int(bo)) if bo is not None else (1, 0)
-
-                    locals_only.sort(key=lkey)
-
-                    seen_names = set()
-                    for v in locals_only:
-                        nm = getattr(v, "name", None) or ""
-                        if nm and nm in seen_names:
-                            continue
-                        if nm:
-                            seen_names.add(nm)
-                        c.append("    " + _format_local_decl(db, v))
-
-                    blocks = getattr(pl, "blocks", []) or []
-                    labels = getattr(pl, "labels", []) or []
-                    if blocks or labels:
-                        c.append("")
-                        c.append("    /* debug symbols */")
-                        for b in blocks:
-                            bname = getattr(b, "name", None) or "(block)"
-                            bseg = getattr(b, "seg", None)
-                            boff = getattr(b, "off", None)
-                            if bseg is not None and boff is not None:
-                                c.append(f"    /* block {bname} @ {_seg_label(db, int(bseg))}:{int(boff):#06x} */")
-                            else:
-                                c.append(f"    /* block {bname} */")
-                        for lab in labels:
-                            lname = getattr(lab, "name", None) or "(label)"
-                            lseg = getattr(lab, "seg", None)
-                            loff = getattr(lab, "off", None)
-                            if lseg is not None and loff is not None:
-                                c.append(f"    /* label {lname} @ {_seg_label(db, int(lseg))}:{int(loff):#06x} */")
-                            else:
-                                c.append(f"    /* label {lname} */")
-
-                c.append("")
-                c.append("    /* TODO: implement */")
-
-                # default return for non-void functions
-                try:
-                    ret_part = base.split("(", 1)[0].strip()
-                    ret_tokens = ret_part.split()
-                    ret_type = " ".join(ret_tokens[:-1]).strip() if len(ret_tokens) >= 2 else ""
-                except Exception:
-                    ret_type = ""
-
-                if ret_type and ret_type != "void":
-                    if "*" in ret_type:
-                        c.append("    return NULL;")
-                    else:
-                        c.append("    return 0;")
-
-                c.append("}")
-                c.append("")
+                    c.append("}")
+                    c.append("")
 
         (out_dir / c_name).write_text("\n".join(c), encoding="utf-8")
 
@@ -1164,6 +1197,11 @@ def main() -> int:
     p_p.add_argument("out", nargs="?", default="-")
     p_p.add_argument("--unknown-label", default="(unknown)")
     p_p.add_argument("--no-sort", action="store_true")
+    p_p.add_argument(
+        "--param-names",
+        action="store_true",
+        help="Insert best-effort parameter names into prototypes (uses ProcLocals names when available)",
+    )
 
     p_s = sub.add_parser("dump-structs", help="Dump structs/unions/enums")
     p_s.add_argument("out", nargs="?", default="-")
@@ -1172,6 +1210,16 @@ def main() -> int:
     p_k = sub.add_parser("skeleton", help="Generate per-file .h/.c skeletons into a folder")
     p_k.add_argument("outdir", help="Output directory, e.g. out")
     p_k.add_argument("--unknown-label", default="(unknown)")
+    p_k.add_argument(
+        "--headers-only",
+        action="store_true",
+        help="Only (re)generate header files (and types.h); do not write/update any .c files",
+    )
+    p_k.add_argument(
+        "--no-param-names",
+        action="store_true",
+        help="Do not add parameter names to function prototypes (default is to add names)",
+    )
 
     args = ap.parse_args()
     db = load_nb09(args.nb09_bin)
@@ -1179,11 +1227,25 @@ def main() -> int:
     if args.cmd == "dump-globals":
         _write_out(args.out, dump_globals(db, unknown_label=args.unknown_label, no_sort=args.no_sort))
     elif args.cmd == "dump-procs":
-        _write_out(args.out, dump_procs(db, unknown_label=args.unknown_label, no_sort=args.no_sort))
+        _write_out(
+            args.out,
+            dump_procs(
+                db,
+                unknown_label=args.unknown_label,
+                no_sort=args.no_sort,
+                include_param_names=bool(args.param_names),
+            ),
+        )
     elif args.cmd == "dump-structs":
         _write_out(args.out, dump_structs(db, no_sort=args.no_sort))
     elif args.cmd == "skeleton":
-        generate_skeleton(db, Path(args.outdir), unknown_label=args.unknown_label)
+        generate_skeleton(
+            db,
+            Path(args.outdir),
+            unknown_label=args.unknown_label,
+            headers_only=bool(args.headers_only),
+            include_param_names=not bool(args.no_param_names),
+        )
     else:
         raise SystemExit("unknown command")
 

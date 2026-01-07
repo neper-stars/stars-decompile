@@ -11,6 +11,6 @@ extern int16_t aiTUTChunkOffset[10];  /* MEMORY_TUTOR2:0x59b4 */
 extern char rgTUTLookupTable[76];  /* MEMORY_TUTOR2:0x59c8 */
 
 /* functions */
-int16_t CchTutorString(char *, int16_t);  /* MEMORY_TUTOR2:0x5a14 */
+int16_t CchTutorString(char *pchOut, int16_t idt);  /* MEMORY_TUTOR2:0x5a14 */
 
 #endif /* TUTOR2_H_ */

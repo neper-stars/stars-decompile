@@ -12,33 +12,33 @@ extern char rgMSGLookupTable[72];  /* MEMORY_MSG:0x5ac6 */
 extern char rgcMsgArgs[387];  /* MEMORY_MSG:0x5b0e */
 
 /* functions */
-int16_t FFindPlayerMessage(int16_t, int16_t, int16_t);  /* MEMORY_MSG:0x932a */
-int16_t FGetNMsgbig(int16_t, MSGBIG *);  /* MEMORY_MSG:0x8444 */
-void DecorateMsgTitleBar(uint16_t, RECT *);  /* MEMORY_MSG:0x799c */
-int16_t PackageUpMsg(uint8_t *, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t);  /* MEMORY_MSG:0x802a */
-char * PszGetMessageN(int16_t);  /* MEMORY_MSG:0x8580 */
-int16_t IdmGetMessageN(int16_t);  /* MEMORY_MSG:0x8412 */
-int16_t FFinishPlrMsgEntry(int16_t);  /* MEMORY_MSG:0x9bd6 */
-void SetMsgTitle(uint16_t);  /* MEMORY_MSG:0x7218 */
-void MarkPlanetsPlayerLost(int16_t);  /* MEMORY_MSG:0x93c6 */
-char * PszFormatMessage(int16_t, int16_t *);  /* MEMORY_MSG:0x9220 */
-int16_t FSendPlrMsg2XGen(int16_t, int16_t, int16_t, int16_t, int16_t);  /* MEMORY_MSG:0x823a */
-void SetFilteringGroups(int16_t, int16_t);  /* MEMORY_MSG:0xa018 */
-int16_t FSendPlrMsg2(int16_t, int16_t, int16_t, int16_t, int16_t);  /* MEMORY_MSG:0x7eaa */
+int16_t FFindPlayerMessage(int16_t iPlr, int16_t iMsg, int16_t iObj);  /* MEMORY_MSG:0x932a */
+int16_t FGetNMsgbig(int16_t iMsg, MSGBIG *pmb);  /* MEMORY_MSG:0x8444 */
+void DecorateMsgTitleBar(uint16_t hdc, RECT *prc);  /* MEMORY_MSG:0x799c */
+int16_t PackageUpMsg(uint8_t *pb, int16_t iPlr, int16_t iMsg, int16_t iObj, int16_t p1, int16_t p2, int16_t p3, int16_t p4, int16_t p5, int16_t p6, int16_t p7);  /* MEMORY_MSG:0x802a */
+char * PszGetMessageN(int16_t iMsg);  /* MEMORY_MSG:0x8580 */
+int16_t IdmGetMessageN(int16_t iMsg);  /* MEMORY_MSG:0x8412 */
+int16_t FFinishPlrMsgEntry(int16_t dInc);  /* MEMORY_MSG:0x9bd6 */
+void SetMsgTitle(uint16_t hwnd);  /* MEMORY_MSG:0x7218 */
+void MarkPlanetsPlayerLost(int16_t iPlayer);  /* MEMORY_MSG:0x93c6 */
+char * PszFormatMessage(int16_t idm, int16_t *pParams);  /* MEMORY_MSG:0x9220 */
+int16_t FSendPlrMsg2XGen(int16_t fPrepend, int16_t iMsg, int16_t iObj, int16_t p1, int16_t p2);  /* MEMORY_MSG:0x823a */
+void SetFilteringGroups(int16_t idm, int16_t fSet);  /* MEMORY_MSG:0xa018 */
+int16_t FSendPlrMsg2(int16_t iPlr, int16_t iMsg, int16_t iObj, int16_t p1, int16_t p2);  /* MEMORY_MSG:0x7eaa */
 void ReadPlayerMessages(void);  /* MEMORY_MSG:0x994a */
-int16_t FSendPrependedPlrMsg(int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t);  /* MEMORY_MSG:0x7f80 */
-void MarkPlayersThatSentMsgs(int16_t);  /* MEMORY_MSG:0x9604 */
+int16_t FSendPrependedPlrMsg(int16_t iPlr, int16_t iMsg, int16_t iObj, int16_t p1, int16_t p2, int16_t p3, int16_t p4, int16_t p5, int16_t p6, int16_t p7);  /* MEMORY_MSG:0x7f80 */
+void MarkPlayersThatSentMsgs(int16_t iPlayer);  /* MEMORY_MSG:0x9604 */
 void ResetMessages(void);  /* MEMORY_MSG:0x98d6 */
-int16_t FRemovePlayerMessage(int16_t, int16_t, int16_t);  /* MEMORY_MSG:0x9278 */
-char * PszFormatString(char *, int16_t *);  /* MEMORY_MSG:0x85cc */
-char * PszGetCompressedMessage(int16_t);  /* MEMORY_MSG:0x9eb8 */
-int16_t MsgDlg(uint16_t, uint16_t, uint16_t, int32_t);  /* PASCAL */  /* MEMORY_MSG:0x8f68 */
-void WritePlayerMessages(int16_t);  /* MEMORY_MSG:0x9702 */
-int16_t HtMsgBox(POINT);  /* MEMORY_MSG:0x7d8c */
-int16_t IMsgPrev(int16_t);  /* MEMORY_MSG:0x78d8 */
-int16_t IMsgNext(int16_t);  /* MEMORY_MSG:0x7808 */
-char * PszFormatIds(int16_t, int16_t *);  /* MEMORY_MSG:0x924c */
-int16_t FSendPlrMsg(int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t);  /* MEMORY_MSG:0x7ee8 */
-int32_t MessageWndProc(uint16_t, uint16_t, uint16_t, int32_t);  /* PASCAL */  /* MEMORY_MSG:0x5c92 */
+int16_t FRemovePlayerMessage(int16_t iPlr, int16_t iMsg, int16_t iObj);  /* MEMORY_MSG:0x9278 */
+char * PszFormatString(char *pszFormat, int16_t *pParamsReal);  /* MEMORY_MSG:0x85cc */
+char * PszGetCompressedMessage(int16_t idm);  /* MEMORY_MSG:0x9eb8 */
+int16_t MsgDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam);  /* PASCAL */  /* MEMORY_MSG:0x8f68 */
+void WritePlayerMessages(int16_t iPlayer);  /* MEMORY_MSG:0x9702 */
+int16_t HtMsgBox(POINT pt);  /* MEMORY_MSG:0x7d8c */
+int16_t IMsgPrev(int16_t fFilteredOnly);  /* MEMORY_MSG:0x78d8 */
+int16_t IMsgNext(int16_t fFilteredOnly);  /* MEMORY_MSG:0x7808 */
+char * PszFormatIds(int16_t ids, int16_t *pParams);  /* MEMORY_MSG:0x924c */
+int16_t FSendPlrMsg(int16_t iPlr, int16_t iMsg, int16_t iObj, int16_t p1, int16_t p2, int16_t p3, int16_t p4, int16_t p5, int16_t p6, int16_t p7);  /* MEMORY_MSG:0x7ee8 */
+int32_t MessageWndProc(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam);  /* PASCAL */  /* MEMORY_MSG:0x5c92 */
 
 #endif /* MSG_H_ */

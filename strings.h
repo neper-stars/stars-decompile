@@ -11,6 +11,6 @@ extern int16_t aiSTRChunkOffset[23];  /* MEMORY_STRINGS:0x73b8 */
 extern char rgSTRLookupTable[84];  /* MEMORY_STRINGS:0x73e6 */
 
 /* functions */
-char * PszGetCompressedString(int16_t);  /* MEMORY_STRINGS:0x743a */
+char * PszGetCompressedString(int16_t ids);  /* MEMORY_STRINGS:0x743a */
 
 #endif /* STRINGS_H_ */

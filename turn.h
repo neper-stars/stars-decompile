@@ -11,11 +11,11 @@ extern int16_t rgpctMineHit[3];  /* MEMORY_TURN:0x4f54 */
 extern int16_t rgiWarpSafe[3];  /* MEMORY_TURN:0x4f5a */
 
 /* functions */
-void DoOrders(int16_t);  /* MEMORY_TURN:0x179a */
+void DoOrders(int16_t fPostMovement);  /* MEMORY_TURN:0x179a */
 void FuelFleets(void);  /* MEMORY_TURN:0x2efa */
 int16_t FGenerateTurn(void);  /* MEMORY_TURN:0x0000 */
 void MoveFleets(void);  /* MEMORY_TURN:0x32ce */
-int16_t FTravelThroughMineFields(FLEET *, int16_t *, THING *);  /* MEMORY_TURN:0x4f60 */
-void MoveThings(int16_t);  /* MEMORY_TURN:0x18f4 */
+int16_t FTravelThroughMineFields(FLEET *lpfl, int16_t *pdTravel, THING *lpthHit);  /* MEMORY_TURN:0x4f60 */
+void MoveThings(int16_t fPostProd);  /* MEMORY_TURN:0x18f4 */
 
 #endif /* TURN_H_ */
