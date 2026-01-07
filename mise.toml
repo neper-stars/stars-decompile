@@ -13,12 +13,15 @@ SCRIPTS_DIR = "{{ cwd }}/scripts/ghidra_scripts"
 TARGET_EXE = "{{ cwd }}/target/stars.exe"
 JSON_GLOBALS = "{{ cwd }}/scripts/nb09_ghidra_globals.json"
 JSON_STRUCTS = "{{ cwd }}/scripts/nb09_structmeta.json"
+WINDOWS_H = "{{ cwd }}/include/WINDOWS.H"
 
 [tasks.ghidra-import]
 description = "Import stars.exe into Ghidra project (16-bit Protected Mode)"
 run = '''
 #!/bin/bash
 set -e
+
+mkdir -p "$GHIDRA_PROJECT"
 
 # Use GHIDRA_HOME if set, otherwise fall back to GHIDRA_HOME_
 GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
@@ -141,6 +144,8 @@ run = '''
 #!/bin/bash
 set -e
 
+mkdir -p "$GHIDRA_PROJECT"
+
 GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
 GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
 ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
@@ -198,6 +203,37 @@ fi
 echo "Launching Ghidra..."
 echo "Project location: $GHIDRA_PROJECT/Stars.gpr"
 "$GHIDRA_EXPANDED/ghidraRun" &
+'''
+
+[tasks.ghidra-parse-windowsh]
+description = "Parse WINDOWS.H and import Win16 types (GUI recommended instead)"
+run = '''
+#!/bin/bash
+set -e
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+if [ ! -f "$WINDOWS_H" ]; then
+    echo "Error: WINDOWS.H not found at $WINDOWS_H"
+    exit 1
+fi
+
+echo "Parsing WINDOWS.H for Win16 types..."
+echo ""
+echo "NOTE: Headless C parsing can be unreliable. If this fails, use the GUI:"
+echo "  1. Open Ghidra GUI: mise run ghidra-gui"
+echo "  2. File > Parse C Source..."
+echo "  3. Add: $WINDOWS_H"
+echo "  4. Parse"
+echo ""
+
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript ImportWindowsH.py "$WINDOWS_H" 2>&1
 '''
 
 [tasks.extract-symbols]
