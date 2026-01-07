@@ -150,21 +150,90 @@ void DrawPlanetStarbase(uint16_t hdc, TILE *ptile, OBJ obj)
 
 int16_t PctPlanetDesirability(PLANET *lppl, int16_t iPlr)
 {
-    int16_t iMin;
-    int16_t d;
-    int16_t iMax;
-    int32_t pctNeg;
-    int16_t iPref;
-    int16_t i;
-    int16_t dPenalty;
-    int32_t pctPos;
-    int16_t pctVar;
-    int16_t iPlanet;
-    int32_t pctMod;
+    /* pctPos accumulates 0..10000 per env var (squared “percent ideal”). */
+    int32_t pctPos = 0;
 
-    /* TODO: implement */
-    return 0;
+    /* pctNeg accumulates up to 15 per env var if outside acceptable range. */
+    int32_t pctNeg = 0;
+
+    /* pctMod is a scaling factor in 1/10000ths (starts at 100%). */
+    int32_t pctMod = 10000;
+
+    for (int16_t i = 0; i < 3; i++) {
+        /* Planet current env (-??..?? stored as signed char). */
+        int32_t iPlanet = (int32_t)lppl->rgEnvVar[i];
+
+        /* Player environment prefs/ranges (signed char). */
+        int32_t iPref = (int32_t)rgplr[iPlr].rgEnvVar[i];       /* “ideal” / preferred */
+        int32_t iMin = (int32_t)rgplr[iPlr].rgEnvVarMin[i];
+        int32_t iMax = (int32_t)rgplr[iPlr].rgEnvVarMax[i];
+
+        /* Special case: “immune” / no-penalty axis (original checked iMax < 0). */
+        if (iMax < 0) {
+            pctPos += 10000;
+            continue;
+        }
+
+        /* Outside range => negative penalty by distance to nearest bound, capped at 15. */
+        if (iPlanet < iMin || iPlanet > iMax) {
+            int32_t delta = (iPlanet < iMin) ? (iMin - iPlanet) : (iPlanet - iMax);
+            if (delta > 15) delta = 15;
+            pctNeg += delta;
+            continue;
+        }
+
+        /* In range: compute squared “percent ideal” contribution, plus a modifier penalty
+           when you’re more than halfway from ideal toward the nearer edge. */
+        int32_t absdiff = iPlanet - iPref;
+        if (absdiff < 0) absdiff = -absdiff;
+
+        int32_t d;         /* range from ideal to nearest edge in the direction of iPlanet */
+        int32_t dPenalty;  /* (2*absdiff - d) */
+        if (iPlanet < iPref) {
+            d = iPref - iMin;
+            dPenalty = (iPref - iPlanet) * 2 - d;
+        } else {
+            d = iMax - iPref;
+            dPenalty = (iPlanet - iPref) * 2 - d;
+        }
+
+        /* pctVar = floor(absdiff * 100 / d); pctIdeal = 100 - pctVar */
+        int32_t pctVar = (d != 0) ? (absdiff * 100) / d : 100;
+        int32_t pctIdeal = 100 - pctVar;
+
+        /* Add squared contribution (0..10000). */
+        pctPos += pctIdeal * pctIdeal;
+
+        /* If dPenalty > 0, reduce pctMod by:
+              pctMod = floor(pctMod * (2*d - dPenalty) / (2*d))
+           (matches the original mul/div helper behavior, using truncating integer division).
+        */
+        if (dPenalty > 0 && d > 0) {
+            int32_t denom = d * 2;
+            int32_t numer_factor = denom - dPenalty; /* (2*d - dPenalty) */
+            pctMod = (int32_t)((pctMod * (int32_t)numer_factor) / (int32_t)denom);
+        }
+    }
+
+    /* If any env var was out of range, result is a negative penalty (sum of capped deltas). */
+    if (pctNeg != 0) {
+        return (int16_t)(-pctNeg);
+    }
+
+    /* Otherwise:
+         base = floor(sqrt(pctPos / 3.0))
+         result = floor(base * pctMod / 10000)
+       DAT_1120_1d2e in the original is the divisor used to average the 3 axes; 3.0 matches
+       the intended “mean of 3 squared contributions” behavior.
+    */
+    {
+        double avg = (double)pctPos / 3.0;
+        int32_t base = (int32_t)(sqrt(avg)); /* trunc toward 0 like __ftol for positive */
+        int32_t result = (base * pctMod) / 10000;
+        return (int16_t)result;
+    }
 }
+
 
 void DrawPlanetMinSum(uint16_t hdc, TILE *ptile, OBJ obj)
 {

@@ -1,5 +1,6 @@
 #ifndef STARS_NB09_TYPES_H
 #define STARS_NB09_TYPES_H
+#include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stddef.h>

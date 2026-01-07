@@ -4,7 +4,7 @@
 #include "popup.h"
 
 /* globals */
-uint16_t mpimdgrbitBU[8] = { 0x0008, 0x0008, 0x0010, 0x0020, 0x0080, 0x0040, 0x0008, 0x0008 }; /* 10c0:0138 */
+uint16_t mpimdgrbitBU[8] = {0x0008, 0x0008, 0x0010, 0x0020, 0x0080, 0x0040, 0x0008, 0x0008};
 
 /* functions */
 int32_t PopupWndProc(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam)

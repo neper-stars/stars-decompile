@@ -11,6 +11,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 option(STARS_BUILD_CLI   "Build portable CLI executable (main.c)" ON)
 option(STARS_BUILD_WIN32 "Build Win32 GUI executable (winmain.c)" OFF)
+option(STARS_BUILD_TESTS "Build unit tests (acutest)" ON)
+
 
 # CrossOver helpers: useful when *host* is macOS even if *target* is Windows
 option(CROSSOVER_ENABLE "Enable CrossOver copy/run helpers (macOS host)" ON)
@@ -22,7 +24,7 @@ if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
 endif()
 
 message(STATUS "Host=${CMAKE_HOST_SYSTEM_NAME} Target=${CMAKE_SYSTEM_NAME} WIN32=${WIN32}")
-message(STATUS "STARS_BUILD_CLI=${STARS_BUILD_CLI} STARS_BUILD_WIN32=${STARS_BUILD_WIN32}")
+message(STATUS "STARS_BUILD_CLI=${STARS_BUILD_CLI} STARS_BUILD_WIN32=${STARS_BUILD_WIN32} STARS_BUILD_TESTS=${STARS_BUILD_TESTS}")
 message(STATUS "CROSSOVER_ENABLE=${CROSSOVER_ENABLE} HOST_IS_MAC=${HOST_IS_MAC}")
 
 # -------- Sources: flat directory --------
@@ -43,6 +45,29 @@ if (MSVC)
 else()
   target_compile_options(stars_core PRIVATE -Wall -Wextra -Wno-unused-parameter)
 endif()
+
+
+# -------- Unit tests (acutest) --------
+if (STARS_BUILD_TESTS)
+  enable_testing()
+
+  add_executable(stars_tests
+    "${CMAKE_SOURCE_DIR}/test/test_planet.c"
+  )
+  target_link_libraries(stars_tests PRIVATE stars_core)
+  target_include_directories(stars_tests PRIVATE
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/test
+  )
+
+  # sqrt() etc
+  if (NOT MSVC)
+    target_link_libraries(stars_tests PRIVATE m)
+  endif()
+
+  add_test(NAME stars_tests COMMAND stars_tests)
+endif()
+
 
 # -------- CLI executable: main() --------
 if (STARS_BUILD_CLI)

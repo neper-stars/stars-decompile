@@ -306,7 +306,7 @@ double DGetDistance(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
     dy = (int32_t)y2 - (int32_t)y1;
     l = (int32_t)((int64_t)dx * (int64_t)dx + (int64_t)dy * (int64_t)dy);
     /* Use double sqrt like the original (which routed through the C runtime). */
-    return __builtin_sqrt((double)l);
+    return sqrt((double)l);
 }
 
 int16_t FDeleteFleet(int16_t idFleet, int16_t grobjSel, int16_t idSel)

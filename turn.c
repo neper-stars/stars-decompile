@@ -4,16 +4,16 @@
 #include "turn.h"
 
 /* globals */
-int16_t rgiWarpSafe[3] = { 4, 6, 5 }; /* 10b0:4f5a */
-int16_t rgpctMineHit[3] = { 3, 10, 35 }; /* 10b0:4f54 */
-int16_t rgrgdmgMine[3][2] = { { 100, 125 }, { 500, 600 }, { 0, 0 } }; /* 10b0:4f3c */
-int16_t rgrgdmgMinMine[3][2] = { { 500, 600 }, { 2000, 2500 }, { 0, 0 } }; /* 10b0:4f48 */
+int16_t rgiWarpSafe[3] = {4, 6, 5};
+int16_t rgpctMineHit[3] = {3, 10, 35};
+int16_t rgrgdmgMine[3][2] = {{100, 125}, {500, 600}, {0, 0}};
+int16_t rgrgdmgMinMine[3][2] = {{500, 600}, {2000, 2500}, {0, 0}};
 
 /* functions */
 void DoOrders(int16_t fPostMovement)
 {
-    PLANET * lppl;
-    PLANET * lpplMac;
+    PLANET *lppl;
+    PLANET *lpplMac;
 
     /* TODO: implement */
 }
@@ -22,13 +22,13 @@ void FuelFleets(void)
 {
     int16_t j;
     int32_t cPods;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t i;
     int16_t ifl;
-    FLEET * lpfl;
-    SHDEF * lpshdef;
+    FLEET *lpfl;
+    SHDEF *lpshdef;
     int32_t csh;
-    HUL * lphul;
+    HUL *lphul;
 
     /* debug symbols */
     /* label LChkFuelTransport @ MEMORY_TURN:0x306e */
@@ -44,9 +44,9 @@ int16_t FGenerateTurn(void)
     int16_t j;
     uint8_t mpiplr2[16];
     uint8_t rgfNoXFile[16];
-    int16_t (* penvMemSav)[9];
+    int16_t (*penvMemSav)[9];
     int16_t ifl;
-    FLEET * lpfl;
+    FLEET *lpfl;
     char *pchCur;
     int16_t i;
     int16_t env[9];
@@ -59,11 +59,11 @@ int16_t FGenerateTurn(void)
     int16_t fDone;
     int16_t cAdv;
     int16_t dPlanRange;
-    FLEET * lpflTarget;
-    PLANET * lppl;
+    FLEET *lpflTarget;
+    PLANET *lppl;
     int16_t dRange;
     int16_t iSteal;
-    PLANET * lpplMac;
+    PLANET *lpplMac;
     int16_t pctDetect;
     ORDER ord;
 
@@ -87,10 +87,10 @@ void MoveFleets(void)
     double d;
     int16_t fGotEnufFuel;
     int16_t fRanOutOfFuel;
-    ORDER * lpord;
+    ORDER *lpord;
     POINT ptEnd;
     int16_t ifl;
-    FLEET * lpfl;
+    FLEET *lpfl;
     double r;
     int32_t pct;
     int16_t dMineTravel;
@@ -105,17 +105,17 @@ void MoveFleets(void)
     int16_t i;
     int16_t dy;
     int16_t iCtr;
-    PLANET * lpplDst;
+    PLANET *lpplDst;
     int32_t cDie;
     int16_t ish;
     int16_t dx;
     int32_t lFuelGainAct;
-    THING * lpthDest;
+    THING *lpthDest;
     int32_t wtColonists;
     double dyRound;
-    THING * lpth;
+    THING *lpth;
     int16_t grbitPlr;
-    PLANET * lpplSrc;
+    PLANET *lpplSrc;
     int16_t fJumpgate;
     double dxRound;
     int16_t isbsDst;
@@ -165,7 +165,7 @@ int16_t FTravelThroughMineFields(FLEET *lpfl, int16_t *pdTravel, THING *lpthHit)
     int32_t dmgReduce;
     int32_t dmgToApply;
     int16_t i;
-    THING * lpth;
+    THING *lpth;
     int16_t dmgExtra;
     int16_t cshDamaged;
     int16_t fMineExpert;
@@ -174,7 +174,7 @@ int16_t FTravelThroughMineFields(FLEET *lpfl, int16_t *pdTravel, THING *lpthHit)
     int16_t cFields;
     int16_t dStart;
     FLEET flDead;
-    THING * lpthMac;
+    THING *lpthMac;
     int32_t csh;
     int16_t rgi[3];
     int16_t pct;
@@ -186,9 +186,9 @@ int16_t FTravelThroughMineFields(FLEET *lpfl, int16_t *pdTravel, THING *lpthHit)
     int32_t dpShield;
     int16_t iType;
     int16_t rgFieldE[3][8];
-    THING * lpthClosest;
+    THING *lpthClosest;
     int16_t cishInc;
-    THING * lpthSalvage;
+    THING *lpthSalvage;
     int16_t fHasRamScoop;
     int16_t dmgPer;
     int16_t rgFieldS[3][8];
@@ -217,13 +217,13 @@ void MoveThings(int16_t fPostProd)
     int16_t iMax;
     POINT ptDst;
     int16_t dLeft;
-    THING * lpth;
+    THING *lpth;
     int16_t fAnythingMoved;
     int16_t fMajorMove;
     int16_t idm;
     int16_t iLow;
     POINT ptSrc;
-    THING * lpthMac;
+    THING *lpthMac;
     int16_t dRange;
     POINT ptBase;
     int16_t iX;
@@ -235,7 +235,7 @@ void MoveThings(int16_t fPostProd)
     int16_t iWarp;
     int16_t fTerra;
     double dxRound;
-    PLANET * lppl;
+    PLANET *lppl;
     int16_t wtCur;
     int16_t pctMinKeep;
     double r;
@@ -250,8 +250,8 @@ void MoveThings(int16_t fPostProd)
     int16_t iWarpPacket2;
     int16_t pctRate;
     int16_t iplr;
-    THING * lpth2;
-    THING * lpth2Mac;
+    THING *lpth2;
+    THING *lpth2Mac;
     int16_t rgMin[3];
     int16_t cTerraPerm;
     int16_t cTerraTemp;
