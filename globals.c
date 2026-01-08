@@ -1,4 +1,6 @@
 #include "types.h"
+
+#define GLOBALS_DEFINE 1
 #include "globals.h"
 
 /* Unassigned symbols (no file inferred) */
@@ -80,7 +82,6 @@ FLEET **rglpfl;
 FRAMESTUFF vfs = {0};
 GAME game = {.lid = 0, .mdSize = 2, .mdDensity = 1, .cPlayer = 2, .cPlanMax = 0, .mdStartDist = 1, .fDirty = 0, .turn = 0x0000, .rgvc = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, .szName = ""};
 GDATA gd = {};
-HB *rglphb[1];
 HDR hdrCur = {0};
 HDR hdrPrev = {0};
 HS rghsFutureTech[8] = {0};
@@ -445,7 +446,6 @@ uint16_t hwndTitle = 0x0000;
 uint16_t hwndTooltip = 0x0000;
 uint16_t hwndVCRDlg = 0x0000;
 uint16_t hwndZipOrderDlg = 0x0000;
-uint16_t mphtcbAlloc[12] = {0xf800, 0x1000, 0x1000, 0x1000, 0x2000, 0xf800, 0xff00, 0x4440, 0x1000, 0x1800, 0x0800, 0xff00};
 uint16_t rghbrCache[32] = {0};
 uint16_t rghbrMineral[5] = {0};
 uint16_t rghbrMinSum[4][2] = {0};

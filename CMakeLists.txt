@@ -39,6 +39,11 @@ list(REMOVE_ITEM STARSRCS
 add_library(stars_core STATIC ${STARSRCS})
 target_include_directories(stars_core PUBLIC ${CMAKE_SOURCE_DIR})
 
+# Math library (sqrt, etc.)
+if (NOT MSVC)
+  target_link_libraries(stars_core PUBLIC m)
+endif()
+
 # Warnings
 if (MSVC)
   target_compile_options(stars_core PRIVATE /W3)
@@ -51,21 +56,35 @@ endif()
 if (STARS_BUILD_TESTS)
   enable_testing()
 
-  add_executable(stars_tests
-    "${CMAKE_SOURCE_DIR}/test/test_planet.c"
-  )
-  target_link_libraries(stars_tests PRIVATE stars_core)
-  target_include_directories(stars_tests PRIVATE
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/test
-  )
+  # Build one test executable per test_*.c file.
+  file(GLOB TEST_SOURCES "${CMAKE_SOURCE_DIR}/test/test_*.c")
 
-  # sqrt() etc
-  if (NOT MSVC)
-    target_link_libraries(stars_tests PRIVATE m)
-  endif()
+  foreach(TEST_SOURCE ${TEST_SOURCES})
+    get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
 
-  add_test(NAME stars_tests COMMAND stars_tests)
+    add_executable(${TEST_NAME} ${TEST_SOURCE})
+    target_link_libraries(${TEST_NAME} PRIVATE stars_core)
+
+    target_include_directories(${TEST_NAME} PRIVATE
+      ${CMAKE_SOURCE_DIR}
+      ${CMAKE_SOURCE_DIR}/test
+    )
+
+    # sqrt(), etc.
+    if (NOT MSVC)
+      target_link_libraries(${TEST_NAME} PRIVATE m)
+    endif()
+
+    add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+    set_tests_properties(${TEST_NAME} PROPERTIES WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+  endforeach()
+
+  # Convenience target: build + run all tests
+  add_custom_target(test_all
+    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+    DEPENDS ${TEST_SOURCES}
+    COMMENT "Running all tests"
+  )
 endif()
 
 

@@ -62,4 +62,6 @@ __pycache__
 .DS_Store
 build/
 build-win/
+build-mac-debug/
+build-mac-release/
 ghidra_project/

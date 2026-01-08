@@ -8,6 +8,7 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
+#include <setjmp.h>
 
 /* forward declarations (to satisfy pointer members) */
 typedef struct _planet PLANET;

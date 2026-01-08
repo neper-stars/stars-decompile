@@ -33,6 +33,11 @@ cmake --build build-win
 cmake --build build-win --target run_in_crossover
 ```
 
+### run tests
+```bash
+cmake --build build --target test_all
+```
+
 ## scripts
 
 - [`nb09_model.py`](scripts/nb09_model.py) / [`nb09_parser.py`](scripts/nb09_parser.py)  
