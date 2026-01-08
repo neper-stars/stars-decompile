@@ -18,21 +18,24 @@ undefined2 __cdecl16far UTIL::CalcPlayerScore(int iPlr,undefined2 *pscore)
   int *piVar2;
   SCORE *pSVar3;
   undefined2 *puVar4;
-  long lVar5;
+  int iVar5;
   uint uVar6;
-  int iVar7;
-  ushort uVar8;
-  uint uVar9;
+  ushort uVar7;
+  uint uVar8;
+  int iVar9;
   int iVar10;
-  int iVar11;
-  int iVar12;
-  int *piVar13;
-  SCORE *pSVar14;
-  undefined2 uVar15;
-  bool bVar16;
+  int *piVar11;
+  undefined2 unaff_SI;
+  SCORE *pSVar12;
+  undefined2 unaff_DI;
+  undefined2 uVar13;
+  bool bVar14;
+  long lVar15;
+  HULDEF *pHVar16;
   long lVar17;
-  HULDEF *pHVar18;
-  undefined4 uVar19;
+  ulong uVar18;
+  undefined uVar19;
+  undefined uVar20;
   short rgType [16];
   long lPower;
   short iTech;
@@ -45,89 +48,90 @@ undefined2 __cdecl16far UTIL::CalcPlayerScore(int iPlr,undefined2 *pscore)
   long lTemp;
   long rgcsh [3];
   
-  PUBLIC::_memset(&score,0,0x14);
-  uVar9 = (int)_DATA::lpPlanets + c_common::cPlanet * 0x38;
-  lppl = (PLANET *)CONCAT22(_DATA::lpPlanets._2_2_,(int)_DATA::lpPlanets);
-  while ((uint)lppl < uVar9) {
-    uVar15 = (undefined2)((ulong)lppl >> 0x10);
+  PUBLIC::_memset(&score,0,CONCAT22(unaff_DI,0x14));
+  uVar8 = (ushort)_DATA::lpPlanets + c_common::cPlanet * 0x38;
+  lppl = (PLANET *)CONCAT22(_DATA::lpPlanets._2_2_,(ushort)_DATA::lpPlanets);
+  uVar7 = (ushort)_DATA::lpPlanets;
+  while ((uint)lppl < uVar8) {
+    uVar13 = (undefined2)((ulong)lppl >> 0x10);
     if (*(int *)((uint)lppl + 2) == iPlr) {
       score.cPlanet = score.cPlanet + 1;
       uVar6 = *(uint *)((uint)lppl + 0x28);
-      lVar17 = PUBLIC::__aFldiv(uVar6 + 999,*(int *)((uint)lppl + 0x2a) + (uint)(0xfc18 < uVar6),
-                                0xe8,0);
-      if (6 < lVar17) {
-        lVar17 = 6;
+      lVar15 = PUBLIC::__aFldiv(CONCAT22(*(int *)((uint)lppl + 0x2a) + (uint)(0xfc18 < uVar6),
+                                         uVar6 + 999),1000);
+      if (6 < lVar15) {
+        lVar15 = 6;
       }
-      score.lScore = lVar17 + score.lScore;
+      score.lScore = lVar15 + score.lScore;
       if ((*(uint *)((uint)lppl + 4) >> 9 & 1) != 0) {
-        pHVar18 = PARTS::LphuldefFromId
+        pHVar16 = PARTS::LphuldefFromId
                             (*(short *)(*(int *)(iPlr * 4 + 0x14c) +
                                        (*(uint *)((uint)lppl + 0x2c) & 0xf) * 0x93));
-        if (*(int *)((int)pHVar18 + 0x34) != 0) {
+        if (*(int *)((int)pHVar16 + 0x34) != 0) {
           score.cStarbase = score.cStarbase + 1;
         }
       }
       uVar6 = PLANET::CResourcesAtPlanet(lppl,iPlr);
-      bVar16 = CARRY2((uint)score.cResources,uVar6);
+      bVar14 = CARRY2((uint)score.cResources,uVar6);
       score.cResources._0_2_ = (uint)score.cResources + uVar6;
-      score.cResources._2_2_ = score.cResources._2_2_ + ((int)uVar6 >> 0xf) + (uint)bVar16;
+      score.cResources._2_2_ = score.cResources._2_2_ + ((int)uVar6 >> 0xf) + (uint)bVar14;
     }
-    lppl = (PLANET *)CONCAT22(uVar15,(uint)lppl + 0x38);
+    lppl = (PLANET *)CONCAT22(uVar13,(uint)lppl + 0x38);
   }
-  lVar17 = PUBLIC::__aFldiv((uint)score.cResources,score.cResources._2_2_,0x1e,0);
-  lVar17 = lVar17 + score.lScore + (long)(score.cStarbase * 3);
-  score.lScore._0_2_ = (int)lVar17;
-  score.lScore._2_2_ = (int)((ulong)lVar17 >> 0x10);
-  if ((*(uint *)(iPlr * 0xc0 + 0x59f6) & 1) == 0) {
+  lVar15 = PUBLIC::__aFldiv(CONCAT22(score.cResources._2_2_,(uint)score.cResources),0x1e);
+  lVar15 = lVar15 + score.lScore + (long)(score.cStarbase * 3);
+  score.lScore._0_2_ = (int)lVar15;
+  score.lScore._2_2_ = (int)((ulong)lVar15 >> 0x10);
+  if ((*(uint *)((int)&c_common::rgplr[0].wFlags + iPlr * 0xc0) & 1) == 0) {
     for (i = 0; i < 6; i = i + 1) {
-      iVar10 = (int)*(char *)(iPlr * 0xc0 + 0x59bc + i);
-      score.cTechLevels = score.cTechLevels + iVar10;
-      if (iVar10 < 4) {
-        lVar17 = lVar17 + iVar10;
+      iVar9 = (int)*(char *)(iPlr * 0xc0 + 0x59bc + i);
+      score.cTechLevels = score.cTechLevels + iVar9;
+      if (iVar9 < 4) {
+        lVar15 = lVar15 + iVar9;
+        score.lScore._0_2_ = (int)lVar15;
+        score.lScore._2_2_ = (int)((ulong)lVar15 >> 0x10);
+      }
+      else if (iVar9 < 7) {
+        lVar15 = lVar15 + (iVar9 * 2 + -3);
+        score.lScore._0_2_ = (int)lVar15;
+        score.lScore._2_2_ = (int)((ulong)lVar15 >> 0x10);
+      }
+      else if (iVar9 < 10) {
+        iVar9 = iVar9 * 3 + -9;
+        lVar17 = lVar15 + iVar9;
         score.lScore._0_2_ = (int)lVar17;
         score.lScore._2_2_ = (int)((ulong)lVar17 >> 0x10);
-      }
-      else if (iVar10 < 7) {
-        lVar17 = lVar17 + (iVar10 * 2 + -3);
-        score.lScore._0_2_ = (int)lVar17;
-        score.lScore._2_2_ = (int)((ulong)lVar17 >> 0x10);
-      }
-      else if (iVar10 < 10) {
-        iVar10 = iVar10 * 3 + -9;
-        lVar5 = lVar17 + iVar10;
-        score.lScore._0_2_ = (int)lVar5;
-        score.lScore._2_2_ = (int)((ulong)lVar5 >> 0x10);
-        lVar17 = lVar17 + iVar10;
+        lVar15 = lVar15 + iVar9;
       }
       else {
-        iVar10 = iVar10 * 4 + -0x12;
-        lVar5 = lVar17 + iVar10;
-        score.lScore._0_2_ = (int)lVar5;
-        score.lScore._2_2_ = (int)((ulong)lVar5 >> 0x10);
-        lVar17 = lVar17 + iVar10;
+        iVar9 = iVar9 * 4 + -0x12;
+        lVar17 = lVar15 + iVar9;
+        score.lScore._0_2_ = (int)lVar17;
+        score.lScore._2_2_ = (int)((ulong)lVar17 >> 0x10);
+        lVar15 = lVar15 + iVar9;
       }
     }
   }
-  for (i = 0; score.lScore = lVar17, i < 0x10; i = i + 1) {
+  for (i = 0; score.lScore = lVar15, i < 0x10; i = i + 1) {
     if ((*(uint *)(*(int *)(iPlr * 4 + 0xfe) + i * 0x93 + 0x7b) >> 9 & 1) == 0) {
-      iVar10 = *(int *)(iPlr * 4 + 0x100);
-      uVar9 = LComputePower((char)(*(int *)(iPlr * 4 + 0xfe) + i * 0x93),iVar10);
-      if ((iVar10 < 1) && ((iVar10 < 0 || (uVar9 == 0)))) {
+      iVar9 = *(int *)(iPlr * 4 + 0x100);
+      uVar8 = LComputePower(*(int *)(iPlr * 4 + 0xfe) + i * 0x93,iVar9);
+      if ((iVar9 < 1) && ((iVar9 < 0 || (uVar8 == 0)))) {
         rgType[i] = 0;
-        lVar17 = score.lScore;
+        lVar15 = score.lScore;
       }
-      else if ((iVar10 < 1) && ((iVar10 < 0 || (uVar9 < 2000)))) {
+      else if ((iVar9 < 1) && ((iVar9 < 0 || (uVar8 < 2000)))) {
         rgType[i] = 1;
-        lVar17 = score.lScore;
+        lVar15 = score.lScore;
       }
       else {
         rgType[i] = 2;
-        lVar17 = score.lScore;
+        lVar15 = score.lScore;
       }
     }
     else {
       rgType[i] = -1;
-      lVar17 = score.lScore;
+      lVar15 = score.lScore;
     }
   }
   for (i = 0; i < 3; i = i + 1) {
@@ -135,65 +139,61 @@ undefined2 __cdecl16far UTIL::CalcPlayerScore(int iPlr,undefined2 *pscore)
     *(undefined2 *)((int)rgcsh + i * 4 + 2) = 0;
   }
   for (ifl = 0; ifl < c_common::cFleet; ifl = ifl + 1) {
-    piVar13 = (int *)((int)_DATA::rglpfl + ifl * 4);
-    iVar10 = *piVar13;
-    iVar7 = piVar13[1];
-    if ((iVar10 == 0) && (iVar7 == 0)) break;
-    if ((*(int *)(iVar10 + 2) == iPlr) && ((*(uint *)(iVar10 + 4) >> 10 & 1) == 0)) {
+    piVar11 = (int *)((int)_DATA::rglpfl + ifl * 4);
+    iVar9 = *piVar11;
+    iVar10 = piVar11[1];
+    if ((iVar9 == 0) && (iVar10 == 0)) break;
+    if ((*(int *)(iVar9 + 2) == iPlr) && ((*(uint *)(iVar9 + 4) >> 10 & 1) == 0)) {
       for (i = 0; i < 0x10; i = i + 1) {
-        if ((0 < *(int *)(iVar10 + 0xc + i * 2)) && (rgType[i] != -1)) {
-          uVar9 = *(uint *)(iVar10 + 0xc + i * 2);
-          iVar11 = rgType[i];
-          plVar1 = rgcsh + iVar11;
+        if ((0 < *(int *)(iVar9 + 0xc + i * 2)) && (rgType[i] != -1)) {
+          uVar8 = *(uint *)(iVar9 + 0xc + i * 2);
+          iVar5 = rgType[i];
+          plVar1 = rgcsh + iVar5;
           uVar6 = *(uint *)plVar1;
-          *(uint *)plVar1 = *(uint *)plVar1 + uVar9;
-          piVar2 = (int *)((int)rgcsh + iVar11 * 4 + 2);
-          *piVar2 = *piVar2 + ((int)uVar9 >> 0xf) + (uint)CARRY2(uVar6,uVar9);
+          *(uint *)plVar1 = *(uint *)plVar1 + uVar8;
+          piVar2 = (int *)((int)rgcsh + iVar5 * 4 + 2);
+          *piVar2 = *piVar2 + ((int)uVar8 >> 0xf) + (uint)CARRY2(uVar6,uVar8);
         }
       }
     }
   }
-  iVar10 = score.cPlanet >> 0xf;
-  if ((iVar10 < rgcsh[1]._2_2_) ||
-     ((iVar10 <= rgcsh[1]._2_2_ && ((uint)score.cPlanet <= (uint)rgcsh[1])))) {
-    rgcsh[1]._2_2_ = iVar10;
-  }
-  uVar15 = PUBLIC::__aFlshl();
-  iVar10 = score.cPlanet >> 0xf;
-  if ((iVar10 < rgcsh[0]._2_2_) ||
-     ((iVar10 <= rgcsh[0]._2_2_ && ((uint)score.cPlanet <= (uint)rgcsh[0])))) {
+  lVar15 = PUBLIC::__aFlshl(CONCAT22(unaff_SI,unaff_DI),uVar7);
+  iVar9 = score.cPlanet >> 0xf;
+  if ((iVar9 < rgcsh[0]._2_2_) ||
+     ((iVar9 <= rgcsh[0]._2_2_ && ((uint)score.cPlanet <= (uint)rgcsh[0])))) {
     rgcsh[0]._0_2_ = score.cPlanet;
-    rgcsh[0]._2_2_ = iVar10;
+    rgcsh[0]._2_2_ = iVar9;
   }
-  lVar17 = PUBLIC::__aFldiv((uint)rgcsh[0],rgcsh[0]._2_2_,2,0);
-  lVar17 = lVar17 + CONCAT22(rgcsh[1]._2_2_,uVar15) + score.lScore;
-  score.lScore._0_2_ = (int)lVar17;
-  score.lScore._2_2_ = (int)((ulong)lVar17 >> 0x10);
+  lVar17 = PUBLIC::__aFldiv(CONCAT22(rgcsh[0]._2_2_,(uint)rgcsh[0]),2);
+  lVar15 = lVar17 + lVar15 + score.lScore;
+  score.lScore._0_2_ = (int)lVar15;
+  score.lScore._2_2_ = (int)((ulong)lVar15 >> 0x10);
   if ((-1 < rgcsh[2]._2_2_) && ((0 < rgcsh[2]._2_2_ || ((uint)rgcsh[2] != 0)))) {
-    iVar11 = score.cPlanet >> 0xf;
-    iVar7 = score.cPlanet + (uint)rgcsh[2];
-    iVar12 = iVar11 + rgcsh[2]._2_2_ + (uint)CARRY2(score.cPlanet,(uint)rgcsh[2]);
-    iVar10 = score.cPlanet;
-    score.lScore = lVar17;
-    uVar15 = PUBLIC::__aFlshl(score.cPlanet,iVar11,(char)iVar7,iVar12);
-    uVar19 = PUBLIC::__aFulmul(uVar15,rgcsh[2]._2_2_,iVar10,iVar11);
-    lVar17 = PUBLIC::__aFldiv(uVar19,(char)iVar7,iVar12);
-    lVar17 = score.lScore + lVar17;
-    score.lScore._0_2_ = (int)lVar17;
-    score.lScore._2_2_ = (int)((ulong)lVar17 >> 0x10);
+    iVar9 = score.cPlanet >> 0xf;
+    uVar7 = score.cPlanet + (uint)rgcsh[2];
+    iVar10 = iVar9 + rgcsh[2]._2_2_ + (uint)CARRY2(score.cPlanet,(uint)rgcsh[2]);
+    uVar19 = (undefined)score.cPlanet;
+    uVar20 = (undefined)((uint)score.cPlanet >> 8);
+    score.lScore = lVar15;
+    uVar18 = PUBLIC::__aFlshl((long)score.cPlanet,uVar7);
+    uVar18 = PUBLIC::__aFulmul(uVar18,CONCAT22(iVar9,CONCAT11(uVar20,uVar19)));
+    lVar15 = PUBLIC::__aFldiv(uVar18,CONCAT22(iVar10,uVar7));
+    lVar15 = lVar15 + score.lScore;
+    score.lScore._0_2_ = (int)lVar15;
+    score.lScore._2_2_ = (int)((ulong)lVar15 >> 0x10);
   }
-  score.lScore = lVar17;
+  score.lScore = lVar15;
   for (i = 0; i < 3; i = i + 1) {
-    uVar8 = WPackLong(CONCAT22(*(undefined2 *)((int)rgcsh + i * 4 + 2),*(undefined2 *)(rgcsh + i)));
-    score.rgcsh[i] = uVar8;
+    uVar7 = WPackLong(CONCAT22(*(undefined2 *)((int)rgcsh + i * 4 + 2),*(undefined2 *)(rgcsh + i)));
+    score.rgcsh[i] = uVar7;
   }
   if (pscore != (undefined2 *)0x0) {
-    pSVar14 = &score;
-    for (iVar10 = 10; iVar10 != 0; iVar10 = iVar10 + -1) {
+    pSVar12 = &score;
+    for (iVar9 = 10; iVar9 != 0; iVar9 = iVar9 + -1) {
       puVar4 = pscore;
       pscore = pscore + 1;
-      pSVar3 = pSVar14;
-      pSVar14 = (SCORE *)((int)&pSVar14->lScore + 2);
+      pSVar3 = pSVar12;
+      pSVar12 = (SCORE *)((int)&pSVar12->lScore + 2);
       *puVar4 = *(undefined2 *)&pSVar3->lScore;
     }
   }
@@ -218,13 +218,14 @@ int __cdecl16far UTIL::LComputePower(SHDEF *lpshdef)
   int iVar2;
   short sVar3;
   int iVar4;
-  int iVar5;
-  short *psVar6;
+  short *psVar5;
+  int iVar6;
   undefined2 uVar7;
-  undefined4 uVar8;
+  ulong uVar8;
   long lVar9;
-  long lVar10;
-  long lVar11;
+  ulong uVar10;
+  ulong uVar11;
+  long lVar12;
   PART part;
   long dp;
   long dpBombs;
@@ -237,69 +238,74 @@ int __cdecl16far UTIL::LComputePower(SHDEF *lpshdef)
   short dSpeed;
   
   dpBombs._0_2_ = 0;
-  lVar11 = 0;
-  dpTorps._0_2_ = 0;
-  lVar10 = 1000;
+  uVar11 = 0;
+  lVar12 = 0;
+  uVar10 = 1000;
   ihs = 0;
   while( true ) {
+    dpTorps._0_2_ = (int)lVar12;
     uVar7 = (undefined2)((ulong)lpshdef >> 0x10);
     if ((int)(uint)*(byte *)((int)lpshdef + 0x7a) <= ihs) break;
-    psVar6 = (short *)((int)lpshdef + 0x3a + ihs * 4);
-    part.hs.grhst = *psVar6;
-    part.hs.flags2 = psVar6[1];
+    psVar5 = (short *)((int)lpshdef + 0x3a + ihs * 4);
+    part.hs.grhst = *psVar5;
+    part.hs.flags2 = psVar5[1];
     if (((uint)part.hs.flags2 >> 8 != 0) && (sVar3 = PARTS::FLookupPart(&part), sVar3 != 0)) {
-      iVar4 = (int)part.pterra;
+      iVar6 = (int)part.pterra;
       uVar7 = (undefined2)((ulong)part.pterra >> 0x10);
       if (part.hs.grhst == 0x10) {
-        iVar2 = *(int *)(iVar4 + 0x34) + 3;
-        iVar5 = iVar2 >> 0xf;
-        iVar4 = *(int *)(iVar4 + 0x36);
-        uVar8 = PUBLIC::__aFulmul(iVar4,iVar4 >> 0xf,(uint)part.hs.flags2 >> 8,0);
-        PUBLIC::__aFulmul(uVar8,iVar2,iVar5);
-        lVar9 = PUBLIC::__aFldiv();
+        lVar9 = 4;
+        iVar2 = *(int *)(iVar6 + 0x34) + 3;
+        iVar4 = iVar2 >> 0xf;
+        uVar8 = PUBLIC::__aFulmul((long)*(int *)(iVar6 + 0x36),(ulong)((uint)part.hs.flags2 >> 8));
+        uVar8 = PUBLIC::__aFulmul(uVar8,CONCAT22(iVar4,iVar2));
+        lVar9 = PUBLIC::__aFldiv(uVar8,lVar9);
         if ((*(uint *)((int)part.pterra + 0x3a) & 1) != 0) {
-          lVar9 = PUBLIC::__aFldiv();
+          lVar9 = PUBLIC::__aFldiv(lVar9,3);
         }
-        lVar11 = lVar9 + lVar11;
+        uVar11 = lVar9 + uVar11;
       }
       else if (part.hs.grhst == 0x20) {
-        iVar2 = *(int *)(iVar4 + 0x34) + -2;
-        iVar5 = iVar2 >> 0xf;
-        iVar4 = *(int *)(iVar4 + 0x36);
-        uVar8 = PUBLIC::__aFulmul(iVar4,iVar4 >> 0xf,(uint)part.hs.flags2 >> 8,0);
-        PUBLIC::__aFulmul(uVar8,iVar2,iVar5);
-        iVar4 = PUBLIC::__aFldiv();
-        dpTorps._0_2_ = (int)dpTorps + iVar4;
+        lVar9 = 2;
+        iVar2 = *(int *)(iVar6 + 0x34) + -2;
+        iVar4 = iVar2 >> 0xf;
+        uVar8 = PUBLIC::__aFulmul((long)*(int *)(iVar6 + 0x36),(ulong)((uint)part.hs.flags2 >> 8));
+        uVar8 = PUBLIC::__aFulmul(uVar8,CONCAT22(iVar4,iVar2));
+        lVar9 = PUBLIC::__aFldiv(uVar8,lVar9);
+        lVar12 = lVar9 + lVar12;
       }
       else if (part.hs.grhst == 0x40) {
         dpBombs._0_2_ =
              (int)dpBombs +
-             (*(int *)(iVar4 + 0x36) + *(int *)(iVar4 + 0x38)) * ((uint)part.hs.flags2 >> 8) * 2;
+             (*(int *)(iVar6 + 0x36) + *(int *)(iVar6 + 0x38)) * ((uint)part.hs.flags2 >> 8) * 2;
       }
       else if ((part.hs.grhst == 0x800) &&
               (((part.hs.flags2 & 0xffU) == 0xc || ((part.hs.flags2 & 0xffU) == 0xd)))) {
         for (i = (uint)part.hs.flags2 >> 8; 0 < i; i = i + -1) {
+          lVar9 = 100;
           uVar1 = *(uint *)((int)part.pterra + 0x34);
-          PUBLIC::__aFulmul(lVar10,uVar1 + 100,((int)uVar1 >> 0xf) + (uint)(0xff9b < uVar1));
-          lVar10 = PUBLIC::__aFldiv();
+          uVar10 = PUBLIC::__aFulmul(uVar10,CONCAT22(((int)uVar1 >> 0xf) + (uint)(0xff9b < uVar1),
+                                                     uVar1 + 100));
+          uVar10 = PUBLIC::__aFldiv(uVar10,lVar9);
         }
       }
     }
     ihs = ihs + 1;
   }
-  if (lVar10 != 1000) {
-    lVar10 = PUBLIC::__aFldiv();
-    if (0xff < lVar10) {
-      lVar10 = 0xff;
+  if (uVar10 != 1000) {
+    uVar10 = PUBLIC::__aFldiv(uVar10,10);
+    if (0xff < (long)uVar10) {
+      uVar10 = 0xff;
     }
-    PUBLIC::__aFulmul(lVar11,lVar10);
-    lVar11 = PUBLIC::__aFldiv();
+    lVar12 = 100;
+    uVar10 = PUBLIC::__aFulmul(uVar11,uVar10);
+    uVar11 = PUBLIC::__aFldiv(uVar10,lVar12);
   }
-  dpBeams._0_2_ = (int)lVar11;
   sVar3 = BATTLE::SpdOfShip((FLEET *)0x0,0,(TOK *)0x0,0,lpshdef);
-  PUBLIC::__aFulmul(lVar11,sVar3 + -4,sVar3 + -4 >> 0xf);
-  iVar4 = PUBLIC::__aFldiv();
-  return (int)dpBombs + (int)dpBeams + iVar4 + (int)dpTorps;
+  dpBeams._0_2_ = (int)uVar11;
+  lVar12 = 10;
+  uVar10 = PUBLIC::__aFulmul(uVar11,(long)(sVar3 + -4));
+  lVar12 = PUBLIC::__aFldiv(uVar10,lVar12);
+  return (int)dpBombs + (int)dpBeams + (int)lVar12 + (int)dpTorps;
 }
 
 
@@ -311,22 +317,25 @@ int __cdecl16far UTIL::LComputePower(SHDEF *lpshdef)
 
 
 /* WARNING: Removing unreachable block (ram,0x10487954) */
-/* WARNING: Could not reconcile some variable overlaps */
 
 short __cdecl16far PLANET::CResourcesAtPlanet(PLANET *lppl,short iplr)
 
 {
-  short sVar1;
-  uint uVar2;
-  undefined2 uVar3;
+  uint uVar1;
+  double __x;
+  short sVar2;
+  uint uVar3;
   short sVar4;
   int iVar5;
-  uint uVar6;
-  int iVar7;
-  int iVar8;
-  undefined2 uVar9;
+  int iVar6;
+  undefined2 unaff_SI;
+  undefined2 unaff_DI;
+  undefined2 uVar7;
+  long lVar8;
+  ulong uVar9;
   long lVar10;
-  undefined4 uVar11;
+  undefined2 uVar11;
+  ushort in_stack_0000ffca;
   long local_26;
   long local_1e;
   short iEnergy;
@@ -337,54 +346,55 @@ short __cdecl16far PLANET::CResourcesAtPlanet(PLANET *lppl,short iplr)
   long lPop;
   short cRes;
   
-  uVar9 = (undefined2)((ulong)lppl >> 0x10);
-  iVar8 = (int)lppl;
-  if ((*(int *)(iVar8 + 0x28) == 0) && (*(int *)(iVar8 + 0x2a) == 0)) {
+  uVar7 = (undefined2)((ulong)lppl >> 0x10);
+  iVar6 = (int)lppl;
+  if ((*(int *)(iVar6 + 0x28) == 0) && (*(int *)(iVar6 + 0x2a) == 0)) {
     cRes = 0;
   }
   else {
-    sVar1 = RACE::GetRaceStat((PLAYER *)((int)&c_common::rgplr + iplr * 0xc0),0);
-    uVar6 = *(uint *)(iVar8 + 0x28);
-    iVar5 = *(int *)(iVar8 + 0x2a);
-    lPop = CONCAT22(iVar5,uVar6);
-    iVar7 = iVar5;
-    uVar2 = CalcPlanetMaxPop();
-    if ((iVar7 <= iVar5) && ((iVar7 < iVar5 || (uVar2 < uVar6)))) {
-      lVar10 = PUBLIC::__aFldiv(uVar6 - uVar2,CONCAT42(2,(iVar5 - iVar7) - (uint)(uVar6 < uVar2)));
-      lPop = lVar10 + CONCAT22(iVar7,uVar2);
-      iVar5 = iVar7;
-      uVar3 = PUBLIC::__aFlshl();
-      if (CONCAT22(iVar5,uVar3) < lVar10 + CONCAT22(iVar7,uVar2)) {
-        uVar3 = PUBLIC::__aFlshl();
-        lPop = CONCAT22(iVar7,uVar3);
+    sVar2 = RACE::GetRaceStat((PLAYER *)((int)c_common::rgplr + iplr * 0xc0),0);
+    uVar1 = *(uint *)(iVar6 + 0x28);
+    iVar6 = *(int *)(iVar6 + 0x2a);
+    lPop = CONCAT22(iVar6,uVar1);
+    iVar5 = iVar6;
+    uVar3 = CalcPlanetMaxPop(lppl->id,iplr);
+    if ((iVar5 <= iVar6) && ((iVar5 < iVar6 || (uVar3 < uVar1)))) {
+      lVar8 = PUBLIC::__aFldiv(CONCAT22((iVar6 - iVar5) - (uint)(uVar1 < uVar3),uVar1 - uVar3),2);
+      lPop = lVar8 + CONCAT22(iVar5,uVar3);
+      lVar8 = PUBLIC::__aFlshl(CONCAT22(unaff_SI,unaff_DI),in_stack_0000ffca);
+      if (lVar8 < lPop) {
+        lPop = PUBLIC::__aFlshl(CONCAT22(unaff_SI,unaff_DI),in_stack_0000ffca);
       }
     }
-    sVar4 = RACE::GetRaceStat((PLAYER *)((int)&c_common::rgplr + iplr * 0xc0),0xe);
+    sVar4 = RACE::GetRaceStat((PLAYER *)((int)c_common::rgplr + iplr * 0xc0),0xe);
     if (sVar4 == 8) {
-      iEnergy = (short)*(char *)(iplr * 0xc0 + 0x59bc);
-      PctPlanetDesirability((PLANET *)CONCAT42(CONCAT22(iplr,uVar9),iVar8),iplr);
+      iEnergy = (short)*(char *)((int)c_common::rgplr[0].rgTech + iplr * 0xc0);
+      PctPlanetDesirability(lppl,iplr);
       if (iEnergy < 1) {
         iEnergy = 1;
       }
       local_1e = (long)iEnergy;
-      local_26 = (long)sVar1;
-      PUBLIC::_sqrt(0x1048,((double)local_1e * (double)lPop) / (double)local_26);
-      cRes = PUBLIC::__ftol();
+      local_26 = (long)sVar2;
+      __x = ((double)local_1e * (double)lPop) / (double)local_26;
+      uVar7 = (undefined2)((qword)__x >> 0x30);
+      PUBLIC::_sqrt((double *)0x1048,__x);
+      lVar8 = PUBLIC::__ftol((double)CONCAT26(10,CONCAT24(unaff_SI,CONCAT22(unaff_DI,uVar7))));
+      cRes = (short)lVar8;
     }
     else {
-      iVar5 = PUBLIC::__aFldiv((undefined2)lPop,CONCAT42((long)sVar1,lPop._2_2_));
-      cFact = CMaxOperableFactories((PLANET *)CONCAT42(CONCAT22(iplr,uVar9),iVar8),iplr,0);
-      uVar6 = PUBLIC::__aFulshr();
-      if ((int)(uVar6 & 0xfff) < cFact) {
-        uVar6 = PUBLIC::__aFulshr();
-        cFact = uVar6 & 0xfff;
+      lVar8 = PUBLIC::__aFldiv(lPop,(long)sVar2);
+      cFact = CMaxOperableFactories(lppl,iplr,0);
+      uVar9 = PUBLIC::__aFulshr(CONCAT22(unaff_SI,unaff_DI),in_stack_0000ffca);
+      if ((int)((uint)uVar9 & 0xfff) < cFact) {
+        uVar9 = PUBLIC::__aFulshr(CONCAT22(unaff_SI,unaff_DI),in_stack_0000ffca);
+        cFact = (uint)uVar9 & 0xfff;
       }
-      sVar1 = RACE::GetRaceStat((PLAYER *)((int)&c_common::rgplr + iplr * 0xc0),1);
-      uVar11 = 10;
-      lVar10 = PUBLIC::__aFulmul(cFact,cFact >> 0xf,sVar1);
-      iVar8 = PUBLIC::__aFldiv((int)(lVar10 + 9),CONCAT42(uVar11,(int)((ulong)(lVar10 + 9) >> 0x10))
-                              );
-      cRes = iVar5 + iVar8;
+      sVar2 = RACE::GetRaceStat((PLAYER *)((int)c_common::rgplr + iplr * 0xc0),1);
+      uVar11 = 0;
+      uVar7 = 10;
+      uVar9 = PUBLIC::__aFulmul((long)cFact,(long)sVar2);
+      lVar10 = PUBLIC::__aFldiv(uVar9 + 9,CONCAT22(uVar11,uVar7));
+      cRes = (int)lVar8 + (int)lVar10;
     }
     if (cRes == 0) {
       cRes = 1;
@@ -410,7 +420,7 @@ int __cdecl16far PLANET::CalcPlanetMaxPop(short idpl,int iplr)
   uint uVar2;
   int iVar3;
   undefined2 unaff_SS;
-  long lVar4;
+  ulong uVar4;
   long lVar5;
   short ihuldef;
   long pctDesire;
@@ -418,41 +428,40 @@ int __cdecl16far PLANET::CalcPlanetMaxPop(short idpl,int iplr)
   PLANET pl;
   
   UTIL::FLookupPlanet(idpl,&pl);
-  sVar1 = RACE::GetRaceStat((PLAYER *)((int)&c_common::rgplr + iplr * 0xc0),0xe);
+  sVar1 = RACE::GetRaceStat((PLAYER *)((int)c_common::rgplr + iplr * 0xc0),0xe);
   if (sVar1 == 8) {
     if ((pl.iPlayer != iplr) || (((uint)pl.flags3 >> 9 & 1) == 0)) {
       return 0;
     }
     iVar3 = (*(int *)(*(int *)(iplr * 4 + 0x14c) + (pl._44_2_ & 0xf) * 0x93) + -0x20) * 4;
-    lVar4 = CONCAT22(*(undefined2 *)(iVar3 + 0x8ce),*(undefined2 *)(iVar3 + 0x8cc));
+    uVar4 = CONCAT22(*(undefined2 *)(iVar3 + 0x8ce),*(undefined2 *)(iVar3 + 0x8cc));
   }
   else {
     uVar2 = PctPlanetDesirability((PLANET *)CONCAT22(unaff_SS,&pl),iplr);
-    iVar3 = (int)uVar2 >> 0xf;
-    if ((iVar3 < 1) && ((iVar3 < 0 || (uVar2 < 5)))) {
-      lVar4 = 500;
+    if (((int)uVar2 >> 0xf < 1) && (((int)uVar2 >> 0xf < 0 || (uVar2 < 5)))) {
+      uVar4 = 500;
     }
     else {
-      lVar4 = PUBLIC::__aFulmul(uVar2,iVar3,100,0);
+      uVar4 = PUBLIC::__aFulmul((long)(int)uVar2,100);
     }
-    sVar1 = RACE::GetRaceStat((PLAYER *)((int)&c_common::rgplr + iplr * 0xc0),0xe);
+    sVar1 = RACE::GetRaceStat((PLAYER *)((int)c_common::rgplr + iplr * 0xc0),0xe);
     if (sVar1 == 0) {
-      lVar5 = PUBLIC::__aFldiv(lVar4,2,0);
-      lVar4 = lVar4 - lVar5;
+      lVar5 = PUBLIC::__aFldiv(uVar4,2);
+      uVar4 = uVar4 - lVar5;
     }
     else {
-      sVar1 = RACE::GetRaceStat((PLAYER *)((int)&c_common::rgplr + iplr * 0xc0),0xe);
+      sVar1 = RACE::GetRaceStat((PLAYER *)((int)c_common::rgplr + iplr * 0xc0),0xe);
       if (sVar1 == 9) {
-        lVar5 = PUBLIC::__aFldiv(lVar4,5,0);
-        lVar4 = lVar5 + lVar4;
+        lVar5 = PUBLIC::__aFldiv(uVar4,5);
+        uVar4 = lVar5 + uVar4;
       }
     }
   }
-  lMaxPop._0_2_ = (int)lVar4;
-  sVar1 = RACE::GetRaceGrbit((PLAYER *)((int)&c_common::rgplr + iplr * 0xc0),9);
+  lMaxPop._0_2_ = (int)uVar4;
+  sVar1 = RACE::GetRaceGrbit((PLAYER *)((int)c_common::rgplr + iplr * 0xc0),9);
   if (sVar1 != 0) {
-    iVar3 = PUBLIC::__aFldiv(lVar4,10,0);
-    lMaxPop._0_2_ = (int)lMaxPop + iVar3;
+    lVar5 = PUBLIC::__aFldiv(uVar4,10);
+    lMaxPop._0_2_ = (int)lMaxPop + (int)lVar5;
   }
   return (int)lMaxPop;
 }
@@ -465,6 +474,7 @@ int __cdecl16far PLANET::CalcPlanetMaxPop(short idpl,int iplr)
 // ======================================================================
 
 
+/* WARNING: Variable defined which should be unmapped: pctMod */
 /* WARNING: Could not reconcile some variable overlaps */
 
 short __cdecl16far PLANET::PctPlanetDesirability(PLANET *lppl,short iPlr)
@@ -477,14 +487,15 @@ short __cdecl16far PLANET::PctPlanetDesirability(PLANET *lppl,short iPlr)
   int iVar5;
   uint uVar6;
   short sVar7;
-  undefined2 uVar8;
-  undefined2 extraout_DX;
-  undefined2 uVar9;
-  undefined2 unaff_CS;
-  bool bVar10;
+  undefined2 unaff_SI;
+  undefined2 unaff_DI;
+  double *unaff_CS;
+  bool bVar8;
+  ulong uVar9;
+  ulong uVar10;
   long lVar11;
-  undefined4 uVar12;
-  undefined4 uVar13;
+  undefined2 uVar12;
+  undefined2 uVar13;
   long pctMod;
   short iPlanet;
   short pctVar;
@@ -500,18 +511,14 @@ short __cdecl16far PLANET::PctPlanetDesirability(PLANET *lppl,short iPlr)
   pctPos = 0;
   pctNeg._0_2_ = 0;
   pctNeg._2_2_ = 0;
-  uVar12 = 10000;
-  i = 0;
-  while( true ) {
-    pctMod._2_2_ = (undefined2)((ulong)uVar12 >> 0x10);
-    pctMod._0_2_ = (undefined2)uVar12;
-    if (2 < i) break;
+  uVar10 = 10000;
+  for (i = 0; pctMod._0_2_ = (undefined2)uVar10, i < 3; i = i + 1) {
     iVar1 = (int)*(char *)((int)lppl + 0xc + i);
     iVar2 = (int)*(char *)(iPlr * 0xc0 + 0x59b2 + i);
     iVar3 = (int)*(char *)(iPlr * 0xc0 + 0x59b5 + i);
     iVar4 = (int)*(char *)(iPlr * 0xc0 + 0x59b8 + i);
     if (iVar4 < 0) {
-      pctPos = pctPos + 10000;
+      pctPos = CONCAT22(pctPos._2_2_ + (uint)(0xd8ef < (uint)pctPos),(uint)pctPos + 10000);
     }
     else if ((iVar1 < iVar3) || (iVar4 < iVar1)) {
       if (iVar1 < iVar3) {
@@ -523,9 +530,9 @@ short __cdecl16far PLANET::PctPlanetDesirability(PLANET *lppl,short iPlr)
           uVar6 = 0xf;
           iVar1 = 0;
         }
-        bVar10 = CARRY2((uint)pctNeg,uVar6);
+        bVar8 = CARRY2((uint)pctNeg,uVar6);
         pctNeg._0_2_ = (uint)pctNeg + uVar6;
-        pctNeg._2_2_ = pctNeg._2_2_ + iVar1 + (uint)bVar10;
+        pctNeg._2_2_ = pctNeg._2_2_ + iVar1 + (uint)bVar8;
       }
       else {
         if (iVar1 - iVar4 < 0x10) {
@@ -536,13 +543,13 @@ short __cdecl16far PLANET::PctPlanetDesirability(PLANET *lppl,short iPlr)
           uVar6 = 0xf;
           iVar1 = 0;
         }
-        bVar10 = CARRY2((uint)pctNeg,uVar6);
+        bVar8 = CARRY2((uint)pctNeg,uVar6);
         pctNeg._0_2_ = (uint)pctNeg + uVar6;
-        pctNeg._2_2_ = pctNeg._2_2_ + iVar1 + (uint)bVar10;
+        pctNeg._2_2_ = pctNeg._2_2_ + iVar1 + (uint)bVar8;
       }
     }
     else {
-      iVar5 = PUBLIC::_abs();
+      iVar5 = PUBLIC::_abs(iVar1 - iVar2);
       if (iVar1 < iVar2) {
         d = iVar2 - iVar3;
         dPenalty = (iVar2 - iVar1) * 2 - d;
@@ -552,26 +559,25 @@ short __cdecl16far PLANET::PctPlanetDesirability(PLANET *lppl,short iPlr)
         dPenalty = (iVar1 - iVar2) * 2 - d;
       }
       pctVar = (iVar5 * 100) / d;
-      iVar1 = 100 - pctVar;
-      lVar11 = PUBLIC::__aFulmul(iVar1,CONCAT42((long)iVar1,iVar1 >> 0xf));
-      pctPos = lVar11 + pctPos;
+      uVar9 = PUBLIC::__aFulmul((long)(100 - pctVar),(long)(100 - pctVar));
+      pctPos = uVar9 + pctPos;
       if (0 < dPenalty) {
-        uVar12 = PUBLIC::__aFulmul((undefined2)pctMod,
-                                   CONCAT42((long)(d * 2 - dPenalty),pctMod._2_2_));
-        uVar12 = PUBLIC::__aFldiv((int)uVar12,CONCAT42((long)(d << 1),(int)((ulong)uVar12 >> 0x10)))
-        ;
+        uVar10 = PUBLIC::__aFulmul(uVar10,(long)(d * 2 - dPenalty));
+        uVar10 = PUBLIC::__aFldiv(uVar10,(long)(d << 1));
       }
-      unaff_CS = 0x1118;
+      unaff_CS = (double *)0x1118;
     }
-    i = i + 1;
   }
   if (((uint)pctNeg == 0) && (pctNeg._2_2_ == 0)) {
-    PUBLIC::_sqrt(unaff_CS,(double)pctPos / DAT_1120_1d2e);
-    uVar9 = extraout_DX;
-    uVar8 = PUBLIC::__ftol();
-    uVar13 = 10000;
-    uVar12 = PUBLIC::__aFulmul(uVar8,uVar9,(undefined2)pctMod);
-    sVar7 = PUBLIC::__aFldiv((int)uVar12,CONCAT42(uVar13,(int)((ulong)uVar12 >> 0x10)));
+    uVar12 = (undefined2)((qword)((double)pctPos / DOUBLE_3_0__1120_1d2e) >> 0x30);
+    PUBLIC::_sqrt(unaff_CS,(double)pctPos / DOUBLE_3_0__1120_1d2e);
+    uVar9 = PUBLIC::__ftol((double)CONCAT26((undefined2)pctMod,
+                                            CONCAT24(unaff_SI,CONCAT22(unaff_DI,uVar12))));
+    uVar13 = 0;
+    uVar12 = 10000;
+    uVar10 = PUBLIC::__aFulmul(uVar9,uVar10);
+    lVar11 = PUBLIC::__aFldiv(uVar10,CONCAT22(uVar13,uVar12));
+    sVar7 = (short)lVar11;
   }
   else {
     sVar7 = -(uint)pctNeg;
@@ -598,7 +604,7 @@ short __cdecl16far PLANET::CMaxOperableFactories(PLANET *lppl,short iplr,short f
   uint uVar3;
   int iVar4;
   bool bVar5;
-  undefined4 uVar6;
+  ulong uVar6;
   long lVar7;
   undefined2 uVar8;
   undefined2 uVar9;
@@ -608,7 +614,7 @@ short __cdecl16far PLANET::CMaxOperableFactories(PLANET *lppl,short iplr,short f
   short cMax;
   
   sVar1 = CMaxFactories(lppl,iplr);
-  sVar2 = RACE::GetRaceStat((PLAYER *)((int)&c_common::rgplr + iplr * 0xc0),3);
+  sVar2 = RACE::GetRaceStat((PLAYER *)((int)c_common::rgplr + iplr * 0xc0),3);
   lPop._0_2_ = *(uint *)((int)lppl + 0x28);
   lPop._2_2_ = *(int *)((int)lppl + 0x2a);
   if (fNextYear != 0) {
@@ -620,8 +626,8 @@ short __cdecl16far PLANET::CMaxOperableFactories(PLANET *lppl,short iplr,short f
   }
   uVar9 = 0;
   uVar8 = 100;
-  uVar6 = PUBLIC::__aFulmul((uint)lPop,lPop._2_2_,sVar2,sVar2 >> 0xf);
-  lVar7 = PUBLIC::__aFldiv(uVar6,uVar8,uVar9);
+  uVar6 = PUBLIC::__aFulmul(CONCAT22(lPop._2_2_,(uint)lPop),(long)sVar2);
+  lVar7 = PUBLIC::__aFldiv(uVar6,CONCAT22(uVar9,uVar8));
   cMax = (short)lVar7;
   if (sVar1 < lVar7) {
     cMax = sVar1;
@@ -629,7 +635,7 @@ short __cdecl16far PLANET::CMaxOperableFactories(PLANET *lppl,short iplr,short f
   if (cMax < 1) {
     cMax = 1;
   }
-  sVar1 = RACE::GetRaceStat((PLAYER *)((int)&c_common::rgplr + iplr * 0xc0),0xe);
+  sVar1 = RACE::GetRaceStat((PLAYER *)((int)c_common::rgplr + iplr * 0xc0),0xe);
   if (sVar1 == 8) {
     cMax = 0;
   }
@@ -653,25 +659,22 @@ short __cdecl16far PLANET::CMaxFactories(PLANET *lppl,short iplr)
   undefined2 uVar1;
   short sVar2;
   undefined2 in_DX;
-  undefined4 uVar3;
+  ulong uVar3;
   long lVar4;
-  undefined2 uVar5;
-  undefined2 uVar6;
   short iEff;
   long lPopMax;
   long cMax;
   
-  uVar1 = CalcPlanetMaxPop(lppl->id,iplr);
-  sVar2 = RACE::GetRaceStat((PLAYER *)((int)&c_common::rgplr + iplr * 0xc0),3);
-  uVar6 = 0;
-  uVar5 = 100;
-  uVar3 = PUBLIC::__aFulmul(uVar1,in_DX,sVar2,sVar2 >> 0xf);
-  lVar4 = PUBLIC::__aFldiv(uVar3,uVar5,uVar6);
-  cMax._0_2_ = (short)lVar4;
+  uVar1 = CalcPlanetMaxPop(lppl->id);
+  sVar2 = RACE::GetRaceStat((PLAYER *)((int)c_common::rgplr + iplr * 0xc0),3);
+  lVar4 = 100;
+  uVar3 = PUBLIC::__aFulmul(CONCAT22(in_DX,uVar1),(long)sVar2);
+  lVar4 = PUBLIC::__aFldiv(uVar3,lVar4);
   if (lVar4 < 10) {
-    cMax._0_2_ = 10;
+    lVar4 = 10;
   }
-  sVar2 = RACE::GetRaceStat((PLAYER *)((int)&c_common::rgplr + iplr * 0xc0),0xe);
+  sVar2 = RACE::GetRaceStat((PLAYER *)((int)c_common::rgplr + iplr * 0xc0),0xe);
+  cMax._0_2_ = (short)lVar4;
   if (sVar2 == 8) {
     cMax._0_2_ = 0;
   }
@@ -719,166 +722,6 @@ void __cdecl16far UTIL::GetTrueHullCost(short iPlayer,HUL *lphul,ushort *rgCost)
   }
   rgCost[3] = *(ushort *)((int)lphul + 0x2a);
   return;
-}
-
-
-
-// ======================================================================
-// Function: SpdOfShip
-// Address: 10f0:339c
-// ======================================================================
-
-
-short __cdecl16far
-BATTLE::SpdOfShip(FLEET *lpfl,short ishdef,TOK *ptok,short fDumpCargo,SHDEF *lpshdef)
-
-{
-  uint *puVar1;
-  uint *puVar2;
-  uint *puVar3;
-  long lVar4;
-  int iVar5;
-  short sVar6;
-  undefined2 uVar7;
-  uint uVar8;
-  uint uVar9;
-  uint uVar10;
-  undefined2 uVar11;
-  int iVar12;
-  int iVar13;
-  undefined2 uVar14;
-  undefined2 uVar15;
-  undefined2 uVar16;
-  ENGINE *pEVar17;
-  undefined4 uVar18;
-  ENGINE *lpengine;
-  short iEngine;
-  ushort wtCargoShdefMax;
-  short cEngineT;
-  short j;
-  long wtFleetCargo;
-  short cThruster;
-  short cHalfThruster;
-  ushort wt;
-  short iWarp;
-  short spd;
-  long wtCargoFleetMax;
-  
-  iVar5 = (int)lpfl;
-  uVar14 = (undefined2)((ulong)lpfl >> 0x10);
-  if (((int)lpshdef == 0) && (lpshdef._2_2_ == 0)) {
-    iVar12 = *(int *)(iVar5 + 2) * 4;
-    lpshdef = (SHDEF *)CONCAT22(*(undefined2 *)(iVar12 + 0x100),
-                                *(int *)(iVar12 + 0xfe) + ishdef * 0x93);
-  }
-  iEngine = -1;
-  cHalfThruster = 0;
-  cThruster = 0;
-  j = 0;
-  while( true ) {
-    uVar15 = (undefined2)((ulong)lpshdef >> 0x10);
-    iVar12 = (int)lpshdef;
-    if ((int)(uint)*(byte *)(iVar12 + 0x7a) <= j) break;
-    if (*(uint *)(iVar12 + j * 4 + 0x3c) >> 8 != 0) {
-      iVar13 = *(int *)(iVar12 + 0x3a + j * 4);
-      if (iVar13 == 1) {
-        iEngine = *(uint *)(iVar12 + j * 4 + 0x3c) & 0xff;
-        cEngineT = *(uint *)(iVar12 + j * 4 + 0x3c) >> 8;
-        if (iEngine == 8) {
-          cHalfThruster = cHalfThruster + (*(uint *)(iVar12 + j * 4 + 0x3c) >> 8);
-        }
-      }
-      else if (iVar13 == 0x80) {
-        if ((*(uint *)(iVar12 + j * 4 + 0x3c) & 0xff) == 6) {
-          cHalfThruster = cHalfThruster + (*(uint *)(iVar12 + j * 4 + 0x3c) >> 8);
-        }
-      }
-      else if (iVar13 == 0x800) {
-        if ((*(uint *)(iVar12 + j * 4 + 0x3c) & 0xff) == 4) {
-          cThruster = cThruster + (*(uint *)(iVar12 + j * 4 + 0x3c) >> 8);
-        }
-      }
-      else if (iVar13 == 0x1000) {
-        uVar10 = *(uint *)(iVar12 + j * 4 + 0x3c) & 0xff;
-        if (uVar10 == 7) {
-          cThruster = cThruster + (*(uint *)(iVar12 + j * 4 + 0x3c) >> 8);
-        }
-        else if (uVar10 == 8) {
-          cThruster = cThruster + (*(uint *)(iVar12 + j * 4 + 0x3c) >> 8) * 2;
-        }
-      }
-    }
-    j = j + 1;
-  }
-  if ((iEngine == -1) || (cEngineT == 0)) {
-    iVar5 = 0;
-  }
-  else {
-    pEVar17 = PARTS::LpengineFromId(iEngine);
-    uVar11 = (undefined2)((ulong)pEVar17 >> 0x10);
-    if ((((iEngine == 7) || (iEngine == 8)) || (iEngine == 9)) ||
-       ((iEngine == 0xe || (iEngine == 0xf)))) {
-      iWarp = 10;
-    }
-    else {
-      iWarp = 9;
-      while ((0 < iWarp && (0x78 < *(int *)((int)pEVar17 + 0x36 + iWarp * 2)))) {
-        iWarp = iWarp + -1;
-      }
-    }
-    spd = iWarp + -4 + cThruster + (cHalfThruster + 1) / 2;
-    if (lpfl != (FLEET *)0x0) {
-      lVar4 = (long)*(int *)(iVar5 + 2) * 0xc0;
-      uVar11 = (undefined2)((ulong)lVar4 >> 0x10);
-      sVar6 = RACE::GetRaceStat((PLAYER *)((int)&c_common::rgplr + (int)lVar4),0xe);
-      spd = spd + (uint)(sVar6 == 2) * 2;
-    }
-    wt = *(ushort *)(iVar12 + 0x28);
-    iVar13 = (int)ptok;
-    uVar16 = (undefined2)((ulong)ptok >> 0x10);
-    if (lpfl != (FLEET *)0x0) {
-      sVar6 = SHIP::WtMaxShdefStat(lpshdef,2);
-      if (sVar6 == 0) {
-        fDumpCargo = 0;
-      }
-      else {
-        uVar7 = SHIP::LGetFleetStat(lpfl,2);
-        uVar10 = *(uint *)(iVar5 + 0x4c);
-        puVar1 = (uint *)(iVar5 + 0x50);
-        uVar8 = uVar10 + *puVar1;
-        puVar2 = (uint *)(iVar5 + 0x54);
-        uVar9 = uVar8 + *puVar2;
-        puVar3 = (uint *)(iVar5 + 0x58);
-        uVar18 = PUBLIC::__aFulmul(uVar9 + *puVar3,
-                                   *(int *)(iVar5 + 0x4e) + *(int *)(iVar5 + 0x52) +
-                                   (uint)CARRY2(uVar10,*puVar1) + *(int *)(iVar5 + 0x56) +
-                                   (uint)CARRY2(uVar8,*puVar2) + *(int *)(iVar5 + 0x5a) +
-                                   (uint)CARRY2(uVar9,*puVar3),sVar6,0);
-        iVar5 = PUBLIC::__aFldiv(uVar18,uVar7,uVar11);
-        wt = wt + iVar5;
-      }
-      if (fDumpCargo != 0) {
-        spd = spd + -1;
-      }
-      uVar10 = UTILGEN::Random(0xf);
-      *(uint *)(iVar13 + 0x1b) = *(uint *)(iVar13 + 0x1b) & 0xc3ff | (uVar10 & 0xf) << 10;
-    }
-    if (ptok != (TOK *)0x0) {
-      *(ushort *)(iVar13 + 0xf) = wt;
-    }
-    iVar5 = spd - (int)(((ulong)wt / 0x46) / (ulong)(*(uint *)(iVar12 + 0x3c) >> 8));
-    iVar12 = iVar5;
-    if (8 < iVar5) {
-      iVar12 = 8;
-    }
-    if (iVar12 < 0) {
-      iVar5 = 0;
-    }
-    else if (8 < iVar5) {
-      iVar5 = 8;
-    }
-  }
-  return iVar5;
 }
 
 

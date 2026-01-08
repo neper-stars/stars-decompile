@@ -241,6 +241,46 @@ bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
     -postScript ImportWindowsH.py "$WINDOWS_H" 2>&1
 '''
 
+[tasks.ghidra-update-runtime-helpers]
+description = "Update the known runtime helper functions (i.e. __aFl*/__aFul*) signatures"
+run = '''
+#!/bin/bash
+set -e
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+echo "Updating runtime helper signatures..."
+echo ""
+
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript UpdateStarsRuntimeHelperSignatures.py  2>&1
+'''
+
+[tasks.ghidra-retype-doubles]
+description = "Update the unknown8 vars in 1120:* to be doubles"
+run = '''
+#!/bin/bash
+set -e
+
+GHIDRA_PATH="${GHIDRA_HOME:-$GHIDRA_HOME_}"
+GHIDRA_EXPANDED="${GHIDRA_PATH/#~/$HOME}"
+ANALYZER="$GHIDRA_EXPANDED/support/analyzeHeadless"
+
+echo "Updating runtime helper signatures..."
+echo ""
+
+bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
+    -process stars.exe \
+    -noanalysis \
+    -scriptPath "$SCRIPTS_DIR" \
+    -postScript RetypeUndefined8Doubles1120.py  2>&1
+'''
+
 [tasks.extract-symbols]
 description = "Re-extract symbols from the NE executable (requires Python)"
 run = '''

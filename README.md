@@ -87,6 +87,9 @@ Default: `~/.local/ghidra/ghidra_10.3_DEV`
 | `mise run ghidra-apply-names`                        | Apply function and global names                      |
 | `mise run ghidra-apply-globals`                      | Apply global variable types                          |
 | `mise run ghidra-apply-funcsigs`                     | Apply function signatures                            |
+| `mise run ghidra-parse-windowsh`                     | Parse WINDOWS.H for types                            |
+| `mise run ghidra-update-runtime-helpers`             | Update sigs for `__aFl*`/`__aFul*`/`__strcmp`, etc   |
+| `mise run ghidra-retype-doubles`                     | Retype known doubles in DATA segment                 |
 | `mise run ghidra-setup`                              | Full setup: import + all 4 scripts                   |
 | `mise run ghidra-gui`                                | Launch Ghidra GUI                                    |
 | `mise run list-functions -- <pattern>`               | List functions matching a pattern                    |
