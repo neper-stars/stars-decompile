@@ -123,8 +123,10 @@ void ResetHb(HeapType ht)
 
 void FreePl(PL *lppl)
 {
-
-    /* TODO: implement */
+    if (lppl != NULL)
+    {
+        FreeLp(lppl, (HeapType)lppl->ht);
+    }
 }
 
 HB *LphbReAlloc(HB *lphb)
@@ -216,55 +218,215 @@ LReAllocOOM:
 
 PL *LpplReAlloc(PL *lppl, uint16_t cAlloc)
 {
+    PL *lpplNew;
 
-    /* TODO: implement */
-    return NULL;
+    lpplNew = (PL *)LpReAlloc(
+        lppl,
+        (uint16_t)(lppl->cbItem * cAlloc + sizeof(PL)),
+        (HeapType)lppl->ht);
+
+    lpplNew->iMax = cAlloc;
+
+    return lpplNew;
 }
 
 HB *LphbFromLpHt(void *lp, HeapType ht)
 {
     HB *lphb;
 
-    /* TODO: implement */
-    return NULL;
+    /* bounds-check like the decompile: (ht < 0) || (0xb < ht) */
+    if ((int)ht < 0 || (int)ht >= (int)htCount)
+    {
+        return NULL;
+    }
+
+    lphb = rglphb[ht];
+
+    /* find the HB whose address range contains lp:
+       (lphb < lp) && (lp < (uint8_t*)lphb + lphb->cbBlock) */
+    while (lphb != NULL)
+    {
+        uint8_t *base = (uint8_t *)lphb;
+        uint8_t *end = base + lphb->cbBlock;
+
+        if ((void *)lphb < lp && lp < (void *)end)
+        {
+            break;
+        }
+
+        lphb = lphb->lphbNext;
+    }
+
+    return lphb;
 }
 
 void FreeLp(void *lp, HeapType ht)
 {
-    uint16_t cbFree;
     HB *lphb;
+    uint16_t cbSpan;
+    uint16_t *phdr;
 
-    /* TODO: implement */
+    if (lp == NULL)
+        return;
+
+    lphb = LphbFromLpHt(lp, ht);
+
+    phdr = (uint16_t *)((uint8_t *)lp - 2);
+
+    /* total span in heap includes the 2-byte header */
+    cbSpan = (*phdr + 2u);
+
+    /* mark chunk free */
+    *phdr |= 1u;
+
+    lphb->cbFree += cbSpan;
+
+    /* if this was the last allocation at the top, roll ibTop back and return span to slop */
+    if ((uint16_t)(((uint8_t *)lp - (uint8_t *)lphb) + cbSpan - 2u) == lphb->ibTop)
+    {
+        lphb->ibTop -= cbSpan;
+        lphb->cbSlop += cbSpan;
+    }
 }
 
 void *LpAlloc(uint16_t cb, HeapType ht)
 {
-    int16_t fFree;
-    uint16_t cbItem;
-    uint8_t *lpbPrev;
-    uint8_t *lpbTop;
     HB *lphb;
+    uint16_t cb_00;
+    uint8_t *lpbTop;
     uint8_t *lpb;
 
-    /* debug symbols */
-    /* label LTryNextBlock @ MEMORY_MEMORY:0x03fc */
+    /* round payload up like the original: (cb + 3) & 0xfffe */
+    cb_00 = (cb + 3u) & 0xfffeu;
 
-    /* TODO: implement */
-    return NULL;
+    lphb = rglphb[ht];
+
+    for (;;)
+    {
+        if (lphb == NULL || cb_00 <= lphb->cbFree)
+        {
+            if (lphb == NULL)
+            {
+                lphb = LphbAlloc(cb_00, ht);
+            }
+
+            lpbTop = (uint8_t *)lphb + lphb->ibTop;
+
+            /* fast path: allocate from slop at top of heap */
+            if (cb_00 <= lphb->cbSlop)
+            {
+                *(uint16_t *)lpbTop = cb_00 - 2u; /* size word (no free bit) */
+                lphb->ibTop += cb_00;
+                lphb->cbFree -= cb_00;
+                lphb->cbSlop -= cb_00;
+                return lpbTop + 2;
+            }
+
+            /* scan the chunk list starting at +0x10 up to ibTop */
+            lpb = (uint8_t *)lphb + 0x10;
+            while ((uint16_t)(lpb - (uint8_t *)lphb) < lphb->ibTop)
+            {
+                uint8_t *start = lpb;
+                uint16_t hdr = *(uint16_t *)lpb;
+
+                lpb += (hdr & 0xfffeu) + 2u;
+
+                if ((hdr & 1u) != 0)
+                {
+                    /* coalesce consecutive free chunks until big enough or hit top */
+                    while ((uint16_t)(lpb - (uint8_t *)lphb) < lphb->ibTop)
+                    {
+                        uint16_t hdr2 = *(uint16_t *)lpb;
+                        if ((hdr2 & 1u) == 0)
+                            break;
+                        if ((uint16_t)(lpb - start) >= cb_00)
+                            break;
+                        lpb += (hdr2 & 0xfffeu) + 2u;
+                    }
+
+                    {
+                        uint16_t span = (uint16_t)(lpb - start);
+
+                        /* mark merged span as one free chunk */
+                        *(uint16_t *)start = (span - 2u) | 1u;
+
+                        if (cb_00 <= span)
+                        {
+                            /* allocate the *entire* span (no splitting) */
+                            *(uint16_t *)start &= 0xfffeu;
+                            lphb->cbFree -= span;
+                            return start + 2;
+                        }
+                    }
+                }
+            }
+        }
+
+        /* next heap block in chain */
+        lphb = lphb->lphbNext;
+    }
 }
 
 void *LpReAlloc(void *lp, uint16_t cb, HeapType ht)
 {
-    void *lpNew;
-    HB *lphb;
     uint16_t cbCur;
+    uint16_t cb_00;
     uint16_t cbGrow;
+    HB *lphb;
+    void *lpNew;
 
-    /* debug symbols */
-    /* label LGrewHeap @ MEMORY_MEMORY:0x06b3 */
+    cbCur = *(uint16_t *)((uint8_t *)lp - 2);
+    cb_00 = (cb + 1u) & 0xfffeu; /* original used +1 here */
 
-    /* TODO: implement */
-    return NULL;
+    if (cbCur >= cb_00)
+    {
+        return lp;
+    }
+
+    cbGrow = cb_00 - cbCur;
+
+    lphb = LphbFromLpHt(lp, ht);
+
+    /* If the pointer isn't found in this heap chain, we can't do in-place growth. */
+    if (lphb != NULL)
+    {
+        for (;;)
+        {
+            /* in-place grow only if this allocation is exactly at the heap top and slop is enough */
+            if ((uint8_t *)lphb + lphb->ibTop == (uint8_t *)lp + cbCur &&
+                cbGrow <= lphb->cbSlop)
+            {
+                lphb->cbSlop -= cbGrow;
+                lphb->cbFree -= cbGrow;
+                lphb->ibTop += cbGrow;
+                *(uint16_t *)((uint8_t *)lp - 2) = cb_00;
+                return lp;
+            }
+
+            /* planets/things heaps can move during HB realloc; update lp accordingly */
+            if (ht != htPlanets && ht != htThings)
+            {
+                break;
+            }
+
+            lphb = LphbReAlloc(lphb);
+            lp = (uint8_t *)lphb + 0x12;
+
+            /* After moving, re-read current size header from the new location */
+            cbCur = *(uint16_t *)((uint8_t *)lp - 2);
+            if (cbCur >= cb_00)
+            {
+                return lp;
+            }
+            cbGrow = cb_00 - cbCur;
+        }
+    }
+
+    /* fallback: allocate new, copy old payload, free old */
+    lpNew = LpAlloc(cb_00, ht);
+    memcpy(lpNew, lp, cbCur);
+    FreeLp(lp, ht);
+    return lpNew;
 }
 
 HB *LphbAlloc(uint16_t cb, HeapType ht)
@@ -340,8 +502,20 @@ PL *LpplAlloc(uint16_t cbItem, uint16_t cAlloc, HeapType ht)
 {
     PL *lppl;
 
-    /* TODO: implement */
-    return NULL;
+    /* sizeof(PL) is verified to match original layout in your asserts */
+    lppl = (PL *)LpAlloc((uint16_t)(cbItem * cAlloc + sizeof(PL)), ht);
+
+    /* matches decompile writes at +2/+3 */
+    lppl->iMax = (uint8_t)cAlloc;
+    lppl->iMac = 0;
+
+    /* use your bitfields instead of raw flag twiddling */
+    lppl->fMark = 0;
+    lppl->cbItem = cbItem;
+    lppl->ht = ht;
+    lppl->cAlloc = cAlloc;
+
+    return lppl;
 }
 
 void FreeHb(HB *lphb)

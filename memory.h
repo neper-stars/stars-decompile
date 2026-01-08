@@ -20,8 +20,8 @@ typedef enum HeapType
     htCount
 } HeapType;
 
-extern uint16_t mphtcbAlloc[12];
-extern HB *rglphb[12];
+extern uint16_t mphtcbAlloc[12]; /*1120:0d64*/
+extern HB *rglphb[12]; /*1120:0d34*/
 
 /* functions */
 void ResetHb(HeapType ht);                                                 /* MEMORY_MEMORY:0x0348 */

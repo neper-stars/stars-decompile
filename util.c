@@ -4,6 +4,7 @@
 #include "utilgen.h"
 #include "parts.h"
 #include "globals.h"
+#include "planet.h"
 #include "strings.h"
 
 /* globals */
@@ -462,10 +463,60 @@ void CalcPctSurvive(PLANET *lppl, float *ppct, float *ppctSmart)
     PART part;
     int16_t cMax;
 
-    /* debug symbols */
-    /* block (block) @ MEMORY_UTIL:0x0369 */
+    /* Default smart-bomb survival to 1.0 if requested. */
+    if (ppctSmart != NULL)
+    {
+        *ppctSmart = 1.0f;
+    }
 
-    /* TODO: implement */
+    /* If no owner or no defenses, everyone survives. */
+    if (lppl->iPlayer == -1 || (lppl->cDefenses & 0x0FFFu) == 0)
+    {
+        pct = 1.0f;
+        *ppct = pct;
+        return;
+    }
+
+    /* Temporarily set global current player to planet owner (matches original). */
+    iPlrSav = idPlayer;
+    idPlayer = lppl->iPlayer;
+
+    if (!FGetBestDefensePart(&part))
+    {
+        pct = 1.0f;
+    }
+    else
+    {
+        /* Clamp defenses by max operable. */
+        cDefenses = (int32_t)(lppl->cDefenses & 0x0FFFu);
+
+        cMax = CMaxOperableDefenses(lppl, lppl->iPlayer, false);
+        if ((int32_t)cMax < cDefenses)
+        {
+            cDefenses = (int32_t)cMax;
+        }
+
+        /* dDmgCol is at +0x34 in the defense "terra" part (bomb). */
+        {
+            const int16_t dDmgCol = *(const int16_t *)((const uint8_t *)part.pterra + 0x34);
+
+            /* Normal bombs: (1 - dDmgCol/1000) ^ cDefenses */
+            const double base = 1.0 - ((double)dDmgCol / 1000.0);
+            pct = (float)pow(base, (double)cDefenses);
+
+            /* Smart bombs: (1 - dDmgCol/2000) ^ cDefenses */
+            if (ppctSmart != NULL)
+            {
+                const double baseSmart = 1.0 - ((double)dDmgCol / 2000.0);
+                *ppctSmart = (float)pow(baseSmart, (double)cDefenses);
+            }
+        }
+    }
+
+    /* Restore global current player. */
+    idPlayer = iPlrSav;
+
+    *ppct = pct;
 }
 
 int16_t IshFindSimilarDesign(HUL *lphul, int16_t iPlrDst)

@@ -4,10 +4,10 @@
 #include "tutor2.h"
 
 /* globals */
-char aTUTCmpr[22323];  /* MEMORY_TUTOR2:0x0000 */
-uint8_t acTUT[640];  /* MEMORY_TUTOR2:0x5734 */
-int16_t aiTUTChunkOffset[10];  /* MEMORY_TUTOR2:0x59b4 */
-char rgTUTLookupTable[76];  /* MEMORY_TUTOR2:0x59c8 */
+char aTUTCmpr[22323] = {0};
+uint8_t acTUT[640] = {0};
+int16_t aiTUTChunkOffset[10] = {0};
+char rgTUTLookupTable[76] = {0};
 
 /* functions */
 int16_t CchTutorString(char *pchOut, int16_t idt)

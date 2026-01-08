@@ -57,12 +57,15 @@ if (STARS_BUILD_TESTS)
   enable_testing()
 
   # Build one test executable per test_*.c file.
-  file(GLOB TEST_SOURCES "${CMAKE_SOURCE_DIR}/test/test_*.c")
+  file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/test/test_*.c")
+
+  set(TEST_TARGETS "")
 
   foreach(TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
 
     add_executable(${TEST_NAME} ${TEST_SOURCE})
+    list(APPEND TEST_TARGETS ${TEST_NAME})
     target_link_libraries(${TEST_NAME} PRIVATE stars_core)
 
     target_include_directories(${TEST_NAME} PRIVATE
@@ -82,7 +85,7 @@ if (STARS_BUILD_TESTS)
   # Convenience target: build + run all tests
   add_custom_target(test_all
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
-    DEPENDS ${TEST_SOURCES}
+    DEPENDS ${TEST_TARGETS}
     COMMENT "Running all tests"
   )
 endif()

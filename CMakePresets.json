@@ -1,0 +1,109 @@
+{
+  "version": 5,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "macos-linux",
+      "displayName": "macOS / Linux (CLI only)",
+      "inherits": "base",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "STARS_BUILD_CLI": "ON",
+        "STARS_BUILD_WIN32": "OFF"
+      }
+    },
+    {
+      "name": "win32",
+      "displayName": "Windows (CLI + Win32)",
+      "inherits": "base",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "STARS_BUILD_CLI": "ON",
+        "STARS_BUILD_WIN32": "ON"
+      }
+    },
+    {
+      "name": "macos-crossover",
+      "displayName": "macOS \u2192 Win32 (Crossover / MinGW)",
+      "inherits": "base",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build-win",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/toolchains/mingw-w64.cmake",
+        "STARS_BUILD_CLI": "OFF",
+        "STARS_BUILD_WIN32": "ON"
+      }
+    },
+    {
+      "name": "macos-linux-debug",
+      "displayName": "macOS / Linux (CLI only, Debug)",
+      "inherits": "base",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "STARS_BUILD_CLI": "ON",
+        "STARS_BUILD_WIN32": "OFF",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build-macos-linux",
+      "displayName": "Build (macOS / Linux)",
+      "configurePreset": "macos-linux"
+    },
+    {
+      "name": "build-win32-debug",
+      "displayName": "Build (Windows Debug)",
+      "configurePreset": "win32",
+      "configuration": "Debug"
+    },
+    {
+      "name": "build-macos-crossover",
+      "displayName": "Build (macOS Crossover)",
+      "configurePreset": "macos-crossover"
+    },
+    {
+      "name": "run-tests",
+      "displayName": "Run all tests",
+      "configurePreset": "macos-linux",
+      "targets": [
+        "test_all"
+      ]
+    },
+    {
+      "name": "run-crossover",
+      "displayName": "Run in Crossover",
+      "configurePreset": "macos-crossover",
+      "targets": [
+        "run_in_crossover"
+      ]
+    },
+    {
+      "name": "build-macos-linux-debug",
+      "displayName": "Build (macOS / Linux Debug)",
+      "configurePreset": "macos-linux-debug"
+    },
+    {
+      "name": "run-tests-debug",
+      "displayName": "Run all tests (Debug)",
+      "configurePreset": "macos-linux-debug",
+      "targets": [
+        "test_all"
+      ]
+    }
+  ]
+}

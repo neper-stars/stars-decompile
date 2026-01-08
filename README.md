@@ -6,37 +6,57 @@ All of the types, function signatures, and initial local variable declarations a
 
 ## building
 
-To build using cmake, execute the following
+This project uses CMake. The recommended way to configure and build is via **CMake Presets** (`CMakePresets.json`), which keeps build flags consistent across platforms.
 
-### macos/linux
+### prerequisites
 
-```bash
-cmake -S . -B build -G Ninja -DSTARS_BUILD_CLI=ON -DSTARS_BUILD_WIN32=OFF
-cmake --build build
-```
+- CMake 3.23+
+- A C compiler toolchain (clang/gcc on macOS/Linux, MSVC or clang-cl on Windows)
+- Ninja (recommended on macOS/Linux)
 
-### win32
+---
 
-```bash
-cmake -S . -B build -DSTARS_BUILD_CLI=ON -DSTARS_BUILD_WIN32=ON
-cmake --build build --config Debug
-```
+## build with presets (recommended)
 
-### macos crossover build
+### macos / linux (cli only)
 
 ```bash
-cmake -S . -B build-win -G Ninja \
-  -DCMAKE_TOOLCHAIN_FILE=toolchains/mingw-w64.cmake \
-  -DSTARS_BUILD_CLI=OFF -DSTARS_BUILD_WIN32=ON
-
-cmake --build build-win
-cmake --build build-win --target run_in_crossover
+cmake --preset macos-linux
+cmake --build --preset build-macos-linux
 ```
 
-### run tests
+### win32 (cli + win32)
+
 ```bash
-cmake --build build --target test_all
+cmake --preset win32
+cmake --build --preset build-win32-debug
 ```
+
+### macos crossover build (mingw-w64)
+
+```bash
+cmake --preset macos-crossover
+cmake --build --preset build-macos-crossover
+cmake --build --preset run-crossover
+```
+
+---
+
+## run tests
+
+Tests are built and run via the `test_all` target:
+
+```bash
+cmake --build --preset run-tests
+```
+
+### notes
+
+- Presets use the following build directories:
+  - `build/` for native builds
+  - `build-win/` for MinGW / Crossover builds
+- If you change compiler or toolchain settings, it’s often easiest to delete the corresponding build directory and reconfigure.
+
 
 ## scripts
 

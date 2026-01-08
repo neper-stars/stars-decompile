@@ -10,6 +10,10 @@
 #include <time.h>
 #include <setjmp.h>
 
+// ensure our structs use classic win16 packing
+#include "pack1.h"
+PACK_PUSH_1
+
 /* forward declarations (to satisfy pointer members) */
 typedef struct _planet PLANET;
 typedef struct _fleet FLEET;
@@ -3181,5 +3185,11 @@ typedef struct PLORD
     uint8_t iordMac; /* +0x0003 */
     ORDER rgord[0];  /* +0x0004 */
 } PLORD;
+
+// turn off win16 packing
+PACK_POP
+
+// assert sizes of our structs match
+ASSERT_SIZE(PL, 4);
 
 #endif /* STARS_NB09_TYPES_H */
