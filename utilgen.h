@@ -47,7 +47,7 @@ void DrawBtn(uint16_t hdc, RECT *prc, int16_t bt, int16_t fDown, char *szText); 
 void _Draw3dFrame(uint16_t hdc, RECT *prc, int16_t fErase);  /* MEMORY_UTILGEN:0x336a */
 int16_t FCompressUserString(char *szIn, char *szOut, int16_t *pcOut);  /* MEMORY_UTILGEN:0x45a0 */
 void CopyFile(char *szSrc, char *szDst);  /* MEMORY_UTILGEN:0x1ffa */
-int32_t LGetNextFileXor(void);  /* MEMORY_UTILGEN:0x1b54 */
+uint32_t LGetNextFileXor(void);  /* MEMORY_UTILGEN:0x1b54 */
 void BoundPoints(RECT *prc, POINT *rgpt, int16_t cpt);  /* MEMORY_UTILGEN:0x2f70 */
 uint16_t HpalFromDib(uint16_t hdib);  /* MEMORY_UTILGEN:0x4b50 */
 int16_t DibBlt(uint16_t hdc, int16_t x0, int16_t y0, int16_t dx, int16_t dy, uint16_t hdib, int16_t x1, int16_t y1, int16_t dxSrc, int16_t dySrc, int32_t rop);  /* MEMORY_UTILGEN:0x4db8 */
@@ -58,7 +58,7 @@ void PopRandom(void);  /* MEMORY_UTILGEN:0x14a2 */
 void SetFileSeeds(int32_t l1, int32_t l2);  /* MEMORY_UTILGEN:0x1a7c */
 void GetFileSeeds(int32_t *pl1, int32_t *pl2);  /* MEMORY_UTILGEN:0x1a4e */
 void SetFileXorStream(int32_t lid, int16_t lSalt, int16_t turn, int16_t iPlayer, int16_t fCrippled);  /* MEMORY_UTILGEN:0x1aa6 */
-void XorFileBuf(char *rgb, int16_t cb);  /* MEMORY_UTILGEN:0x1cc4 */
+void XorFileBuf(uint8_t *rgb, int16_t cb);  /* MEMORY_UTILGEN:0x1cc4 */
 char * PszGetLine(char * *ppszBeg);  /* RETFAR */  /* MEMORY_UTILGEN:0x68ba */
 int16_t Random(int16_t c);  /* MEMORY_UTILGEN:0x16d2 */
 char * PszFromLong(int32_t l, int16_t *pcch);  /* MEMORY_UTILGEN:0x22b6 */

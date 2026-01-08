@@ -13,7 +13,6 @@ int16_t IPlrAlsoCheater(int16_t iplr);  /* MEMORY_MAIN:0x07aa */
 int16_t WinMain(uint16_t hInstance, uint16_t hPrevInstance, char *lpCmdLine, int16_t nCmdShow);  /* PASCAL */  /* MEMORY_MAIN:0x0000 */
 void FreeStuff(void);  /* MEMORY_MAIN:0x0bae */
 int16_t FHandleKey(uint16_t hwnd, int16_t iMsg, int16_t iKey, uint32_t dw);  /* MEMORY_MAIN:0x165a */
-char * SzVersion(void);  /* MEMORY_MAIN:0x1212 */
 int16_t FHandleChar(uint16_t hwnd, uint16_t ch, int32_t lParam);  /* MEMORY_MAIN:0x15de */
 
 #endif /* STARS_H_ */

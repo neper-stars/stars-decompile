@@ -2,6 +2,8 @@
 #include "types.h"
 
 #include "stars.h"
+#include "globals.h"
+#include "strings.h"
 
 /* functions */
 int16_t About(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam)
@@ -92,13 +94,6 @@ int16_t FHandleKey(uint16_t hwnd, int16_t iMsg, int16_t iKey, uint32_t dw)
 
     /* TODO: implement */
     return 0;
-}
-
-char *SzVersion(void)
-{
-
-    /* TODO: implement */
-    return NULL;
 }
 
 int16_t FHandleChar(uint16_t hwnd, uint16_t ch, int32_t lParam)

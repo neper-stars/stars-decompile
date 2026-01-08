@@ -875,11 +875,31 @@ int16_t DxStreamTextOut(uint16_t hdc, int16_t *px, int16_t y, char *psz, int16_t
 
 void OutputFileString(char *szFile, char *sz)
 {
-    OFSTRUCT of;
-    uint16_t w;
-    int16_t hf;
+    FILE *fp;
+    size_t n;
 
-    /* TODO: implement */
+    if (szFile == NULL || sz == NULL)
+    {
+        return;
+    }
+
+    /* Win16 logic:
+       - if file doesn't exist -> create
+       - open for write, seek to end, write strlen bytes, close
+       "ab" matches this cross-platform: create if missing, append at end. */
+    fp = fopen(szFile, "ab");
+    if (fp == NULL)
+    {
+        return;
+    }
+
+    n = strlen(sz);
+    if (n != 0)
+    {
+        (void)fwrite(sz, 1, n, fp);
+    }
+
+    (void)fclose(fp);
 }
 
 char *PszGetCompressedPlanet(int16_t id)

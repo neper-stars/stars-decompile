@@ -1,8 +1,10 @@
 
 #include "types.h"
 #include "util.h"
+#include "utilgen.h"
 #include "parts.h"
 #include "globals.h"
+#include "strings.h"
 
 /* globals */
 uint32_t rgcrDrawStars[5] = {0x007f7f7f, 0x00ffffff, 0x000000ff, 0x0000ff00, 0x00ff0000};
@@ -13,6 +15,22 @@ int32_t rgDSDivCnt2[5] = {80000, 210000, 310000, 260000, 0};
 uint8_t vrgbTachyon[18] = {0x64, 0x5f, 0x5d, 0x5b, 0x5a, 0x59, 0x58, 0x57, 0x56, 0x56, 0x55, 0x54, 0x54, 0x53, 0x53, 0x52, 0x52, 0x51};
 
 /* functions */
+
+char *SzVersion(void)
+{
+    /* These are the wsprintf arguments in the decompile. */
+    int16_t major = 2;
+    int16_t minor = 60;
+    char letter = 'k';
+
+    /* ids 0x22d is a format string stored in the compressed string table. */
+    const char *fmt = PszGetCompressedString(idsVersionFormat);
+
+    /* wsprintf into shared work buffer and return it. */
+    snprintf(szWork, sizeof(szWork), fmt, major, minor, letter);
+    return szWork;
+}
+
 char *PszGetLocName(int16_t grobj, int16_t id, int16_t x, int16_t y)
 {
 
@@ -570,12 +588,58 @@ int16_t ICompFleetPoint(void *arg1, void *arg2)
 
 void OutputSz(int16_t dt, char *sz)
 {
+    char szTemp[256];
+    char szDate[100];
     char szTime[100];
     char szFile[256];
-    char szDate[100];
-    char szTemp[256];
+    FILE *fp;
+    time_t t;
+    struct tm *lt;
 
-    /* TODO: implement */
+    if (sz == NULL)
+    {
+        return;
+    }
+
+    /* _DATA::mpdtsz observed entries: xy, x, hst, m, h, r, log, chk */
+    if (dt < 0 || dt >= 8)
+    {
+        return; /* original likely assumes caller passes valid dt */
+    }
+
+    /* "%s.%s" -> szBase + "." + mpdtsz[dt] */
+    (void)snprintf(szFile, sizeof(szFile), "%s.%s", szBase, mpdtsz[dt]);
+
+    /* If file doesn't exist: write "Stars! %s\r\n\r\n" with version string. */
+    fp = fopen(szFile, "rb");
+    if (fp == NULL)
+    {
+        char *ver = SzVersion();
+        (void)snprintf(szTemp, sizeof(szTemp), "Stars! %s\r\n\r\n", ver ? ver : "");
+        OutputFileString(szFile, szTemp);
+    }
+    else
+    {
+        (void)fclose(fp);
+    }
+
+    /* __strdate -> mm/dd/yy, __strtime -> HH:MM:SS */
+    t = time(NULL);
+    lt = localtime(&t);
+    if (lt != NULL)
+    {
+        strftime(szDate, sizeof(szDate), "%m/%d/%y", lt);
+        strftime(szTime, sizeof(szTime), "%H:%M:%S", lt);
+    }
+    else
+    {
+        szDate[0] = '\0';
+        szTime[0] = '\0';
+    }
+
+    /* "%s %s - %s\r\n" */
+    (void)snprintf(szTemp, sizeof(szTemp), "%s %s - %s\r\n", szDate, szTime, sz);
+    OutputFileString(szFile, szTemp);
 }
 
 void ComputeShdefPowers(void)
