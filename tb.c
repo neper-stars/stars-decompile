@@ -15,7 +15,7 @@ int32_t FakeComboProc(uint16_t hwnd, uint16_t msg, uint16_t wParam, int32_t lPar
     return 0;
 }
 
-void ShowTooltip(int16_t ids, RECT *prc)
+void ShowTooltip(StringId ids, RECT *prc)
 {
     uint16_t hdc;
     uint16_t hfontSav;

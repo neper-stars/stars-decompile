@@ -75,7 +75,7 @@ int16_t InitInstance(int16_t nCmdShow)
     return 0;
 }
 
-void GetIniWinRc(char *szSection, char *szIniFile, int16_t ids, WN *pwn)
+void GetIniWinRc(char *szSection, char *szIniFile, StringId ids, WN *pwn)
 {
     int16_t fInitalized;
     int16_t fMinimized;

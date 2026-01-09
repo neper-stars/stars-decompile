@@ -11,19 +11,8 @@ char rgSTRLookupTable[84] = " eatiornslhducpmygf.b%vwTS:'kPMRY0CADF,Wx*EIBN-qHLO
 
 extern const char *const aSTRUncompressed[];
 /* functions */
-char *PszGetCompressedString(int16_t ids)
+char *PszGetCompressedString(StringId ids)
 {
-    int16_t iChunk;
-    char *pchLen;
-    int16_t iBuild;
-    int16_t iNibble;
-    int16_t i;
-    int16_t iLen;
-    char *pch;
-    char *pszOut;
-    int16_t iOffset;
-    int16_t fHigh;
-
     // TODO: implement actual decompression, but for now all the strings are uncompressed in string_uncompressed.c for simplicity
     return aSTRUncompressed[ids];
 }

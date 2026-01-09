@@ -133,6 +133,7 @@ bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
 
 [tasks.ghidra-apply-funcsigs]
 description = "Apply NB09 function signatures to Ghidra project"
+depends = ["ghidra-create-enums"]
 run = '''
 #!/bin/bash
 set -e
@@ -476,3 +477,18 @@ echo ""
 echo "Output: $PROJECT_DIR/decompiled/p1_util.c"
 '''
 
+[tasks.dump-globals-json]
+description = "dump the nb09_ghidra_globals.json"
+run = '''
+#!/bin/bash
+set -e
+
+python3 $PROJECT_DIR/scripts/dump_nb09_ghidra.py \
+  $PROJECT_DIR/scripts/stars26jrc3.codeview.nb09.bin \
+  --segments $PROJECT_DIR/scripts/segments.csv \
+  --sig-overrides $PROJECT_DIR/scripts/sig_overrides.json \
+  --out $PROJECT_DIR/scripts/nb09_ghidra_globals.json
+
+echo ""
+echo "Output: $PROJECT_DIR/scripts/nb09_ghidra_globals"
+'''

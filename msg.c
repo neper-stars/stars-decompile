@@ -2,6 +2,7 @@
 #include "types.h"
 
 #include "msg.h"
+#include "strings.h"
 
 /* globals */
 char aMSGCmpr[22836] = {0};
@@ -9,8 +10,10 @@ uint8_t acMSG[387] = {0x62, 0xa5, 0x7c, 0x63, 0x69, 0x99, 0x6c, 0x9b, 0x7c, 0x83
 char rgMSGLookupTable[72] = " eotasnirldh\\ucpfybm.gvwk,YT0'AzPMSXFxOIj%UVL-CDEN!GHq*W()25:QR1B/46Z78?";
 int16_t aiMSGChunkOffset[7] = {0, 2854, 6582, 10933, 14692, 18914, 22612};
 
+extern const char *const aMSGUncompressed[];
+
 /* functions */
-int16_t FFindPlayerMessage(int16_t iPlr, int16_t iMsg, int16_t iObj)
+int16_t FFindPlayerMessage(int16_t iPlr, MessageId iMsg, int16_t iObj)
 {
     uint8_t *lpbMax;
     uint8_t *lpb;
@@ -56,7 +59,7 @@ void DecorateMsgTitleBar(uint16_t hdc, RECT *prc)
     /* TODO: implement */
 }
 
-int16_t PackageUpMsg(uint8_t *pb, int16_t iPlr, int16_t iMsg, int16_t iObj, int16_t p1, int16_t p2, int16_t p3, int16_t p4, int16_t p5, int16_t p6, int16_t p7)
+int16_t PackageUpMsg(uint8_t *pb, int16_t iPlr, MessageId iMsg, int16_t iObj, int16_t p1, int16_t p2, int16_t p3, int16_t p4, int16_t p5, int16_t p6, int16_t p7)
 {
     int16_t *pi;
     int16_t i;
@@ -132,14 +135,14 @@ void MarkPlanetsPlayerLost(int16_t iPlayer)
     /* TODO: implement */
 }
 
-char *PszFormatMessage(int16_t idm, int16_t *pParams)
+char *PszFormatMessage(MessageId idm, int16_t *pParams)
 {
 
     /* TODO: implement */
     return NULL;
 }
 
-int16_t FSendPlrMsg2XGen(int16_t fPrepend, int16_t iMsg, int16_t iObj, int16_t p1, int16_t p2)
+int16_t FSendPlrMsg2XGen(int16_t fPrepend, MessageId iMsg, int16_t iObj, int16_t p1, int16_t p2)
 {
     uint8_t rgb[64];
     int16_t *pi;
@@ -153,14 +156,14 @@ int16_t FSendPlrMsg2XGen(int16_t fPrepend, int16_t iMsg, int16_t iObj, int16_t p
     return 0;
 }
 
-void SetFilteringGroups(int16_t idm, int16_t fSet)
+void SetFilteringGroups(MessageId idm, int16_t fSet)
 {
     int16_t i;
 
     /* TODO: implement */
 }
 
-int16_t FSendPlrMsg2(int16_t iPlr, int16_t iMsg, int16_t iObj, int16_t p1, int16_t p2)
+int16_t FSendPlrMsg2(int16_t iPlr, MessageId iMsg, int16_t iObj, int16_t p1, int16_t p2)
 {
 
     /* TODO: implement */
@@ -187,7 +190,7 @@ void ReadPlayerMessages(void)
     /* TODO: implement */
 }
 
-int16_t FSendPrependedPlrMsg(int16_t iPlr, int16_t iMsg, int16_t iObj, int16_t p1, int16_t p2, int16_t p3, int16_t p4, int16_t p5, int16_t p6, int16_t p7)
+int16_t FSendPrependedPlrMsg(int16_t iPlr, MessageId iMsg, int16_t iObj, int16_t p1, int16_t p2, int16_t p3, int16_t p4, int16_t p5, int16_t p6, int16_t p7)
 {
     uint8_t rgbWork[40];
     int16_t cbMsg;
@@ -209,7 +212,7 @@ void ResetMessages(void)
     /* TODO: implement */
 }
 
-int16_t FRemovePlayerMessage(int16_t iPlr, int16_t iMsg, int16_t iObj)
+int16_t FRemovePlayerMessage(int16_t iPlr, MessageId iMsg, int16_t iObj)
 {
     uint8_t *lpbMax;
     uint8_t *lpb;
@@ -249,21 +252,9 @@ char *PszFormatString(char *pszFormat, int16_t *pParamsReal)
     return NULL;
 }
 
-char *PszGetCompressedMessage(int16_t idm)
+char *PszGetCompressedMessage(MessageId idm)
 {
-    int16_t iBuild;
-    int16_t iNibble;
-    int16_t i;
-    int16_t iLen;
-    char *pchLen;
-    int16_t iOffset;
-    char *pszOut;
-    int16_t fHigh;
-    char *pch;
-    int16_t iChunk;
-
-    /* TODO: implement */
-    return NULL;
+    return aMSGUncompressed[idm];
 }
 
 int16_t MsgDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam)
@@ -324,14 +315,16 @@ int16_t IMsgNext(int16_t fFilteredOnly)
     return 0;
 }
 
-char *PszFormatIds(int16_t ids, int16_t *pParams)
+char *PszFormatIds(StringId ids, int16_t *pParams)
 {
+    char *psz;
 
-    /* TODO: implement */
-    return NULL;
+    psz = PszGetCompressedString(ids);
+    psz = PszFormatString(psz, pParams);
+    return psz;
 }
 
-int16_t FSendPlrMsg(int16_t iPlr, int16_t iMsg, int16_t iObj, int16_t p1, int16_t p2, int16_t p3, int16_t p4, int16_t p5, int16_t p6, int16_t p7)
+int16_t FSendPlrMsg(int16_t iPlr, MessageId iMsg, int16_t iObj, int16_t p1, int16_t p2, int16_t p3, int16_t p4, int16_t p5, int16_t p6, int16_t p7)
 {
     uint8_t rgbWork[40];
     int16_t cbMsg;

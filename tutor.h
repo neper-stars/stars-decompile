@@ -3,6 +3,7 @@
 
 
 #include "types.h"
+#include "strings.h"
 
 /* globals */
 extern ITEMACTION rgiaQuikDrop[5];  /* MEMORY_TUTOR:0x0f94 */
@@ -30,7 +31,7 @@ void RestoreGameState(void);  /* MEMORY_TUTOR:0x0e1c */
 int16_t PanicDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam);  /* PASCAL */  /* MEMORY_TUTOR:0x026a */
 int16_t FCheckPatrolWP(uint16_t ifl, int16_t iord, int16_t id, uint16_t iWarp, uint16_t iPlan, uint16_t iDist);  /* MEMORY_TUTOR:0x71ac */
 int16_t FCheckLayingWP(uint16_t ifl, int16_t iord, int16_t id, int16_t iYears);  /* MEMORY_TUTOR:0x6ff4 */
-int16_t FCheckMessages(int16_t imsg, int16_t idm, int16_t fFilter);  /* MEMORY_TUTOR:0x6c48 */
+int16_t FCheckMessages(int16_t imsg, MessageId idm, int16_t fFilter);  /* MEMORY_TUTOR:0x6c48 */
 int16_t FCheckQueue(int16_t ipl, int16_t iprod, uint16_t grobj, uint16_t iItem, uint16_t cItem, uint16_t fNoResearch);  /* MEMORY_TUTOR:0x7442 */
 int16_t FTutorialEnabledShipBuilder(int16_t itutsbAction);  /* MEMORY_TUTOR:0x79f6 */
 int16_t FCheckTemplate(int16_t iTemplate);  /* MEMORY_TUTOR:0x666e */

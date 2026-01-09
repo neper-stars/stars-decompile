@@ -4,7 +4,7 @@
 #include "file.h"
 
 /* functions */
-void FileError(int16_t ids)
+void FileError(StringId ids)
 {
 
     /* TODO: implement */
@@ -36,7 +36,7 @@ void UnpackBattlePlan(uint8_t *lpb, BTLPLAN *lpbtlplan, int16_t iplan)
     /* TODO: implement */
 }
 
-int16_t FBadFileError(int16_t ids)
+int16_t FBadFileError(StringId ids)
 {
 
     /* TODO: implement */

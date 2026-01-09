@@ -210,7 +210,7 @@ HB *LphbReAlloc(HB *lphb)
 LReAllocOOM:
 {
     int16_t mbType = 0x10;
-    char *sz = PszFormatIds(idsOutOfMemory, (int16_t *)0);
+    char *sz = PszFormatIds(idsMemory, (int16_t *)0);
     AlertSz(sz, mbType);
     longjmp(penvMem, -1);
 }

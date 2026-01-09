@@ -3,6 +3,7 @@
 
 
 #include "types.h"
+#include "strings.h"
 
 /* globals */
 extern uint8_t vrgSBAip[85];  /* MEMORY_AIU:0x7688 */
@@ -26,7 +27,7 @@ int16_t XferAiTroopers(int16_t idSrc, int16_t idDst, int16_t cQuan);  /* MEMORY_
 int16_t IdNearestColonizablePlanet(FLEET *lpflCol, THING * *plpthWorm);  /* MEMORY_AIU:0x0e3e */
 void GetProdQCost(PLANET *lppl, int32_t *rgCost);  /* MEMORY_AIU:0x57c0 */
 void MoveToNearestPlanetOrEnemy(FLEET *lpfl, int16_t dEnemyRange);  /* MEMORY_AIU:0x7014 */
-void PickANameAndBmp(SHDEF *pshdef, int16_t ids, int16_t cids, int16_t ibmpStart);  /* MEMORY_AIU:0x055a */
+void PickANameAndBmp(SHDEF *pshdef, StringId ids, int16_t cids, int16_t ibmpStart);  /* MEMORY_AIU:0x055a */
 int16_t FIsAiAttack(FLEET *lpfl);  /* MEMORY_AIU:0x4a72 */
 void SplitOutShdefs(uint8_t *rgbIsh);  /* MEMORY_AIU:0x98d8 */
 int16_t FGotoWormholeAiFleet(FLEET *lpfl, THING *lpthWorm);  /* MEMORY_AIU:0x0d5c */

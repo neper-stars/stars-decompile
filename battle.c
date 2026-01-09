@@ -704,7 +704,7 @@ void SpankTheCheaters(void)
     /* TODO: implement */
 }
 
-int16_t ITechLearnATech(int16_t iplr, int16_t x, int16_t y, int16_t idm, uint16_t *piGoto)
+int16_t ITechLearnATech(int16_t iplr, int16_t x, int16_t y, MessageId idm, uint16_t *piGoto)
 {
     uint16_t iGoto;
     int16_t fBattle;

@@ -155,6 +155,64 @@ def _remove_existing(dtm, cat_path_str, name):
         return False
 
 
+def _is_enum_dt(dt):
+    """Best-effort check for enum datatype."""
+    if dt is None:
+        return False
+    try:
+        # In Jython, isinstance checks can be flaky across classloaders.
+        return dt.getClass().getName().endswith("EnumDataType") or dt.getClass().getName().endswith("EnumDB")
+    except Exception:
+        try:
+            # Fallback: enum types expose getNames()/add().
+            dt.getNames
+            dt.add
+            return True
+        except Exception:
+            return False
+
+
+def _sync_enum(existing_enum, members):
+    """Make an existing Ghidra Enum match the parsed members.
+
+    Strategy:
+      - remove all existing names
+      - add parsed names/values
+    This is idempotent and avoids creating duplicate *_2 enums.
+    """
+    # Ensure 2-byte storage
+    try:
+        existing_enum.setLength(ENUM_SIZE_BYTES)
+    except Exception:
+        # Some enum-backed DB implementations may not allow resizing.
+        pass
+
+    # Clear all existing members
+    try:
+        names = list(existing_enum.getNames())
+    except Exception:
+        names = []
+    for n in names:
+        try:
+            existing_enum.remove(n)
+        except Exception:
+            # If removal fails (should be rare), continue and try to overwrite later.
+            pass
+
+    # Add new members
+    for mem_name, mem_val in members:
+        try:
+            # Remove name if it somehow survived.
+            try:
+                existing_enum.remove(mem_name)
+            except Exception:
+                pass
+            existing_enum.add(mem_name, mem_val)
+        except Exception as ex:
+            if VERBOSE:
+                Msg.warn(None, "Could not add %s=%d: %s" % (mem_name, mem_val, str(ex)))
+
+
 def create_enums(enums):
     dtm = currentProgram.getDataTypeManager()
     _ensure_category(dtm, CATEGORY_PATH_STR)
@@ -166,10 +224,32 @@ def create_enums(enums):
         cat_path = CategoryPath(CATEGORY_PATH_STR)
         for enum_name, members in enums:
             name_to_use = enum_name
-            if OVERWRITE_EXISTING:
-                if not _remove_existing(dtm, CATEGORY_PATH_STR, enum_name):
+
+            # Idempotent behavior:
+            # - If an enum with this name exists, update it in-place (overwrite members, keep name).
+            # - If a non-enum datatype exists with this name, try to remove it; if that fails,
+            #   fall back to creating a uniquely-named enum.
+            existing = dtm.getDataType(cat_path, enum_name)
+            if existing is not None:
+                if _is_enum_dt(existing):
+                    try:
+                        _sync_enum(existing, members)
+                        created += 1
+                        if VERBOSE:
+                            Msg.info(None, "Updated enum %s (%d members)" % (enum_name, len(members)))
+                    except Exception as ex:
+                        skipped += 1
+                        Msg.error(None, "Failed to update enum %s: %s" % (enum_name, str(ex)))
+                    continue
+
+                # Existing is not an enum.
+                if OVERWRITE_EXISTING:
+                    if not _remove_existing(dtm, CATEGORY_PATH_STR, enum_name):
+                        name_to_use = _unique_name(dtm, CATEGORY_PATH_STR, enum_name)
+                else:
                     name_to_use = _unique_name(dtm, CATEGORY_PATH_STR, enum_name)
 
+            # Create a new enum datatype.
             e = EnumDataType(cat_path, name_to_use, ENUM_SIZE_BYTES)
             for mem_name, mem_val in members:
                 try:
@@ -206,12 +286,8 @@ def _default_header_path():
 
 
 def main():
-    # Check for script arguments first (headless mode)
-    args = getScriptArgs()
-    if args and len(args) > 0:
-        path = args[0]
-        print("CreateEnumsFromHeader.py> using argument: %s" % path)
-    else:
+    path = _default_header_path()
+    if path is None:
         f = askFile("Select enums.h", "Open")
         path = f.getAbsolutePath()
 

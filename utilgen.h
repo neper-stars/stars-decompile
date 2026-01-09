@@ -3,6 +3,7 @@
 
 
 #include "types.h"
+#include "strings.h"
 
 /* globals */
 extern char aPNCmpr[4099];  /* MEMORY_UTILGEN:0x0000 */
@@ -36,7 +37,7 @@ uint16_t HpalBlackReserved(void);  /* MEMORY_UTILGEN:0x4c9c */
 int16_t FIntersectCircleLine(POINT ptL1, POINT ptL2, POINT ptC, int32_t r2, int16_t dMax, int16_t *pdStart, int16_t *pdEnd);  /* MEMORY_UTILGEN:0x53b4 */
 void Randomize2(uint32_t dw);  /* MEMORY_UTILGEN:0x165a */
 void Randomize(uint32_t dw);  /* MEMORY_UTILGEN:0x15ea */
-int16_t CchGetString(int16_t ids, char *psz);  /* MEMORY_UTILGEN:0x221e */
+int16_t CchGetString(StringId ids, char *psz);  /* MEMORY_UTILGEN:0x221e */
 int32_t LSaltFromSz(char *psz);  /* MEMORY_UTILGEN:0x59ce */
 int16_t FGetRMouseMove(POINT *ppt);  /* MEMORY_UTILGEN:0x41e0 */
 uint16_t HfontPrinterCreate(uint16_t hdc, int16_t iSize, int16_t *pdyFont);  /* MEMORY_UTILGEN:0x6aa6 */

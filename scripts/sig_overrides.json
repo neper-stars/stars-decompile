@@ -1,9 +1,31 @@
 {
-  "ResetHb": { "ht": "HeapType" },
-  "LphbFromLpHt": { "ht": "HeapType" },
   "FreeLp": { "ht": "HeapType" },
   "LpAlloc": { "ht": "HeapType" },
-  "LpReAlloc": { "ht": "HeapType" },
   "LphbAlloc": { "ht": "HeapType" },
-  "LpplAlloc": { "ht": "HeapType" }
+  "LphbFromLpHt": { "ht": "HeapType" },
+  "LpplAlloc": { "ht": "HeapType" },
+  "LpReAlloc": { "ht": "HeapType" },
+  "ResetHb": { "ht": "HeapType" },
+
+  "FCheckMessages": { "imsg": "MessageId" },
+  "FFindPlayerMessage": { "iMsg": "MessageId" },
+  "FGetNMsgbig": { "idm": "MessageId" },
+  "FRemovePlayerMessage": { "iMsg": "MessageId" },
+  "FSendPlrMsg": { "iMsg": "MessageId" },
+  "FSendPlrMsg2": { "iMsg": "MessageId" },
+  "FSendPlrMsg2XGen": { "iMsg": "MessageId" },
+  "FSendPrependedPlrMsg": { "iMsg": "MessageId" },
+  "ITechLearnATech": { "idm": "MessageId" },
+  "PackageUpMsg": { "iMsg": "MessageId" },
+  "PszGetCompressedMessage": { "idm": "MessageId" },
+
+  "CchGetString": { "ids": "StringId" },
+  "FBadFileError": { "ids": "StringId" },
+  "FileError": { "ids": "StringId" },
+  "GetIniWinRc": { "ids": "StringId" },
+  "PickANameAndBmp": { "ids": "StringId" },
+  "PszFormatIds": { "ids": "StringId" },
+  "PszGetCompressedString": { "ids": "StringId" },
+  "ShowTooltip": { "ids": "StringId" },
+  "TurnLog": { "ids": "StringId" }
 }

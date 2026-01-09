@@ -201,7 +201,7 @@ int16_t FCheckLayingWP(uint16_t ifl, int16_t iord, int16_t id, int16_t iYears)
     return 0;
 }
 
-int16_t FCheckMessages(int16_t imsg, int16_t idm, int16_t fFilter)
+int16_t FCheckMessages(int16_t imsg, MessageId idm, int16_t fFilter)
 {
     int16_t idhSav;
 

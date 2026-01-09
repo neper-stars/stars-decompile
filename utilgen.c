@@ -11,6 +11,7 @@ char rgPNLookupTable[52] = "earonilstudchmpgb ykwfvzxjq'-10239M45G6C8AOSV7BDFIPR
 int16_t aiPNChunkOffset[16] = {0, 261, 540, 791, 1055, 1348, 1603, 1857, 2120, 2380, 2624, 2869, 3116, 3378, 3641, 3936};
 int16_t rgPrimes[128] = {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 279, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719, 727};
 uint8_t acPN[999] = {0};
+extern const char *const aPNUncompressed[];
 
 /* functions */
 void DrawProgressGauge(uint16_t hdcOrig, int16_t fFull, int16_t iNumOnly)
@@ -302,7 +303,7 @@ void Randomize(uint32_t dw)
 }
 
 // TODO: add bounds checking to make safer
-int16_t CchGetString(int16_t ids, char *psz)
+int16_t CchGetString(StringId ids, char *psz)
 {
     char *dst0 = psz;
     const char *src = PszGetCompressedString(ids);
@@ -904,20 +905,7 @@ void OutputFileString(char *szFile, char *sz)
 
 char *PszGetCompressedPlanet(int16_t id)
 {
-    int16_t fCap;
-    int16_t iOffset;
-    int16_t fHigh;
-    int16_t iChunk;
-    int16_t i;
-    int16_t iBuild;
-    int16_t iNibble;
-    char *pchLen;
-    char *pszOut;
-    char *pch;
-    int16_t iLen;
-
-    /* TODO: implement */
-    return NULL;
+    return aPNUncompressed[id];
 }
 
 int32_t LDrawGauge(uint16_t hdc, RECT *prc, int16_t cSegs, int32_t *rgSize, uint16_t *rghbr, int32_t cTot)

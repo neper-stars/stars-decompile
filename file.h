@@ -3,12 +3,13 @@
 
 
 #include "types.h"
+#include "strings.h"
 
 /* functions */
-void FileError(int16_t ids);  /* MEMORY_IO:0x4a10 */
+void FileError(StringId ids);  /* MEMORY_IO:0x4a10 */
 void StreamOpen(char *szFile, int16_t mdOpen);  /* MEMORY_IO:0x52ae */
 void UnpackBattlePlan(uint8_t *lpb, BTLPLAN *lpbtlplan, int16_t iplan);  /* MEMORY_IO:0x40ce */
-int16_t FBadFileError(int16_t ids);  /* MEMORY_IO:0x524e */
+int16_t FBadFileError(StringId ids);  /* MEMORY_IO:0x524e */
 void ReadRtPlr(PLAYER *pplr, uint8_t *pbIn);  /* MEMORY_IO:0x05e2 */
 void UpdateBattleRecords(void);  /* MEMORY_IO:0x41ac */
 int16_t FReadFleet(FLEET *lpfl);  /* MEMORY_IO:0x3a4c */

@@ -2,6 +2,7 @@
 #define UTIL_H_
 
 #include "types.h"
+#include "strings.h"
 
 /* globals */
 extern uint8_t vrgbTachyon[18];     /* MEMORY_UTIL:0x50be */
@@ -47,7 +48,7 @@ void DecorateHullName(int16_t iplr, int16_t ish, char *psz);                    
 int16_t FCanBuildShdef(SHDEF *lpshdef, int16_t iplr);                                                                                                                      /* MEMORY_UTIL:0x7b40 */
 int16_t FFleetMergeAll(FLEET *pfl);                                                                                                                                        /* MEMORY_UTIL:0x34d8 */
 int16_t ICompFleetPoint2(void *arg1, void *arg2);                                                                                                                          /* MEMORY_UTIL:0x1fa2 */
-void TurnLog(int16_t ids);                                                                                                                                                 /* MEMORY_UTIL:0x80c2 */
+void TurnLog(StringId ids);                                                                                                                                                /* MEMORY_UTIL:0x80c2 */
 char *PszPlayerName(int16_t iPlayer, int16_t fCapital, int16_t fPlural, int16_t fThe, int16_t grWord, PLAYER *pplr);                                                       /* MEMORY_UTIL:0x11f2 */
 int16_t IStargateFromLppl(PLANET *lppl);                                                                                                                                   /* MEMORY_UTIL:0x10fa */
 int32_t DpOfLpflIshdef(FLEET *lpfl, int16_t ishdef);                                                                                                                       /* MEMORY_UTIL:0x0746 */

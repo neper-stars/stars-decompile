@@ -244,7 +244,7 @@ void MoveToNearestPlanetOrEnemy(FLEET *lpfl, int16_t dEnemyRange)
     /* TODO: implement */
 }
 
-void PickANameAndBmp(SHDEF *pshdef, int16_t ids, int16_t cids, int16_t ibmpStart)
+void PickANameAndBmp(SHDEF *pshdef, StringId ids, int16_t cids, int16_t ibmpStart)
 {
     int16_t i;
     int16_t rgfBmpUsed[4];

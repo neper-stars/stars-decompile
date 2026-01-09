@@ -25,7 +25,7 @@ char *SzVersion(void)
     char letter = 'k';
 
     /* ids 0x22d is a format string stored in the compressed string table. */
-    const char *fmt = PszGetCompressedString(idsVersionFormat);
+    const char *fmt = PszGetCompressedString(idsVersionD02dC);
 
     /* wsprintf into shared work buffer and return it. */
     snprintf(szWork, sizeof(szWork), fmt, major, minor, letter);
@@ -385,11 +385,21 @@ int16_t CchGetETA(uint16_t hdc, FLEET *lpfl, char *sz, int16_t iwp, int16_t fSma
 
 char *PszGetPlanetName(int16_t id)
 {
-    int16_t fInOrbit;
-    char *psz;
+    char *pszPlan;
 
-    /* TODO: implement */
-    return NULL;
+    pszPlan = PszGetCompressedPlanet(rgidPlan[id & 0x7fff]);
+
+    if (((uint16_t)id & 0x8000) == 0)
+    {
+        strcpy(szWork, pszPlan);
+    }
+    else
+    {
+        char *pszFmt = PszGetCompressedString(idsOrbitingS); /* 0x365 */
+        (void)sprintf(szWork, pszFmt, pszPlan);
+    }
+
+    return szWork;
 }
 
 int16_t FDupFleet(FLEET *lpfl, FLEET *pfl)
@@ -580,7 +590,7 @@ int16_t ICompFleetPoint2(void *arg1, void *arg2)
     return 0;
 }
 
-void TurnLog(int16_t ids)
+void TurnLog(StringId ids)
 {
     char szTemp[256];
 
