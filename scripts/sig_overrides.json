@@ -7,6 +7,18 @@
   "LpReAlloc": { "ht": "HeapType" },
   "ResetHb": { "ht": "HeapType" },
 
+  "PszGetLocName": { "grobj": "GrobjClass" },
+  "FLookupObject": { "grobj": "GrobjClass" },
+  "FFindNearestObject": { "grobj": "GrobjClass" },
+  "AddItemToQueue": { "grobj": "GrobjClass" },
+  "LogChangeName": { "grobj": "GrobjClass" },
+  "ChgCargo": { "grobj": "GrobjClass" },
+  "FBuildObject": { "grobj": "GrobjClass" },
+  "FCheckFleetWP": { "grobj": "GrobjClass" },
+  "FCheckQueue": { "grobj": "GrobjClass" },
+  "FCheckSelection": { "grobj": "GrobjClass" },
+  "FCheckSummary": { "grobj": "GrobjClass" },
+
   "FCheckMessages": { "imsg": "MessageId" },
   "FFindPlayerMessage": { "iMsg": "MessageId" },
   "FGetNMsgbig": { "idm": "MessageId" },

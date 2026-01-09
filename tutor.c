@@ -145,7 +145,7 @@ int16_t FCheckXferWP(uint16_t ifl, int16_t iord, int16_t id, uint16_t iWarp, ITE
     return 0;
 }
 
-int16_t FCheckFleetWP(uint16_t ifl, int16_t iord, uint16_t grobj, int16_t id, uint16_t grTask, uint16_t iWarp)
+int16_t FCheckFleetWP(uint16_t ifl, int16_t iord, GrobjClass grobj, int16_t id, uint16_t grTask, uint16_t iWarp)
 {
     ORDER ord;
     int16_t fRet;
@@ -209,7 +209,7 @@ int16_t FCheckMessages(int16_t imsg, MessageId idm, int16_t fFilter)
     return 0;
 }
 
-int16_t FCheckQueue(int16_t ipl, int16_t iprod, uint16_t grobj, uint16_t iItem, uint16_t cItem, uint16_t fNoResearch)
+int16_t FCheckQueue(int16_t ipl, int16_t iprod, GrobjClass grobj, uint16_t iItem, uint16_t cItem, uint16_t fNoResearch)
 {
     int16_t fRet;
     PLANET *lppl;
@@ -292,7 +292,7 @@ void StartTutor(int16_t fRestart)
     /* TODO: implement */
 }
 
-int16_t FCheckSelection(uint16_t grobj, int16_t id)
+int16_t FCheckSelection(GrobjClass grobj, int16_t id)
 {
     int16_t fRet;
     int16_t idhSav;
@@ -301,7 +301,7 @@ int16_t FCheckSelection(uint16_t grobj, int16_t id)
     return 0;
 }
 
-int16_t FCheckSummary(uint16_t grobj, int16_t id)
+int16_t FCheckSummary(GrobjClass grobj, int16_t id)
 {
     int16_t fRet;
 

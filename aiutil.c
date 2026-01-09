@@ -61,7 +61,7 @@ PLANET * LpplFindClosestEnum(PLANET *lppl, int16_t (*pfn)(PLANET *, PLANET *))
     return NULL;
 }
 
-void AddItemToQueue(uint16_t iItem, uint16_t cItem, uint16_t grobj, int16_t mdAddItem)
+void AddItemToQueue(uint16_t iItem, uint16_t cItem, GrobjClass grobj, int16_t mdAddItem)
 {
     int16_t fSingle;
     int16_t iprod;

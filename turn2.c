@@ -343,7 +343,7 @@ void MineMinerals(void)
     /* TODO: implement */
 }
 
-int16_t FBuildObject(PLANET *lppl, int16_t grobj, int16_t iItem, int16_t cBuilt, int32_t *rgMinerals)
+int16_t FBuildObject(PLANET *lppl, GrobjClass grobj, int16_t iItem, int16_t cBuilt, int32_t *rgMinerals)
 {
     int16_t iWarp;
     int16_t i;

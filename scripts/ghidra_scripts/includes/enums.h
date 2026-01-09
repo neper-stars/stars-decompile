@@ -15,6 +15,15 @@ typedef enum HeapType
     htCount
 } HeapType;
 
+typedef enum GrobjClass
+{
+    grobjNone = 0x0,
+    grobjPlanet = 0x1,
+    grobjFleet = 0x2,
+    grobjOther = 0x4,
+    grobjThing = 0x8,
+} GrobjClass;
+
 typedef enum StringId
 {
     idsUniverseDefinitionFileSeemsMissingCorrupt = 0x0000,

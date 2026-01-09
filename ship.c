@@ -679,7 +679,7 @@ void DeleteWpFar(FLEET *lpfl, int16_t iDel, int16_t fRecycle)
     /* TODO: implement */
 }
 
-int32_t ChgCargo(int16_t grobj, int16_t id, int16_t iSupply, int32_t dChg, void *pobj)
+int32_t ChgCargo(LogChangeName grobj, int16_t id, int16_t iSupply, int32_t dChg, void *pobj)
 {
     THING * pth;
     XFER xfer;

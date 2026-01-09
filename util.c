@@ -32,14 +32,27 @@ char *SzVersion(void)
     return szWork;
 }
 
-char *PszGetLocName(int16_t grobj, int16_t id, int16_t x, int16_t y)
+char *PszGetLocName(GrobjClass grobj, int16_t id, int16_t x, int16_t y)
 {
+    if (id != -1)
+    {
+        if (grobj == grobjPlanet)
+            return PszGetPlanetName(id);
+        if (grobj == grobjFleet)
+            return PszGetFleetName(id);
+        if (grobj == grobjThing)
+            return PszGetThingName(id);
+    }
 
-    /* debug symbols */
-    /* label NoObj @ MEMORY_UTIL:0x3b68 */
-
-    /* TODO: implement */
-    return NULL;
+    if (x == -1 && y == -1)
+    {
+        strcpy(szWork, PszGetCompressedString(idsDeepSpace)); /* 0x362 */
+    }
+    else
+    {
+        (void)sprintf(szWork, PszGetCompressedString(idsSpaceDD), x, y); /* 0x363 */
+    }
+    return szWork;
 }
 
 int16_t FCanFleetUseStargates(FLEET *lpfl, POINT ptSrc, POINT ptDst)
@@ -68,17 +81,53 @@ int16_t FCanFleetUseStargates(FLEET *lpfl, POINT ptSrc, POINT ptDst)
 
 FLEET *LpflFromId(int16_t idFleet)
 {
-    int16_t iplr;
-    int16_t idGuess;
-    int16_t iLo;
-    int16_t iGuess;
     int16_t i;
-    FLEET *lpfl;
     int16_t iplrCur;
     int16_t iHi;
+    int16_t iLo;
+    int16_t iMid;
+    int16_t want;
 
-    /* TODO: implement */
-    return NULL;
+    i = 0;
+    for (iplrCur = 0; iplrCur < (int16_t)(((uint16_t)idFleet >> 9) & 15); iplrCur++)
+    {
+        i = (int16_t)(i + (int16_t)rgplr[iplrCur].cFleet);
+    }
+
+    iHi = cFleet;
+    iMid = (int16_t)(i - 1);
+    want = (int16_t)((uint16_t)idFleet & 0x1fff);
+
+    for (;;)
+    {
+        iLo = iMid;
+        if (iHi <= (int16_t)(iLo + 1))
+        {
+            return (FLEET *)0;
+        }
+
+        iMid = (int16_t)((iLo + iHi) >> 1);
+
+        if (rglpfl[iMid] == 0)
+        {
+            return (FLEET *)0;
+        }
+
+        if (rglpfl[iMid]->id < want)
+        {
+            /* go right */
+            continue;
+        }
+        if (want < rglpfl[iMid]->id)
+        {
+            /* go left */
+            iHi = iMid;
+            iMid = iLo;
+            continue;
+        }
+
+        return rglpfl[iMid];
+    }
 }
 
 PLANET *LpplFromId(int16_t idPlanet)
@@ -129,10 +178,14 @@ PLANET *LpplFromId(int16_t idPlanet)
 
 THING *LpthFromId(int16_t idth)
 {
-    THING *lpth;
-    THING *lpthMac;
-
-    /* TODO: implement */
+    for (int i = 0; i < cThing; i++)
+    {
+        THING *t = &lpThings[i];
+        if ((int16_t)t->idFull == idth)
+        {
+            return t;
+        }
+    }
     return NULL;
 }
 
@@ -987,7 +1040,7 @@ uint16_t WFromLpfl(FLEET *lpfl)
     return 0;
 }
 
-int16_t FLookupObject(int16_t grobj, int16_t id, void *pobj)
+int16_t FLookupObject(GrobjClass grobj, int16_t id, void *pobj)
 {
 
     /* TODO: implement */
@@ -1009,7 +1062,7 @@ int16_t GetFleetScannerRange(FLEET *lpfl, int16_t *pdPlanRange, int16_t *ppctDet
     return 0;
 }
 
-int16_t FFindNearestObject(POINT pt, int16_t grobj, SCAN *pscan)
+int16_t FFindNearestObject(POINT pt, GrobjClass grobj, SCAN *pscan)
 {
     POINT ptWp;
     POINT *ppt;

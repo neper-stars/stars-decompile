@@ -15,7 +15,7 @@ void QueueAiStarbases(PROD *rgprod, int16_t ishdefSBLatest);  /* MEMORY_AIU:0x85
 int16_t FGetAIPart(int16_t aip, PART *ppart);  /* MEMORY_AIU:0x043e */
 FLEET * LpflFindClosestEnum(FLEET *lpfl, int16_t (*pfn)(FLEET *, FLEET *));  /* RETFAR */  /* MEMORY_AIU:0x5bae */
 PLANET * LpplFindClosestEnum(PLANET *lppl, int16_t (*pfn)(PLANET *, PLANET *));  /* RETFAR */  /* MEMORY_AIU:0x5cd4 */
-void AddItemToQueue(uint16_t iItem, uint16_t cItem, uint16_t grobj, int16_t mdAddItem);  /* MEMORY_AIU:0x3e50 */
+void AddItemToQueue(uint16_t iItem, uint16_t cItem, GrobjClass grobj, int16_t mdAddItem);  /* MEMORY_AIU:0x3e50 */
 int16_t IdTargetAttack(FLEET *lpfl, FLEET *lpflAtk, FLEET *lpflEnemy, int16_t fOnlyHumans);  /* MEMORY_AIU:0x1ffe */
 int16_t FQueueAiDefenses(PLANET *lppl, int32_t *rgResAvail, int32_t *rgResCost);  /* MEMORY_AIU:0x939a */
 int16_t XferAiSupply(int16_t grobjSrc, int16_t idSrc, int16_t grobjDst, int16_t idDst, int16_t iSupply, int16_t cQuan);  /* MEMORY_AIU:0x0ad0 */

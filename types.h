@@ -10,6 +10,15 @@
 #include <time.h>
 #include <setjmp.h>
 
+typedef enum GrobjClass
+{
+    grobjNone = 0x0,
+    grobjPlanet = 0x1,
+    grobjFleet = 0x2,
+    grobjOther = 0x4,
+    grobjThing = 0x8,
+} GrobjClass;
+
 // ensure our structs use classic win16 packing
 #include "pack1.h"
 PACK_PUSH_1

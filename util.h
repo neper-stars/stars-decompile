@@ -14,7 +14,7 @@ extern uint32_t rgcrDrawStars2b[5]; /* MEMORY_UTIL:0x5fce */
 
 /* functions */
 char *SzVersion(void);                                                                                                                                                     /* MEMORY_MAIN:0x1212 */
-char *PszGetLocName(int16_t grobj, int16_t id, int16_t x, int16_t y);                                                                                                      /* MEMORY_UTIL:0x3b08 */
+char *PszGetLocName(GrobjClass grobj, int16_t id, int16_t x, int16_t y);                                                                                                      /* MEMORY_UTIL:0x3b08 */
 int16_t FCanFleetUseStargates(FLEET *lpfl, POINT ptSrc, POINT ptDst);                                                                                                      /* MEMORY_UTIL:0x75e2 */
 FLEET *LpflFromId(int16_t idFleet); /* RETFAR */                                                                                                                           /* MEMORY_UTIL:0x2078 */
 PLANET *LpplFromId(int16_t idPlanet); /* RETFAR */                                                                                                                         /* MEMORY_UTIL:0x021e */
@@ -77,8 +77,8 @@ int32_t CalcPlayerScore(int16_t iPlr, SCORE *pscore);                           
 int16_t FLookupPlanet(int16_t iPlanet, PLANET *ppl);                                                                                                                       /* MEMORY_UTIL:0x04a6 */
 FLEET *LpflNewSplit(FLEET *pfl); /* RETFAR */                                                                                                                              /* MEMORY_UTIL:0x3372 */
 uint16_t WFromLpfl(FLEET *lpfl);                                                                                                                                           /* MEMORY_UTIL:0x2b10 */
-int16_t FLookupObject(int16_t grobj, int16_t id, void *pobj);                                                                                                              /* MEMORY_UTIL:0x24a0 */
+int16_t FLookupObject(GrobjClass grobj, int16_t id, void *pobj);                                                                                                              /* MEMORY_UTIL:0x24a0 */
 int16_t GetFleetScannerRange(FLEET *lpfl, int16_t *pdPlanRange, int16_t *ppctDetect, int16_t *piSteal);                                                                    /* MEMORY_UTIL:0x4fb8 */
-int16_t FFindNearestObject(POINT pt, int16_t grobj, SCAN *pscan);                                                                                                          /* MEMORY_UTIL:0x4070 */
+int16_t FFindNearestObject(POINT pt, GrobjClass grobj, SCAN *pscan);                                                                                                          /* MEMORY_UTIL:0x4070 */
 
 #endif /* UTIL_H_ */

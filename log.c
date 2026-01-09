@@ -296,7 +296,7 @@ void LogChangeFleet(FLEET *pfl, FLEET *pflNew)
     /* TODO: implement */
 }
 
-void LogChangeName(int16_t grobj, int16_t id, char *szName)
+void LogChangeName(GrobjClass grobj, int16_t id, char *szName)
 {
     FLEET * lpfl;
     int16_t cOut;

@@ -26,7 +26,7 @@ void LogMakeValidXferf(LOGXFERF *plxf1, LOGXFERF *plxf2);  /* MEMORY_PLANET:0x9f
 int16_t FRunLogFile(void);  /* MEMORY_PLANET:0xa2d6 */
 void LogMakeValidXfer(LOGXFER *plx1, LOGXFER *plx2);  /* MEMORY_PLANET:0x99f6 */
 void LogChangeFleet(FLEET *pfl, FLEET *pflNew);  /* MEMORY_PLANET:0x8ebe */
-void LogChangeName(int16_t grobj, int16_t id, char *szName);  /* MEMORY_PLANET:0x8d5a */
+void LogChangeName(GrobjClass grobj, int16_t id, char *szName);  /* MEMORY_PLANET:0x8d5a */
 void LogChangeShDef(SHDEF *lpshdefNew);  /* MEMORY_PLANET:0x8c28 */
 
 #endif /* LOG_H_ */

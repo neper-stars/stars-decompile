@@ -23,7 +23,7 @@ void AutoTerraform(void);  /* MEMORY_TURN2:0x48f6 */
 int16_t FPacketDecay(THING *lpth, int16_t pctRate);  /* MEMORY_TURN2:0x6e9c */
 void TransferToOthers(void);  /* MEMORY_TURN2:0x3088 */
 void MineMinerals(void);  /* MEMORY_TURN2:0x55a4 */
-int16_t FBuildObject(PLANET *lppl, int16_t grobj, int16_t iItem, int16_t cBuilt, int32_t *rgMinerals);  /* MEMORY_TURN2:0x19b2 */
+int16_t FBuildObject(PLANET *lppl, GrobjClass grobj, int16_t iItem, int16_t cBuilt, int32_t *rgMinerals);  /* MEMORY_TURN2:0x19b2 */
 int16_t IBestRemoteTerra(PLANET *lppl, int16_t iplr, int16_t fHelp);  /* MEMORY_TURN2:0x8b70 */
 void PlanetaryClimateChange(void);  /* MEMORY_TURN2:0x5c54 */
 void DiscoverNewMinerals(void);  /* MEMORY_TURN2:0x5e0c */
