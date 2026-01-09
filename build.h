@@ -17,7 +17,7 @@ int16_t FCheckQueuedShip(uint16_t hwnd, SHDEF *lpshdef, int16_t fEdit);  /* MEMO
 int16_t SlotDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam);  /* PASCAL */  /* MEMORY_BUILD:0x0550 */
 void DrawDlgLBEntireItem(DRAWITEMSTRUCT *lpdis, int16_t inflate);  /* MEMORY_BUILD:0x59f0 */
 void KillQueuedMassPackets(PLANET *lppl);  /* MEMORY_BUILD:0x6a52 */
-int16_t IEmptyBmpFromGrhst(int16_t grhst);  /* MEMORY_BUILD:0x6716 */
+int16_t IEmptyBmpFromGrhst(HullSlotType grhst);  /* MEMORY_BUILD:0x6716 */
 void DrawBuildSelHull(uint16_t hwnd, uint16_t hdc, int16_t iDraw, RECT *prc);  /* MEMORY_BUILD:0x451e */
 int16_t ShipBuilder(POINT ptDlgSize);  /* MEMORY_BUILD:0x008c */
 void DrawBuildSelComp(uint16_t hwnd, uint16_t hdc, int16_t iDraw);  /* MEMORY_BUILD:0x3ab2 */

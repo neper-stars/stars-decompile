@@ -33,7 +33,7 @@ HULDEF * LphuldefSBFromId(int16_t id);  /* RETFAR */  /* MEMORY_PARTS:0x510a */
 SHDEF * LpshdefT(void);  /* RETFAR */  /* MEMORY_PARTS:0x51ac */
 PLANETARY * LpplanetaryFromId(int16_t id);  /* RETFAR */  /* MEMORY_PARTS:0x51dc */
 SHDEF * LpshdefSBT(void);  /* RETFAR */  /* MEMORY_PARTS:0x51c4 */
-int16_t FLookupPartX(PART *ppart, uint16_t grhst, uint16_t iItem);  /* MEMORY_PARTS:0x51fe */
+int16_t FLookupPartX(PART *ppart, HullSlotType grhst, uint16_t iItem);  /* MEMORY_PARTS:0x51fe */
 SCANNER * LpscannerFromId(int16_t id);  /* RETFAR */  /* MEMORY_PARTS:0x518a */
 ENGINE * LpengineFromId(int16_t id);  /* RETFAR */  /* MEMORY_PARTS:0x5168 */
 

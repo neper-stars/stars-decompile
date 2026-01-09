@@ -7,6 +7,12 @@
   "LpReAlloc": { "ht": "HeapType" },
   "ResetHb": { "ht": "HeapType" },
 
+  "SetRaceGrbit": { "ibit": "RaceGrbit" },
+  "GetRaceGrbit": { "ibit": "RaceGrbit" },
+
+  "SetRaceStat": { "iStat": "RaceStat" },
+  "GetRaceStat": { "iStat": "RaceStat" },
+
   "PszGetLocName": { "grobj": "GrobjClass" },
   "FLookupObject": { "grobj": "GrobjClass" },
   "FFindNearestObject": { "grobj": "GrobjClass" },
@@ -18,6 +24,10 @@
   "FCheckQueue": { "grobj": "GrobjClass" },
   "FCheckSelection": { "grobj": "GrobjClass" },
   "FCheckSummary": { "grobj": "GrobjClass" },
+
+  "IEmptyBmpFromGrhst": { "grhst": "HullSlotType" },
+
+  "LpthNew": { "ith": "ThingType" },
 
   "FCheckMessages": { "imsg": "MessageId" },
   "FFindPlayerMessage": { "iMsg": "MessageId" },

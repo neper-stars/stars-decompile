@@ -64,6 +64,7 @@ bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
 
 [tasks.ghidra-apply-structs]
 description = "Apply NB09 struct definitions to Ghidra project"
+depends = ["ghidra-create-enums"]
 run = '''
 #!/bin/bash
 set -e
@@ -475,6 +476,21 @@ bash "$ANALYZER" "$GHIDRA_PROJECT" Stars \
 
 echo ""
 echo "Output: $PROJECT_DIR/decompiled/p1_util.c"
+'''
+
+[tasks.dump-structmeta-json]
+description = "dump the nb09_structmeta.json"
+run = '''
+#!/bin/bash
+set -e
+
+python3 $PROJECT_DIR/scripts/dump_nb09_structmeta.py \
+  $PROJECT_DIR/scripts/stars26jrc3.codeview.nb09.bin \
+  --struct-overrides $PROJECT_DIR/scripts/struct_overrides.json \
+  --out $PROJECT_DIR/scripts/nb09_structmeta.json
+
+echo ""
+echo "Output: $PROJECT_DIR/scripts/nb09_structmeta"
 '''
 
 [tasks.dump-globals-json]

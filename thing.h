@@ -11,7 +11,7 @@ void FreeLpth(THING *lpth);  /* MEMORY_THING:0x0224 */
 int16_t CPlanetsInCircle(POINT pt, int32_t r2);  /* MEMORY_THING:0x02a0 */
 int16_t PctWormholeMoves(THING *lpth);  /* MEMORY_THING:0x0adc */
 void DoThingInteractions(int16_t fPostMove);  /* MEMORY_THING:0x0b3a */
-THING * LpthNew(int16_t iplr, int16_t ith);  /* RETFAR */  /* MEMORY_THING:0x0000 */
+THING * LpthNew(int16_t iplr, ThingType ith);  /* RETFAR */  /* MEMORY_THING:0x0000 */
 int16_t IValidateWormholePos(THING *lpthWorm);  /* MEMORY_THING:0x064c */
 
 #endif /* THING_H_ */

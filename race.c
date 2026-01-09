@@ -148,7 +148,7 @@ int16_t RaceWizardDlg1(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t
     return 0;
 }
 
-void SetRaceGrbit(PLAYER *pplr, int16_t ibit, int16_t fSet)
+void SetRaceGrbit(PLAYER *pplr, RaceGrbit ibit, int16_t fSet)
 {
     uint32_t grMask;
 
@@ -173,7 +173,7 @@ void SetRaceGrbit(PLAYER *pplr, int16_t ibit, int16_t fSet)
     }
 }
 
-int16_t GetRaceGrbit(PLAYER *pplr, int16_t ibit)
+int16_t GetRaceGrbit(PLAYER *pplr, RaceGrbit ibit)
 {
     uint32_t grMask;
 

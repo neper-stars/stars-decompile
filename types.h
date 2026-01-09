@@ -10,6 +10,45 @@
 #include <time.h>
 #include <setjmp.h>
 
+typedef enum RaceGrbit
+{
+    ibitRaceIFE = 0x00,
+    ibitRaceTT = 0x01,
+    ibitRaceARM = 0x02,
+    ibitRaceISB = 0x03,
+    ibitRaceGeneralizedResearch = 0x04,
+    ibitRaceMineralAlchemy = 0x06,
+    ibitRaceNoRamscoops = 0x07,
+    ibitRaceCheapEngines = 0x08,
+    ibitRaceOBRM = 0x09,
+    ibitRaceNoAdvScanner = 0x0a,
+    ibitRaceLowStartingPop = 0x0b,
+    ibitRaceBleedingEdgeTech = 0x0c,
+    ibitRaceRegeneratingShields = 0x0d,
+    ibitRaceTech3 = 0x1d,
+    ibitRaceAIPlayer = 0x1e,
+    ibitRaceCheapFact = 0x1f,
+    ibitRaceLast = 32,
+} RaceGrbit;
+typedef enum RaceStat
+{
+    rsResGen = 0,
+    rsFactProd = 1,
+    rsFactBuild = 2,
+    rsFactOperate = 3,
+    rsMineProd = 4,
+    rsMineBuild = 5,
+    rsMineOperate = 6,
+    rsUseLeftover = 7,
+    rsTechBonus1 = 8,
+    rsTechBonus2 = 9,
+    rsTechBonus3 = 10,
+    rsTechBonus4 = 11,
+    rsTechBonus5 = 12,
+    rsTechBonus6 = 13,
+    rsMajorAdv = 14,
+} RaceStat;
+
 typedef enum GrobjClass
 {
     grobjNone = 0x0,
@@ -18,6 +57,68 @@ typedef enum GrobjClass
     grobjOther = 0x4,
     grobjThing = 0x8,
 } GrobjClass;
+
+typedef enum HullSlotType
+{
+    hstEngine = 0x0001,
+    hstScanner = 0x0002,
+    hstShield = 0x0004,
+    hstArmor = 0x0008,
+    hstBeam = 0x0010,
+    hstTorp = 0x0020,
+    hstBomb = 0x0040,
+    hstMining = 0x0080,
+    hstMines = 0x0100,
+    hstSpecialSB = 0x0200,
+    hstSBHull = 0x0400,
+    hstSpecialE = 0x0800,
+    hstSpecialM = 0x1000,
+    hstTerra = 0x2000,
+    hstHull = 0x4000,
+    hstPlanetary = 0x8000,
+} HullSlotType;
+
+typedef enum StartingStarbase
+{
+    Starbase = 0,
+    AcceleratorPlatform = 1,
+    PortholetoBeyond = 2,
+    StarterColony = 3,
+} StartingStarbase;
+
+typedef enum StartingShip
+{
+    LilliputianFreighter = 0,
+    ShadowTransport = 1,
+    SmaugarianPeepingTom = 2,
+    ArmedProbe = 3,
+    LongRangeScout = 4,
+    ShadowSleuth = 5,
+    Teamster = 6,
+    StalwartDefender = 7,
+    Swashbuckler = 8,
+    SantaMaria = 9,
+    Pinta = 10,
+    Mayflower = 11,
+    SporeCloud = 12,
+    Gadfly = 13,
+    CottonPicker = 14,
+    PotatoBug = 15,
+    LittleHen = 16,
+    ChangeofHeart = 17,
+    SpeedTurtle = 18,
+    MTLifeboat = 19,
+    MTScout = 20,
+    MTProbe = 21,
+} StartingShip;
+
+typedef enum ThingType
+{
+    Minefield = 0,
+    MysteryTrader = 1,
+    MineralPacket = 2,
+    Wormhole = 3,
+} ThingType;
 
 // ensure our structs use classic win16 packing
 #include "pack1.h"
@@ -483,7 +584,7 @@ typedef struct _cyberinfotemp
 /* typind 4216 (0x1078) size=4 */
 typedef struct _hs
 {
-    uint16_t grhst; /* +0x0000 */
+    HullSlotType grhst; /* +0x0000 */
     union
     {
         struct
@@ -1373,7 +1474,7 @@ typedef struct tagDRVCONFIGINFO
 typedef struct _logxfer
 {
     int16_t id;         /* +0x0000 */
-    int16_t grobj;      /* +0x0002 */
+    GrobjClass grobj;   /* +0x0002 */
     int32_t rgdItem[5]; /* +0x0004 */
 } LOGXFER;
 
@@ -1381,7 +1482,7 @@ typedef struct _logxfer
 typedef struct _logxferf
 {
     int16_t id;          /* +0x0000 */
-    int16_t grobj;       /* +0x0002 */
+    GrobjClass grobj;    /* +0x0002 */
     int16_t rgdItem[16]; /* +0x0004 */
 } LOGXFERF;
 
@@ -1767,9 +1868,9 @@ typedef struct _complex
 /* typind 5254 (0x1486) size=37 */
 typedef struct _rtchgname
 {
-    int16_t id;      /* +0x0000 */
-    int16_t grobj;   /* +0x0002 */
-    uint8_t rgb[33]; /* +0x0004 */
+    int16_t id;       /* +0x0000 */
+    GrobjClass grobj; /* +0x0002 */
+    uint8_t rgb[33];  /* +0x0004 */
 } RTCHGNAME;
 
 /* typind 5257 (0x1489) size=16 */
@@ -2105,13 +2206,13 @@ typedef struct tagLOGPEN
 /* typind 4167 (0x1047) size=16 */
 typedef struct _scan
 {
-    POINT pt;          /* +0x0000 */
-    int16_t grobj;     /* +0x0004 */
-    int16_t grobjFull; /* +0x0006 */
-    int16_t idpl;      /* +0x0008 */
-    int16_t ifl;       /* +0x000a */
-    int16_t iwp;       /* +0x000c */
-    int16_t ith;       /* +0x000e */
+    POINT pt;             /* +0x0000 */
+    GrobjClass grobj;     /* +0x0004 */
+    GrobjClass grobjFull; /* +0x0006 */
+    int16_t idpl;         /* +0x0008 */
+    int16_t ifl;          /* +0x000a */
+    int16_t iwp;          /* +0x000c */
+    int16_t ith;          /* +0x000e */
 } SCAN;
 
 /* typind 5198 (0x144e) size=12 */

@@ -21,8 +21,8 @@ int16_t RaceWizardDlg4(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t
 int16_t RaceWizardDlg3(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam);  /* PASCAL */  /* MEMORY_RACE:0x2792 */
 int16_t RaceWizardDlg2(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam);  /* PASCAL */  /* MEMORY_RACE:0x1060 */
 int16_t RaceWizardDlg1(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam);  /* PASCAL */  /* MEMORY_RACE:0x03ac */
-void SetRaceGrbit(PLAYER *pplr, int16_t ibit, int16_t fSet);  /* MEMORY_RACE:0x31b8 */
-int16_t GetRaceGrbit(PLAYER *pplr, int16_t ibit);  /* MEMORY_RACE:0x3176 */
+void SetRaceGrbit(PLAYER *pplr, RaceGrbit ibit, int16_t fSet);  /* MEMORY_RACE:0x31b8 */
+int16_t GetRaceGrbit(PLAYER *pplr, RaceGrbit ibit);  /* MEMORY_RACE:0x3176 */
 void DrawRaceAdvantagePoints(uint16_t hdc, RECT *prc, PLAYER *pplr);  /* MEMORY_RACE:0x55c6 */
 int16_t CAdvantagePoints(PLAYER *pplr);  /* MEMORY_RACE:0x444c */
 int16_t RaceCreationWizard(uint16_t hwndParent, int16_t fReadOnly, int16_t fDontWrite);  /* MEMORY_RACE:0x0000 */

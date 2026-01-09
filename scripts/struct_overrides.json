@@ -1,0 +1,11 @@
+{
+  "HS": { "grhst": "HullSlotType" },
+  "LOGXFER": { "grobj": "GrobjClass" },
+  "LOGXFERF": { "grobj": "GrobjClass" },
+  "RTCHGNAME": { "grobj": "GrobjClass" },
+  "SCAN": { "grobj": "GrobjClass", "grobjFull": "GrobjClass" },
+  "SEL": { "grobj": "GrobjClass", "grobjFull": "GrobjClass" },
+  "SELSOME": { "grobj": "GrobjClass", "grobjFull": "GrobjClass" },
+  "TOK": { "grobj": "GrobjClass" },
+  "XFER": { "grobj": "GrobjClass" }
+}

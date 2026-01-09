@@ -37,10 +37,10 @@ void FreeLpth(THING *lpth)
 int16_t CPlanetsInCircle(POINT pt, int32_t r2)
 {
     int16_t xStart;
-    POINT * ppt;
+    POINT *ppt;
     int16_t yEnd;
     int16_t dy;
-    POINT * pptEnd;
+    POINT *pptEnd;
     int16_t yStart;
     int16_t i;
     int16_t r;
@@ -71,13 +71,13 @@ void DoThingInteractions(int16_t fPostMove)
     uint8_t rgTech[6];
     int32_t wtNext;
     int32_t dy;
-    THING * lpthMac;
-    PLANET * lpplMac;
-    PLANET * lppl;
+    THING *lpthMac;
+    PLANET *lpplMac;
+    PLANET *lppl;
     int16_t i;
     int16_t ifl;
-    FLEET * lpfl;
-    THING * lpth;
+    FLEET *lpfl;
+    THING *lpth;
     int16_t idm;
     int16_t cPlrTrueMaxTech;
     int32_t dx;
@@ -95,8 +95,8 @@ void DoThingInteractions(int16_t fPostMove)
     int16_t ish;
     int32_t lSpent;
     SHDEF shdef;
-    SHDEF * lpshdefDest;
-    FLEET * lpflNew;
+    SHDEF *lpshdefDest;
+    FLEET *lpflNew;
     int16_t cGive;
 
     /* debug symbols */
@@ -117,11 +117,11 @@ void DoThingInteractions(int16_t fPostMove)
     /* TODO: implement */
 }
 
-THING * LpthNew(int16_t iplr, int16_t ith)
+THING *LpthNew(int16_t iplr, ThingType ith)
 {
     int16_t iItem;
     int16_t i;
-    THING * lpth;
+    THING *lpth;
     THING thNew;
 
     /* TODO: implement */
@@ -133,11 +133,11 @@ int16_t IValidateWormholePos(THING *lpthWorm)
     int16_t iRet;
     POINT pt;
     int32_t dy;
-    THING * lpthMac;
-    FLEET * lpfl;
+    THING *lpthMac;
+    FLEET *lpfl;
     int16_t ifl;
     int16_t i;
-    THING * lpth;
+    THING *lpth;
     int16_t dUni;
     int32_t dx;
     int32_t l;

@@ -3572,7 +3572,6 @@ SPECIALSB rgspecialSB[16] = {
     },
 };
 
-
 /* functions */
 void LookupBestPlanetaryScanner(PART *ppart)
 {
@@ -3647,7 +3646,7 @@ SHDEF *LpshdefSBT(void)
     return NULL;
 }
 
-int16_t FLookupPartX(PART *ppart, uint16_t grhst, uint16_t iItem)
+int16_t FLookupPartX(PART *ppart, HullSlotType grhst, uint16_t iItem)
 {
 
     /* TODO: implement */

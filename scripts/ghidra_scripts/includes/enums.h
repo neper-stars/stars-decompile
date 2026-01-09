@@ -15,6 +15,45 @@ typedef enum HeapType
     htCount
 } HeapType;
 
+typedef enum RaceGrbit
+{
+    ibitRaceIFE = 0x00,
+    ibitRaceTT = 0x01,
+    ibitRaceARM = 0x02,
+    ibitRaceISB = 0x03,
+    ibitRaceGeneralizedResearch = 0x04,
+    ibitRaceMineralAlchemy = 0x06,
+    ibitRaceNoRamscoops = 0x07,
+    ibitRaceCheapEngines = 0x08,
+    ibitRaceOBRM = 0x09,
+    ibitRaceNoAdvScanner = 0x0a,
+    ibitRaceLowStartingPop = 0x0b,
+    ibitRaceBleedingEdgeTech = 0x0c,
+    ibitRaceRegeneratingShields = 0x0d,
+    ibitRaceTech3 = 0x1d,
+    ibitRaceAIPlayer = 0x1e,
+    ibitRaceCheapFact = 0x1f,
+    ibitRaceLast = 32,
+} RaceGrbit;
+typedef enum RaceStat
+{
+    rsResGen = 0,
+    rsFactProd = 1,
+    rsFactBuild = 2,
+    rsFactOperate = 3,
+    rsMineProd = 4,
+    rsMineBuild = 5,
+    rsMineOperate = 6,
+    rsUseLeftover = 7,
+    rsTechBonus1 = 8,
+    rsTechBonus2 = 9,
+    rsTechBonus3 = 10,
+    rsTechBonus4 = 11,
+    rsTechBonus5 = 12,
+    rsTechBonus6 = 13,
+    rsMajorAdv = 14,
+} RaceStat;
+
 typedef enum GrobjClass
 {
     grobjNone = 0x0,
@@ -23,6 +62,68 @@ typedef enum GrobjClass
     grobjOther = 0x4,
     grobjThing = 0x8,
 } GrobjClass;
+
+typedef enum HullSlotType
+{
+    hstEngine = 0x0001,
+    hstScanner = 0x0002,
+    hstShield = 0x0004,
+    hstArmor = 0x0008,
+    hstBeam = 0x0010,
+    hstTorp = 0x0020,
+    hstBomb = 0x0040,
+    hstMining = 0x0080,
+    hstMines = 0x0100,
+    hstSpecialSB = 0x0200,
+    hstSBHull = 0x0400,
+    hstSpecialE = 0x0800,
+    hstSpecialM = 0x1000,
+    hstTerra = 0x2000,
+    hstHull = 0x4000,
+    hstPlanetary = 0x8000,
+} HullSlotType;
+
+typedef enum StartingStarbase
+{
+    Starbase = 0,
+    AcceleratorPlatform = 1,
+    PortholetoBeyond = 2,
+    StarterColony = 3,
+} StartingStarbase;
+
+typedef enum StartingShip
+{
+    LilliputianFreighter = 0,
+    ShadowTransport = 1,
+    SmaugarianPeepingTom = 2,
+    ArmedProbe = 3,
+    LongRangeScout = 4,
+    ShadowSleuth = 5,
+    Teamster = 6,
+    StalwartDefender = 7,
+    Swashbuckler = 8,
+    SantaMaria = 9,
+    Pinta = 10,
+    Mayflower = 11,
+    SporeCloud = 12,
+    Gadfly = 13,
+    CottonPicker = 14,
+    PotatoBug = 15,
+    LittleHen = 16,
+    ChangeofHeart = 17,
+    SpeedTurtle = 18,
+    MTLifeboat = 19,
+    MTScout = 20,
+    MTProbe = 21,
+} StartingShip;
+
+typedef enum ThingType
+{
+    Minefield = 0,
+    MysteryTrader = 1,
+    MineralPacket = 2,
+    Wormhole = 3,
+} ThingType;
 
 typedef enum StringId
 {

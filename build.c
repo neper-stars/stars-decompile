@@ -90,7 +90,7 @@ void KillQueuedMassPackets(PLANET *lppl)
     /* TODO: implement */
 }
 
-int16_t IEmptyBmpFromGrhst(int16_t grhst)
+int16_t IEmptyBmpFromGrhst(HullSlotType grhst)
 {
     int16_t i;
 
