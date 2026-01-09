@@ -1,8 +1,13 @@
 
 #include "types.h"
+#include "globals.h"
 
 #include "msg.h"
 #include "strings.h"
+#include "util.h"
+#include "utilgen.h"
+#include "planet.h"
+#include "parts.h"
 
 /* globals */
 char aMSGCmpr[22836] = {0};
@@ -224,37 +229,451 @@ int16_t FRemovePlayerMessage(int16_t iPlr, MessageId iMsg, int16_t iObj)
 
 char *PszFormatString(char *pszFormat, int16_t *pParamsReal)
 {
-    int16_t iMineral;
-    int16_t cOut;
-    int16_t c;
-    int16_t i;
-    int16_t *pParams;
-    char *pchT;
-    char szBuf[480];
-    uint16_t w;
     char *pch;
-    int32_t l;
-    SHDEF *lpshdef;
-    PART part;
+    char *pchT;
+    int16_t *pParams;
+    uint16_t w;
+    int16_t i;
+    int16_t c;
+    int16_t cOut;
+    int16_t iMineral;
+    char szBuf[480];
 
-    /* debug symbols */
-    /* block (block) @ MEMORY_MSG:0x8b5e */
-    /* block (block) @ MEMORY_MSG:0x8cfd */
-    /* block (block) @ MEMORY_MSG:0x8db5 */
-    /* label DoPlanet @ MEMORY_MSG:0x8ad8 */
-    /* label DoFleet @ MEMORY_MSG:0x8b26 */
-    /* label LThingName @ MEMORY_MSG:0x8bec */
-    /* label DoInt @ MEMORY_MSG:0x87c9 */
-    /* label FinishString @ MEMORY_MSG:0x8ae9 */
-    /* label DoNothing @ MEMORY_MSG:0x8b07 */
+    iMineral = -1;
+    pParams = pParamsReal;
+    pch = szMsgBuf;
 
-    /* TODO: implement */
-    return NULL;
+    for (;;)
+    {
+        char esc;
+
+        if (*pszFormat == '\0')
+        {
+            *pch = '\0';
+            return szMsgBuf;
+        }
+
+        if (*pszFormat != '\\')
+        {
+            *pch++ = *pszFormat++;
+            continue;
+        }
+
+        /* escape */
+        pszFormat++;
+        esc = *pszFormat;
+
+        switch (esc)
+        {
+        case 'E': /* Env var */
+            pchT = PszCalcEnvVar((int16_t)((uint16_t)pParams[0] >> 8), (int16_t)(pParams[0] & 0xff));
+            break;
+
+        case 'F': /* Fleet name from word */
+            pchT = PszFleetNameFromWord((uint16_t)pParams[0]);
+            break;
+
+        case 'G': /* String id offset by idsMineField */
+            w = (uint16_t)pParams[0];
+            c = (int16_t)CchGetString((int16_t)(w + idsMineField), pch);
+            pch += c;
+            pParams += 1;
+            pszFormat++;
+            continue;
+
+        case 'I': /* Compressed string idsDecreased + param */
+            pchT = PszGetCompressedString((int16_t)(pParams[0] + idsDecreased));
+            break;
+
+        case 'L':
+        case 'l': /* Player name with flags in param; 'L' capitalizes */
+            pchT = PszPlayerName(
+                (int16_t)(pParams[0] & 15),
+                (int16_t)(esc == 'L'),
+                (int16_t)((pParams[0] & 0x10) != 0),
+                (int16_t)((pParams[0] & 0x20) != 0),
+                (int16_t)((pParams[0] & 0x00c0) >> 6),
+                (PLAYER *)0);
+            break;
+
+        case 'M': /* rgszMineField / table at 0x1120:04f2 */
+            pchT = rgszMineField[pParams[0]];
+            break;
+
+        case 'O': /* Player name from packed owner bits */
+            w = (uint16_t)pParams[0];
+            w = (uint16_t)((w >> 9) & 15);
+            pchT = PszPlayerName((int16_t)w, 0, 0, 0, 0, (PLAYER *)0);
+            break;
+
+        case 'P':
+        { /* Percent, prints x% or x.y% depending on remainder */
+            int16_t v = pParams[0];
+            int16_t whole = (int16_t)(v / 100);
+            int16_t frac = (int16_t)(v - (int16_t)(whole * 100));
+
+            if (frac != 0)
+            {
+                if (frac < 0)
+                    frac = (int16_t)-frac;
+                /* s_%d.%d%%_1120_01c8 */
+                c = (int16_t)sprintf(pch, "%d.%d%%", whole, frac);
+            }
+            else
+            {
+                /* s__%dkT_1120_01b8 (name from your symbol dump; string is "%d%%" style) */
+                c = (int16_t)sprintf(pch, "%dkT", whole);
+            }
+
+            pch += c;
+            pParams += 1;
+            pszFormat++;
+            continue;
+        }
+
+        case 'S': /* "of <player>'s origin" unless self */
+            if (pParams[0] != idPlayer)
+            {
+                (void)CchGetString(idsOf2, szBuf);
+                pchT = PszPlayerName(pParams[0], 0, 0, 0, 0, (PLAYER *)0);
+                strcat(szBuf, pchT);
+                pchT = PszGetCompressedString(idsOrigin);
+                strcat(szBuf, pchT);
+                pchT = szBuf;
+                break;
+            }
+            /* do nothing but consume */
+            pParams += 1;
+            pszFormat++;
+            continue;
+
+        case 'U':
+        case 'V':
+        case 'v':
+        { /* 32-bit number, maybe append units/mineral name */
+            int32_t l;
+            uint16_t lo = (uint16_t)pParams[0];
+            uint16_t hi = (uint16_t)pParams[1];
+
+            l = (int32_t)((uint32_t)lo | ((uint32_t)hi << 16));
+            pParams += 2;
+
+            c = (int16_t)sprintf(pch, PCTLD, l);
+            pch += c;
+
+            if (esc != 'v')
+            {
+                if (esc == 'V')
+                {
+                    iMineral = pParams[0];
+                    /* NOTE: original does NOT consume here unless 'V' */
+                    /* it reads iMineral from current pParams and then falls through */
+                }
+                /* vrgszUnits (comment in your decompile) */
+                pchT = vrgszUnits[iMineral];
+                strcpy(pch, pchT);
+                pch += (int16_t)strlen(pchT);
+            }
+
+            pszFormat++;
+            continue;
+        }
+
+        case 'X': /* explicit do nothing */
+            pParams += 1;
+            pszFormat++;
+            continue;
+
+        case 'Z':
+        { /* player bitmask -> list of names, with "and" */
+            w = (uint16_t)pParams[0];
+
+            if (w != 0)
+            {
+                if (((w - 1) & w) == 0)
+                {
+                    c = 0;
+                    while ((w & 1) == 0)
+                    {
+                        w >>= 1;
+                        c++;
+                    }
+                    pchT = PszPlayerName(c, 0, 1, 1, 0, (PLAYER *)0);
+                    break;
+                }
+
+                cOut = 0;
+                for (i = 0; i < game.cPlayer; i++)
+                {
+                    if ((w & 1) != 0)
+                    {
+                        if (cOut > 0)
+                        {
+                            if ((w & 0xfffe) == 0)
+                            {
+                                c = (int16_t)CchGetString(idsAnd, pch);
+                                pch += c;
+                            }
+                            else
+                            {
+                                *pch++ = ',';
+                                *pch++ = ' ';
+                            }
+                        }
+
+                        pchT = PszPlayerName(i, 0, 1, 1, 0, (PLAYER *)0);
+                        strcpy(pch, pchT);
+                        pch += (int16_t)strlen(pchT);
+                        cOut++;
+                    }
+                    w >>= 1;
+                }
+
+                /* consume and continue */
+                pParams += 1;
+                pszFormat++;
+                continue;
+            }
+
+            /* consume and continue */
+            pParams += 1;
+            pszFormat++;
+            continue;
+        }
+
+        case 'e': /* table at 0x1120:047e */
+            pchT = rgszPlanetAttr[pParams[0]];
+            break;
+
+        case 'f':
+        case 'h':
+        case 'r':
+        case 't':
+        case 'y':
+        {
+            /* base path */
+            strcpy(pch, szBase);
+            pch += (int16_t)strlen(szBase);
+
+            if (esc == 'f')
+            {
+                if (idPlayer == -1)
+                {
+                    /* ".x%d" then fall into DoInt */
+                    c = (int16_t)sprintf(pch, ".x%d", (int)(idPlayer + 1));
+                }
+                else
+                {
+                    /* ".m%d" */
+                    c = (int16_t)sprintf(pch, ".m%d", (int)(idPlayer + 1));
+                }
+                pch += c;
+                pParams += 1;
+                pszFormat++;
+                continue;
+            }
+
+            if (esc == 'h')
+            {
+                strcat(pch, ".h");
+                pch += 4;
+                pszFormat++;
+                continue;
+            }
+
+            if (esc == 'r')
+            {
+                c = (int16_t)sprintf(pch, ".h%d", (int)(idPlayer + 1));
+                pch += c;
+                pParams += 1;
+                pszFormat++;
+                continue;
+            }
+
+            if (esc == 't')
+            {
+                if (idPlayer == -1)
+                {
+                    strcat(pch, ".hst");
+                    pch += 4;
+                }
+                else
+                {
+                    c = (int16_t)sprintf(pch, ".m%d", (int)(idPlayer + 1));
+                    pch += c;
+                    pParams += 1;
+                }
+                pszFormat++;
+                continue;
+            }
+
+            /* '.xy' */
+            strcat(pch, ".xy");
+            pch += 3;
+            pszFormat++;
+            continue;
+        }
+
+        case 'g': /* thing name */
+            pchT = PszGetThingName(pParams[0]);
+            break;
+
+        case 'i': /* int */
+            c = (int16_t)sprintf(pch, PCTD, (int)pParams[0]);
+            pch += c;
+            pParams += 1;
+            pszFormat++;
+            continue;
+
+        case 'j': /* compressed string idsEnergy + param */
+            pchT = PszGetCompressedString((int16_t)(pParams[0] + idsEnergy));
+            break;
+
+        case 'k':
+        { /* part name from 2 params */
+            PART part;
+            uint16_t w1 = (uint16_t)pParams[0];
+            uint16_t w2 = (uint16_t)pParams[1];
+
+            part.hs.grhst = (HullSlotType)w1;
+            part.hs.iItem = (uint8_t)(w2 & 0xff);
+            part.hs.cItem = (uint8_t)((w2 >> 8) & 0xff);
+            part.pcom = 0;
+
+            pParams += 2;
+
+            (void)FLookupPart(&part);
+
+            pchT = (char *)((uint8_t *)part.pcom + hstArmor);
+            strcpy(pch, pchT);
+            pch += (int16_t)strlen(pchT);
+
+            pszFormat++;
+            continue;
+        }
+
+        case 'm': /* mineral name table at 0x1120:04cc */
+            iMineral = pParams[0];
+            pchT = rgszMinerals[iMineral];
+            break;
+
+        case 'n': /* loc name, thing name, or planet/fleet depending on sentinel */
+            if (pParams[0] == -2)
+            {
+                pParams += 1;
+                pchT = PszGetThingName(pParams[0]);
+                break;
+            }
+            if (pParams[0] == -1)
+            {
+                pParams += 1;
+                /* fall through to 'o' behavior using new current param */
+                if (((uint16_t)pParams[0] & 0x8000) != 0)
+                {
+                    w = (uint16_t)pParams[0] | 0x8000;
+                    pchT = PszGetFleetName((int16_t)w);
+                }
+                else
+                {
+                    pchT = PszGetPlanetName(pParams[0]);
+                }
+                break;
+            }
+
+            pchT = PszGetLocName(grobjNone, -1, pParams[0], pParams[1]);
+            pParams += 1; /* net +2 with the consume below */
+            break;
+
+        case 'o': /* planet-or-fleet depending on high bit */
+            if (((uint16_t)pParams[0] & 0x8000) != 0)
+            {
+                w = (uint16_t)pParams[0] | 0x8000;
+                pchT = PszGetFleetName((int16_t)w);
+            }
+            else
+            {
+                pchT = PszGetPlanetName(pParams[0]);
+            }
+            break;
+
+        case 'p': /* planet */
+            pchT = PszGetPlanetName(pParams[0]);
+            break;
+
+        case 's': /* force fleet */
+            w = (uint16_t)pParams[0] | 0x8000;
+            pchT = PszGetFleetName((int16_t)w);
+            break;
+
+        case 'u': /* "%u" */
+            c = (int16_t)sprintf(pch, "%u", (unsigned)(uint16_t)pParams[0]);
+            pch += c;
+            pParams += 1;
+            pszFormat++;
+            continue;
+
+        case 'w': /* copy szWork into output */
+            strcpy(pch, szWork);
+            pch += (int16_t)strlen(szWork);
+            pszFormat++;
+            continue;
+
+        case 'z':
+        { /* ship design name from packed (iplr<<5)|ish */
+            int16_t iplr = (int16_t)((uint16_t)pParams[0] >> 5);
+            int16_t ish = (int16_t)((uint16_t)pParams[0] & 31);
+            SHDEF *lpshdef;
+
+            if (ish < 16)
+            {
+                lpshdef = &rglpshdef[iplr][ish];
+            }
+            else
+            {
+                lpshdef = &rglpshdefSB[iplr][ish - 16];
+            }
+
+            if (iplr == idPlayer)
+            {
+                strcpy(pch, lpshdef->hul.szClass);
+            }
+            else
+            {
+                char *szPlayerName = PszPlayerName(iplr, 0, 0, 1, 0, (PLAYER *)0);
+                (void)sprintf(pch, "%s %s", szPlayerName, lpshdef->hul.szClass);
+            }
+
+            pch += (int16_t)strlen(pch);
+            pParams += 1;
+            pszFormat++;
+            continue;
+        }
+
+        default:
+            /* unknown escape: emit literally */
+            *pch++ = *pszFormat++;
+            continue;
+        }
+
+        /* common string copy for pchT cases */
+        strcpy(pch, pchT);
+        pch += (int16_t)strlen(pchT);
+
+        /* MSG_DoNothing */
+        pParams += 1;
+        pszFormat++;
+    }
 }
 
 char *PszGetCompressedMessage(MessageId idm)
 {
-    return aMSGUncompressed[idm];
+    if (iLastMsgGet == idm)
+    {
+        return szLastMsgGet;
+    }
+    iLastMsgGet = idm;
+    strncpy(szLastMsgGet, aMSGUncompressed[idm], sizeof(szLastMsgGet));
+    return szLastMsgGet;
 }
 
 int16_t MsgDlg(uint16_t hwnd, uint16_t message, uint16_t wParam, int32_t lParam)

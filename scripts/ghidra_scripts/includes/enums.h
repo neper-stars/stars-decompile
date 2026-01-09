@@ -155,10 +155,10 @@ typedef enum StartingShip
 
 typedef enum ThingType
 {
-    Minefield = 0,
-    MysteryTrader = 1,
-    MineralPacket = 2,
-    Wormhole = 3,
+    ithMinefield = 0,
+    ithMineralPacket = 1,
+    ithWormhole = 2,
+    ithMysteryTrader = 3,
 } ThingType;
 
 typedef enum StringId

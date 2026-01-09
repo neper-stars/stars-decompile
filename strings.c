@@ -2,6 +2,7 @@
 #include "types.h"
 
 #include "strings.h"
+#include "globals.h"
 
 /* globals */
 char aSTRCmpr[28209] = {0};
@@ -14,5 +15,11 @@ extern const char *const aSTRUncompressed[];
 char *PszGetCompressedString(StringId ids)
 {
     // TODO: implement actual decompression, but for now all the strings are uncompressed in string_uncompressed.c for simplicity
-    return aSTRUncompressed[ids];
+    if (iLastStrGet == ids)
+    {
+        return szLastStrGet;
+    }
+    iLastStrGet = ids;
+    strncpy(szLastStrGet, aSTRUncompressed[ids], sizeof(szLastStrGet));
+    return szLastStrGet;
 }

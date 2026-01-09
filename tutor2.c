@@ -2,6 +2,7 @@
 #include "types.h"
 
 #include "tutor2.h"
+#include "globals.h"
 
 /* globals */
 char aTUTCmpr[22323] = {0};
@@ -16,6 +17,11 @@ int16_t CchTutorString(char *pchOut, int16_t idt)
 {
 
     char *dst0 = pchOut;
+
+    if (iLastTutGet == idt)
+    {
+        return strlen(pchOut);
+    }
     const char *src = aTUTUncompressed[idt];
 
     while (*src != '\0')

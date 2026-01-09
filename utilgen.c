@@ -905,7 +905,13 @@ void OutputFileString(char *szFile, char *sz)
 
 char *PszGetCompressedPlanet(int16_t id)
 {
-    return aPNUncompressed[id];
+    if (iLastGet == id)
+    {
+        return szLastGet;
+    }
+    iLastGet = id;
+    strncpy(szLastGet, aPNUncompressed[id], sizeof(szLastGet));
+    return szLastGet;
 }
 
 int32_t LDrawGauge(uint16_t hdc, RECT *prc, int16_t cSegs, int32_t *rgSize, uint16_t *rghbr, int32_t cTot)
@@ -937,11 +943,41 @@ int16_t CommaFormatLong(char *psz, int32_t l)
 
 char ChFromNybble(int16_t nyb)
 {
-    int16_t iPage;
-    int16_t iVal;
+    uint16_t u = (uint16_t)nyb;
+    uint16_t lo = u & 0x000F;
+    uint16_t hi = u >> 4;
 
-    /* TODO: implement */
-    return 0;
+    /* Case 1: small codes 0..10 map directly through table */
+    if (u < 11)
+    {
+        return (char)rgchcompstrlower[u];
+    }
+
+    /* Case 2: escape: low nibble == 0xF means literal hi nibble */
+    if (lo == 0x000F)
+    {
+        return (char)hi;
+    }
+
+    /* Case 3: composite mapping */
+    {
+        int16_t iVal = (int16_t)(((int16_t)(lo - 11) * 16) + (int16_t)hi);
+
+        if (iVal < 26)
+        {
+            return (char)('A' + iVal);
+        }
+        if (iVal < 36)
+        {
+            return (char)(iVal + 0x16); /* '0'..'9' */
+        }
+        if (iVal < 52)
+        {
+            return (char)rgchcompstrlower[iVal - 25];
+        }
+
+        return (char)rgcompstrlower[iVal + 15];
+    }
 }
 
 void DiaganolTextOut(uint16_t hdc, RECT *prc, char *psz, int16_t cLen)

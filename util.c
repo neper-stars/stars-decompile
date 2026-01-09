@@ -355,18 +355,67 @@ int32_t LComputePower(SHDEF *lpshdef)
 
 char *PszGetFleetName(int16_t id)
 {
-    int16_t cshdef;
-    int16_t iplr;
-    char *lpsz;
-    char szShdef[34];
-    int16_t ifl;
     FLEET *lpfl;
+    uint16_t iPlayer;
     char szPlr[34];
+    char szShdef[34];
+    int16_t cshdef;
     int16_t ishdef;
     int16_t cch;
 
-    /* TODO: implement */
-    return NULL;
+    lpfl = LpflFromId((int16_t)(id & 0x7fff));
+    iPlayer = (uint16_t)((((uint16_t)id & 0x7fff) >> 9) & 15);
+
+    if ((int16_t)iPlayer == idPlayer)
+    {
+        szPlr[0] = '\0';
+    }
+    else
+    {
+        char *pszPlr = PszPlayerName((int16_t)iPlayer, 0, 0, 0, 0, (PLAYER *)0);
+        (void)sprintf(szPlr, "%s ", pszPlr);
+    }
+
+    if (lpfl == 0 || lpfl->lpszName == 0)
+    {
+        if (lpfl == 0)
+        {
+            strcpy(szShdef, PszGetCompressedString(idsFleet));
+        }
+        else
+        {
+            ishdef = IshdefPrimaryFromLpfl(lpfl, &cshdef);
+            if (ishdef == 16)
+            {
+                strcpy(szShdef, PszGetCompressedString(idsFleet));
+            }
+            else
+            {
+                SHDEF *psh = &rglpshdef[iPlayer][ishdef];
+                strcpy(szShdef, psh->hul.szClass);
+
+                cch = (int16_t)strlen(szShdef);
+                if (cch > 28)
+                {
+                    cch = 28;
+                    szShdef[cch] = '\0';
+                }
+                if (cshdef > 1)
+                {
+                    szShdef[cch] = '+';
+                    szShdef[cch + 1] = '\0';
+                }
+            }
+        }
+
+        (void)sprintf(szWork, "%s%s #%d", szPlr, szShdef, (int)(((uint16_t)id & 0x1ff) + 1)); /* 0x529 */
+    }
+    else
+    {
+        (void)sprintf(szWork, "%s%s", szPlr, lpfl->lpszName); /* 0x524 */
+    }
+
+    return szWork;
 }
 
 char *PszGetThingName(int16_t id)
@@ -374,8 +423,70 @@ char *PszGetThingName(int16_t id)
     THING *lpth;
     char szPlr[54];
 
-    /* TODO: implement */
-    return NULL;
+    lpth = LpthFromId(id);
+
+    if (lpth == 0)
+    {
+        szWork[0] = '\0';
+        return szWork;
+    }
+
+    if (lpth->ith == ithMinefield)
+    {
+        if ((int16_t)lpth->iplr == idPlayer)
+        {
+            szPlr[0] = '\0';
+        }
+        else
+        {
+            char *pszPlr = PszPlayerName((int16_t)lpth->iplr, 0, 0, 0, 0, (PLAYER *)0);
+            (void)sprintf(szPlr, "%s ", pszPlr);
+        }
+
+        (void)sprintf(szWork, PszGetCompressedString(idsSSMineField), szPlr); /* 0x364 */
+        return szWork;
+    }
+
+    if (lpth->ith == ithMineralPacket)
+    {
+        /* look at the first word of the payload (matches decompile at +6) */
+        THPACK thp = lpth->thp;
+
+        if (thp.iWarp == 0)
+        {
+            (void)CchGetString(idsSalvage, szWork);
+        }
+        else
+        {
+            if ((int16_t)lpth->iplr == idPlayer)
+            {
+                szPlr[0] = '\0';
+            }
+            else
+            {
+                char *pszPlr = PszPlayerName((int16_t)lpth->iplr, 0, 0, 0, 0, (PLAYER *)0);
+                (void)sprintf(szPlr, "%s ", pszPlr);
+            }
+
+            (void)sprintf(szWork, PszGetCompressedString(idsSmineralPacket), szPlr);
+        }
+        return szWork;
+    }
+
+    if (lpth->ith == ithWormhole)
+    {
+        strcpy(szWork, PszGetCompressedString(idsWormhole));
+        return szWork;
+    }
+
+    if (lpth->ith == ithMysteryTrader)
+    {
+        strcpy(szWork, PszGetCompressedString(idsMysteryTrader));
+        return szWork;
+    }
+
+    strcpy(szWork, PszGetCompressedString(idsMysteryObject));
+    return szWork;
 }
 
 int32_t LongFromSerialCh(char ch)
@@ -499,13 +610,39 @@ int16_t FDupPlanet(PLANET *lppl, PLANET *ppl)
 
 char *PszFleetNameFromWord(uint16_t w)
 {
-    char *lpsz;
-    char szShdef[34];
-    int16_t ishdef;
+    uint16_t ishdef;
     int16_t cch;
+    char szShdef[34];
+    char *lpsz;
 
-    /* TODO: implement */
-    return NULL;
+    ishdef = (uint16_t)((w >> 9) & 15);
+
+    if (!rglpshdef[idPlayer][ishdef].fFree)
+    {
+        strcpy(szShdef, rglpshdef[idPlayer][ishdef].hul.szClass);
+
+        cch = (int16_t)strlen(szShdef);
+        if (cch > 28)
+        {
+            cch = 28;
+            szShdef[cch] = '\0';
+        }
+
+        if ((w & 0x2000) != 0)
+        {
+            szShdef[cch] = '+';
+            szShdef[cch + 1] = '\0';
+        }
+
+        lpsz = szShdef;
+    }
+    else
+    {
+        lpsz = PszGetCompressedString(idsFleet); /* 0x4e8 */
+    }
+
+    (void)sprintf(szWork, "%s #%d", lpsz, (int)((w & 0x1ff) + 1));
+    return szWork;
 }
 
 int16_t FValidSerialNo(char *psz, int32_t *plSerial)
@@ -678,11 +815,115 @@ void TurnLog(StringId ids)
 
 char *PszPlayerName(int16_t iPlayer, int16_t fCapital, int16_t fPlural, int16_t fThe, int16_t grWord, PLAYER *pplr)
 {
-    char *pchEnd;
+    uint16_t u;
     char szName[50];
+    char *pchEnd;
 
-    /* TODO: implement */
-    return NULL;
+    if (pplr == (PLAYER *)0)
+    {
+        pplr = &rgplr[iPlayer];
+    }
+
+    if (pplr->szName[0] == '\0')
+    {
+        // TODO: remove this dependency on szLastStrGet
+        (void)PszGetCompressedString(idsPlayerD2);
+        (void)sprintf(szName, "%s", szLastStrGet); /* faithful-ish: wsprintf used compressed result */
+        if (fPlural == 0)
+        {
+            strcat(szName, "'s"); /* 0x515 */
+        }
+        if (grWord == 1)
+        {
+            u = (uint16_t)strlen(szName);
+            (void)CchGetString(idsHas, szName + u); /* 0x55c */
+        }
+        else if (grWord == 2)
+        {
+            u = (uint16_t)strlen(szName);
+            (void)CchGetString(idsIs2, szName + u); /* 0x55d */
+        }
+    }
+    else
+    {
+        if (fThe == 0)
+        {
+            szName[0] = '\0';
+        }
+        else
+        {
+            strcpy(szName, "the "); /* 0x50e */
+            if (fCapital != 0)
+            {
+                szName[0] = 'T';
+            }
+        }
+
+        if ((fPlural == 0) || (pplr->szNames[0] == '\0'))
+        {
+            strcat(szName, pplr->szName);
+        }
+        else
+        {
+            strcat(szName, pplr->szNames);
+        }
+
+        u = (uint16_t)strlen(szName);
+        if (u != 0)
+        {
+            pchEnd = szName + (u - 1);
+            while ((pchEnd >= szName) && (*pchEnd == ' '))
+            {
+                *pchEnd-- = '\0';
+            }
+        }
+        else
+        {
+            pchEnd = szName - 1;
+        }
+
+        if (pchEnd < szName)
+        {
+            (void)CchGetString(idsName, szName);
+        }
+
+        if ((fPlural != 0) && (pplr->szNames[0] == '\0'))
+        {
+            u = (uint16_t)strlen(szName);
+            if (u >= 2)
+            {
+                if ((szName[u - 1] != 's') && !((szName[u - 1] == 'e') && (szName[u - 2] == 's')))
+                {
+                    strcat(szName, "s"); /* 0x513 */
+                }
+            }
+            else if (u == 1)
+            {
+                if (szName[0] != 's')
+                {
+                    strcat(szName, "s"); /* 0x513 */
+                }
+            }
+            else
+            {
+                strcat(szName, "s"); /* 0x513 */
+            }
+        }
+
+        if (grWord == 1)
+        {
+            u = (uint16_t)strlen(szName);
+            (void)CchGetString(idsHave2, szName + u);
+        }
+        else if (grWord == 2)
+        {
+            u = (uint16_t)strlen(szName);
+            (void)CchGetString(idsAre, szName + u);
+        }
+    }
+
+    strcpy(szWork, szName);
+    return szWork;
 }
 
 int16_t IStargateFromLppl(PLANET *lppl)
