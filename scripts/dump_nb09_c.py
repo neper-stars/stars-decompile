@@ -474,34 +474,72 @@ def dump_structs(db, no_sort=False) -> str:
             fl = tt.records[int(fieldlist_tid)]
             fields = fl.data.get("fields") or []
 
-        # group members by offset
+        # Group members by *overlap* (not just identical offsets).
+        #
+        # The NB09 field list often expresses overlapped layouts by emitting multiple
+        # members whose byte ranges overlap (e.g. a 32-bit `lPower` at offset O, and
+        # two 16-bit words at offsets O and O+2).  Grouping only by `offset` breaks
+        # this pattern and leaves the second word outside the union.
         members = [f for f in fields if f.get("kind") == "member"]
         members.sort(key=lambda f: (int(f.get("offset", 0)), f.get("name", "")))
 
-        groups = {}
+        def _type_size_bytes(mtype: int) -> int:
+            """Best-effort byte size for a member type."""
+            try:
+                rt = db.resolve_typind(int(mtype))
+                sz = getattr(rt, "size", None)
+                if sz is not None:
+                    return int(sz)
+            except Exception:
+                pass
+            # Conservative fallback so we still form a stable group.
+            return 1
+
+        # Build sweep-line overlap groups: each group is a list of member dicts.
+        groups: list[tuple[int, int, list[dict]]] = []  # (start_off, end_off, members)
+        cur_start: int | None = None
+        cur_end: int = 0
+        cur: list[dict] = []
+
         for f in members:
-            off = int(f.get("offset", 0))
-            groups.setdefault(off, []).append(f)
+            off = int(f.get("offset", 0) or 0)
+            mtype = int(f.get("type", 0) or 0)
+            end = off + _type_size_bytes(mtype)
+            if cur_start is None:
+                cur_start = off
+                cur_end = end
+                cur = [f]
+                continue
+            # Overlap if this member starts before the current group's end.
+            if off < cur_end:
+                cur.append(f)
+                if end > cur_end:
+                    cur_end = end
+                continue
+            # Flush, start new group.
+            groups.append((int(cur_start), int(cur_end), cur))
+            cur_start = off
+            cur_end = end
+            cur = [f]
+
+        if cur_start is not None:
+            groups.append((int(cur_start), int(cur_end), cur))
 
         def emit_offset_comment(off: int) -> str:
             return f"  /* +0x{off:04x} */"
 
-        for off in sorted(groups.keys()):
-            g = groups[off]
+        group_starts = [g0 for (g0, _g1, _gm) in groups]
+
+        for gi, (off, _end, g) in enumerate(groups):
             if len(g) == 1:
                 f = g[0]
                 mtype = int(f.get("type", 0))
                 nm = f.get("name") or "/*anon*/"
                 # String buffer heuristic: if this looks like a sz*/psz* member, coerce arrays/pointers to char types.
                 next_off = None
-                # find next higher offset in the struct for sizing hints
-                _offs_sorted = sorted(groups.keys())
-                try:
-                    idx_off = _offs_sorted.index(off)
-                    if idx_off + 1 < len(_offs_sorted):
-                        next_off = int(_offs_sorted[idx_off + 1])
-                except Exception:
-                    next_off = None
+                # find next higher group start in the struct for sizing hints
+                if gi + 1 < len(group_starts):
+                    next_off = int(group_starts[gi + 1])
                 byte_hint = None
                 if next_off is not None:
                     byte_hint = max(0, next_off - off)
@@ -523,23 +561,76 @@ def dump_structs(db, no_sort=False) -> str:
                 out.append(f"    {line}{emit_offset_comment(off)}")
                 continue
 
-            # Multiple members at same offset => anonymous union block
+            # Multiple overlapped members => anonymous union block
             out.append("    union {")
-            # Separate normal members and bitfields
-            bf = []
-            normal = []
+
+            # Separate bitfields and normal members.
+            bf: list[dict] = []
+            normal: list[dict] = []
             for f in g:
-                mtype = int(f.get("type", 0))
+                mtype = int(f.get("type", 0) or 0)
                 if is_bitfield_type(mtype):
                     bf.append(f)
                 else:
                     normal.append(f)
 
-            # Emit normal members directly in the union
+            # If we have normal members at multiple offsets that *collectively* form a
+            # non-overlapping view (e.g. word/word overlaying a dword), emit them as an
+            # anonymous struct inside the union, while keeping any "full-span" member(s)
+            # as direct union members.
+            union_start = int(off)
+            union_end = int(_end)
+            span = union_end - union_start
+
+            def _m_range(f: dict) -> tuple[int, int, int]:
+                moff = int(f.get("offset", 0) or 0)
+                mtype = int(f.get("type", 0) or 0)
+                mend = moff + _type_size_bytes(mtype)
+                return moff, mend, mtype
+
+            full_span: list[dict] = []
+            others: list[dict] = []
             for f in normal:
-                mtype = int(f.get("type", 0))
+                moff, mend, _mt = _m_range(f)
+                if moff == union_start and (mend - moff) == span:
+                    full_span.append(f)
+                else:
+                    others.append(f)
+
+            # Emit full-span members (like the 32-bit overlay) directly.
+            for f in full_span:
+                mtype = int(f.get("type", 0) or 0)
                 nm = f.get("name") or "/*anon*/"
                 out.append("        " + decl_for_member(mtype, nm))
+
+            # Try to emit remaining normal members as a packed view struct if they don't overlap.
+            others_sorted = sorted(others, key=lambda f: (int(f.get("offset", 0) or 0), f.get("name", "")))
+            ok_view = len(others_sorted) >= 2
+            last_end = None
+            for f in others_sorted:
+                moff, mend, _mt = _m_range(f)
+                if last_end is None:
+                    last_end = mend
+                    continue
+                # disallow actual overlap; adjacency is fine.
+                if moff < last_end:
+                    ok_view = False
+                    break
+                last_end = mend
+
+            if ok_view:
+                out.append("        struct {")
+                for f in others_sorted:
+                    mtype = int(f.get("type", 0) or 0)
+                    nm = f.get("name") or "/*anon*/"
+                    out.append("            " + decl_for_member(mtype, nm))
+                out.append("        };")
+            else:
+                # Fallback: emit them as independent union members.
+                for f in others_sorted:
+                    mtype = int(f.get("type", 0) or 0)
+                    nm = f.get("name") or "/*anon*/"
+                    out.append("        " + decl_for_member(mtype, nm))
 
             # Emit bitfields inside anonymous struct in the union
             if bf:

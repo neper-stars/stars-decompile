@@ -246,22 +246,16 @@ typedef struct _planet
         struct
         {
             uint32_t iDeltaPop : 8;
-            uint32_t cMines : 12;
-            uint32_t cFactories : 12;
-        };
-    }; /* +0x0014 */
-    union
-    {
-        struct
-        {
             uint32_t cDefenses : 12;
+            uint32_t cMines : 12;
             uint32_t iScanner : 5;
             uint32_t unused5 : 5;
+            uint32_t cFactories : 12;
             uint32_t fArtifact : 1;
             uint32_t fNoResearch : 1;
             uint32_t unused2 : 8;
         };
-    }; /* +0x0018 */
+    }; /* +0x0014 */
     int32_t rgwtMin[4]; /* +0x001c */
     union
     {
@@ -269,19 +263,13 @@ typedef struct _planet
         struct
         {
             uint16_t isb : 4;
-            uint16_t pctDp : 12;
-        };
-    }; /* +0x002c */
-    union
-    {
-        struct
-        {
             uint16_t idFling : 10;
+            uint16_t pctDp : 12;
             uint16_t iWarpFling : 4;
             uint16_t fNoHeal : 1;
             uint16_t unused3 : 1;
         };
-    }; /* +0x002e */
+    }; /* +0x002c */
     union
     {
         uint16_t wRouting;
@@ -337,56 +325,54 @@ typedef struct _gdata
         struct
         {
             uint16_t fUnknownShip : 1;
-            uint16_t fGeneratingTurn : 1;
-            uint16_t fForceTurn : 1;
-            uint16_t fHostMode : 1;
-            uint16_t fSubmit : 1;
-            uint16_t fNoResearchSav : 1;
-            uint16_t fRadiatingEngine : 1;
-            uint16_t fNoIdleChecks : 1;
-            uint16_t fSendMsgMode : 1;
-            uint16_t fRetryOpens : 1;
-            uint16_t fAisDone : 1;
-            uint16_t fTutorial : 1;
-            uint16_t fGotoVCR : 1;
-            uint16_t fVCRTimer : 1;
-            uint16_t mdScreenSize : 2;
-        };
-    }; /* +0x0000 */
-    union
-    {
-        struct
-        {
             uint16_t fGameOverMan : 1;
+            uint16_t fGeneratingTurn : 1;
             uint16_t fDontDoLogFiles : 1;
+            uint16_t fForceTurn : 1;
             uint16_t fFileCrippled : 1;
+            uint16_t fHostMode : 1;
             uint16_t fSmallTileMode : 1;
+            uint16_t fSubmit : 1;
             uint16_t fAllAis : 1;
+            uint16_t fNoResearchSav : 1;
             uint16_t fReadOnly : 1;
+            uint16_t fRadiatingEngine : 1;
             uint16_t fExitWindows : 1;
+            uint16_t fNoIdleChecks : 1;
             uint16_t fPartialTurn : 1;
+            uint16_t fSendMsgMode : 1;
             uint16_t fSetMassMode : 1;
+            uint16_t fRetryOpens : 1;
             uint16_t fRptSafeDraw : 1;
+            uint16_t fAisDone : 1;
             uint16_t fProgressTxt : 1;
+            uint16_t fTutorial : 1;
             uint16_t fSoundFX : 1;
+            uint16_t fGotoVCR : 1;
             uint16_t fNoSound : 1;
+            uint16_t fVCRTimer : 1;
             uint16_t fSetRouteMode : 1;
+            uint16_t mdScreenSize : 2;
             uint16_t fBleedingEdge : 1;
             uint16_t fToolbar : 1;
         };
-    }; /* +0x0002 */
+    }; /* +0x0000 */
     union
     {
         int32_t grBits2;
         struct
         {
             uint16_t fNoScannerDraw : 1;
+            uint16_t iCurGraph : 4;
             uint16_t fTrialPeriodOver : 1;
             uint16_t fClose : 1;
             uint16_t fDontCalcBleed : 1;
             uint16_t fChgZipOrd : 1;
+            uint16_t fMusic : 1;
             uint16_t fChgZipProd : 1;
+            uint16_t fPerPlayerDumps : 1;
             uint16_t fChgScanner : 1;
+            uint16_t fNoHostNames : 1;
             uint16_t fChgReports : 1;
             uint16_t fWriteTurnNum : 1;
             uint16_t fHotSeat : 1;
@@ -394,16 +380,6 @@ typedef struct _gdata
             uint16_t fScoreVictory : 2;
         };
     }; /* +0x0004 */
-    union
-    {
-        struct
-        {
-            uint16_t iCurGraph : 4;
-            uint16_t fMusic : 1;
-            uint16_t fPerPlayerDumps : 1;
-            uint16_t fNoHostNames : 1;
-        };
-    }; /* +0x0006 */
     uint16_t fUnused2 : 14; /* +0x0008 */
 } GDATA;
 
@@ -2500,10 +2476,13 @@ typedef struct _fleet
     FLEET *lpflNext;    /* +0x0068 */
     union
     {
-        int16_t dMoveLeft;
         int32_t lPower;
+        struct
+        {
+            int16_t dMoveLeft;
+            int16_t dMoveUsed;
+        };
     }; /* +0x006c */
-    int16_t dMoveUsed; /* +0x006e */
     int32_t lFuelUsed; /* +0x0070 */
     union
     {
@@ -2511,21 +2490,15 @@ typedef struct _fleet
         struct
         {
             uint16_t dirFltX : 8;
-            uint16_t dirFltY : 8;
-        };
-    }; /* +0x0074 */
-    union
-    {
-        struct
-        {
             uint16_t iwarpFlt : 4;
             uint16_t fdirValid : 1;
             uint16_t fCompChg : 1;
             uint16_t fTargeted : 1;
             uint16_t fSkipped : 1;
+            uint16_t dirFltY : 8;
             uint16_t fUnused : 8;
         };
-    }; /* +0x0076 */
+    }; /* +0x0074 */
     char *lpszName; /* +0x0078 */
 } FLEET;
 
@@ -2807,6 +2780,7 @@ typedef struct _popupdata
     int16_t grPopup; /* +0x0000 */
     union
     {
+        int32_t rgi[5];
         int16_t dxOut;
         int16_t iPlayer;
         int16_t idPlan;
@@ -2814,46 +2788,27 @@ typedef struct _popupdata
         FLEET *lpfl;
         SHDEF *lpshdef;
         PART part;
-        int32_t rgi[5];
-    }; /* +0x0002 */
-    union
-    {
         int16_t cMax;
         int16_t iPlanetVar;
         char *psz;
-    }; /* +0x0004 */
-    union
-    {
         int16_t cCur;
         int16_t fRedDamage;
         int16_t fShowDamage;
         int16_t iPlanVal;
-    }; /* +0x0006 */
-    union
-    {
         int16_t cOperate;
         int16_t dxDamage;
         int16_t fHideCounts;
         int16_t iPlanMin;
-    }; /* +0x0008 */
-    union
-    {
         int16_t fFactory;
         int16_t fToken;
         uint16_t grbit;
         int16_t iPlanMax;
-    }; /* +0x000a */
-    union
-    {
         int16_t fSummary;
         int16_t iPlrVal;
-    }; /* +0x000c */
-    union
-    {
         int16_t iPlrMin;
         int16_t itok;
-    }; /* +0x000e */
-    int16_t iPlrMax; /* +0x0010 */
+        int16_t iPlrMax;
+    }; /* +0x0002 */
 } POPUPDATA;
 
 /* typind 4104 (0x1008) size=147 */
@@ -2940,10 +2895,10 @@ typedef struct _order
     }; /* +0x0006 */
     union
     {
+        TASKXPORT txp;
         TASKLAYMINES tlm;
         TASKPATROL tptl;
         TASKSELL tsell;
-        TASKXPORT txp;
     }; /* +0x0008 */
 } ORDER;
 
@@ -3110,11 +3065,14 @@ typedef struct _zipprodq
     uint8_t fValid;  /* +0x000d */
     union
     {
-        uint8_t fNoResearch;
         ZIPPRODQ1 zpq1;
+        struct
+        {
+            uint8_t fNoResearch;
+            uint8_t cpq;
+            PRODQ1 rgpq[12];
+        };
     }; /* +0x000e */
-    uint8_t cpq;     /* +0x000f */
-    PRODQ1 rgpq[12]; /* +0x0010 */
 } ZIPPRODQ;
 
 /* typind 5286 (0x14a6) size=12 */
